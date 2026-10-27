@@ -824,14 +824,20 @@ window.addEventListener('focus',()=>{if(navigator.onLine)scheduleQueuedSync(700)
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&navigator.onLine)scheduleQueuedSync(700)});
 async function persistCloudSnapshot(snapshot){
  if(!cloudReady||!cloudActorName||!cloudActorPin)throw new Error('لا يوجد اتصال مصادق عليه بالسحابة.');
- if(['kitchen','barista'].includes(cloudActorRole))return {ok:true,skipped:true,kitchen:true,revision:cloudRevision};
  const payload=clone(snapshot),hash=JSON.stringify(payload);clearTimeout(cloudSaveTimer);
  const task=cloudSaveChain.catch(()=>{}).then(async()=>{
   if(hash===cloudLastSavedHash)return {ok:true,skipped:true,revision:cloudRevision};
-  const expected=cloudRevision;
+  let expected=cloudRevision, body=payload;
   queueCloudSnapshot(payload,'حفظ تلقائي قبل الإرسال');
   if(!navigator.onLine)throw new Error('الإنترنت غير متاح؛ تم الاحتفاظ بالتعديلات للمزامنة لاحقًا.');
-  const {data,error}=await apiCall({action:'save_state',state:payload,employee_name:cloudActorName,pin:cloudActorPin,expected_revision:expected});
+  if(['kitchen','barista'].includes(cloudActorRole)){
+    /* حساب المطبخ/البار: ما يكتبش فوق المخزون والأسعار والوصفات. يقرأ آخر نسخة من السحابة ويغيّر الأوردرات بس */
+    const {data:rm,error:le}=await apiCall({action:'get_state',employee_name:cloudActorName,pin:cloudActorPin});
+    if(le||!rm||!rm.state)throw new Error('تعذر قراءة آخر نسخة من السحابة قبل حفظ الأوردرات.');
+    expected=Number(rm.revision??cloudRevision);
+    body=clone(rm.state); body.orders=clone(payload.orders||[]);
+  }
+  const {data,error}=await apiCall({action:'save_state',state:body,employee_name:cloudActorName,pin:cloudActorPin,expected_revision:expected});
   if(error){const msg=String(error.message||'');if((error.context&&error.context.status===409)||msg.includes('REVISION_CONFLICT')){setCloudStatus('تعارض إصدار: لم نكتب فوق بيانات جهاز آخر. احتفظ بالنسخة المحلية ثم حمّل آخر نسخة سحابية للمراجعة.',true);throw new Error('تعارض مع تعديل سحابي أحدث؛ لم يتم تأكيد الحفظ.')}if(error.context&&error.context.status===403){cloudReady=false;setCloudStatus('رفض الخادم التحقق من الموظف. أعد تسجيل الدخول قبل أي تعديل آخر.',true);document.body.classList.add('auth-required');$('loginScreen').classList.remove('hide');throw new Error('رفض الخادم صلاحية الموظف.')}throw new Error(msg||'تعذر حفظ البيانات على الخادم.');}
   if(!data||data.ok===false)throw new Error('لم يرجع الخادم تأكيدًا واضحًا للحفظ.');
   if(data.revision!==undefined&&Number.isFinite(Number(data.revision)))cloudRevision=Number(data.revision);
@@ -844,8 +850,7 @@ async function persistCloudSnapshot(snapshot){
 }
 function scheduleCloudSave(snapshot,immediate=false){
  if(!cloudReady||!cloudActorName||!cloudActorPin)return;
- if(['kitchen','barista'].includes(cloudActorRole)){setCloudStatus('هذا الحساب لا يحفظ الحالة العامة؛ العمليات تتم عبر الخادم.');return;}
- const payload=clone(snapshot);clearTimeout(cloudSaveTimer);
+  const payload=clone(snapshot);clearTimeout(cloudSaveTimer);
  setCloudStatus('تم الحفظ محليًا؛ جارٍ انتظار تأكيد الخادم…');
  const run=()=>persistCloudSnapshot(payload).catch(e=>{queueCloudSnapshot(payload,'تعذر الرفع');setCloudStatus('التعديل محفوظ محليًا؛ لم يؤكد الخادم الرفع. سيُعاد تلقائيًا عند عودة الاتصال. '+(e.message||''),true);if(navigator.onLine)scheduleQueuedSync(8000)});
  if(immediate)run();else cloudSaveTimer=setTimeout(run,650);
