@@ -17,7 +17,25 @@
   syncIcon.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M3 21v-5h5"/></svg>';
   syncIcon.style.cssText='width:44px;height:44px;min-width:44px;border-radius:14px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#7CFC9A;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;margin-inline-start:8px;flex:0 0 auto;padding:0;';
   var drawerBtn=document.getElementById('drawerBtn');
-  if(drawerBtn&&drawerBtn.parentNode) drawerBtn.parentNode.insertBefore(syncIcon, drawerBtn.nextSibling);
+  document.body.appendChild(syncIcon);
+  function placeSyncIcon(){
+    if(!drawerBtn) return;
+    var r=drawerBtn.getBoundingClientRect();
+    if(!r.width) { syncIcon.style.display='none'; return; }
+    var cs=getComputedStyle(drawerBtn);
+    syncIcon.style.display='inline-flex';
+    syncIcon.style.position='fixed';
+    syncIcon.style.zIndex='1000';
+    syncIcon.style.margin='0';
+    syncIcon.style.top=r.top+'px';
+    syncIcon.style.left=(r.right+10)+'px';
+    syncIcon.style.width=r.width+'px';
+    syncIcon.style.height=r.height+'px';
+    syncIcon.style.borderRadius=cs.borderRadius;
+  }
+  placeSyncIcon();
+  window.addEventListener('resize',placeSyncIcon);
+  setInterval(placeSyncIcon,2000);
   syncIcon.addEventListener('click',function(){ alert(syncIcon.title); });
   if(main) main.insertBefore(bar,main.firstChild);
 
