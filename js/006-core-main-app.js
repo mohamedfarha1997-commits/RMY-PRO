@@ -215,6 +215,12 @@ window.pmPrepNext=function(i){
   if(!Array.isArray(state.productionPieces))state.productionPieces=[];
   if(n>0)state.productionPieces.push({id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(16).slice(2)),date:new Date().toISOString(),name:o.name,pieces:n,by:cloudActorName||''});
   save();
+  /* القطع الجاهزة لازم تتسجل على السيرفر كفرق (مش قيمة كاملة) عشان المنيو يظهر عند الكل */
+  if(n>0&&cloudReady&&cloudActorName&&cloudActorPin){
+    apiCall({action:'add_ready_pieces',name:o.name,pieces:n,employee_name:cloudActorName,pin:cloudActorPin}).then(function(r){
+      if(r&&r.error) alert('تعذر إضافة القطع للمنيو على السحابة: '+(r.error.message||''));
+    });
+  }
   if(typeof window.__pmSendNotice==='function'){
     window.__pmSendNotice(['sales'],'تم تسليم '+o.name,o.name+' × '+n+' قطعة\nأضيفت للمنيو');
   }
