@@ -153,6 +153,9 @@
     if(res.error) throw res.error;
     if(res.data && res.data.state){
       state.partyOrders=Array.isArray(res.data.state.partyOrders)?res.data.state.partyOrders:[];
+      // أسماء المشروبات والمنيو لازم تتحدّث عشان الحفلات تتوزع صح على الباريستا
+      if(Array.isArray(res.data.state.drinkNames)) state.drinkNames=res.data.state.drinkNames;
+      if(Array.isArray(res.data.state.menu)) state.menu=res.data.state.menu;
       // الأوردرات اللي اتقفلت مع شهر (من المدير): نحدّثها من الخادم عشان تختفي عند الكل
       if(Array.isArray(res.data.state.closedPartyOrderIds)) state.closedPartyOrderIds=res.data.state.closedPartyOrderIds;
       if(Array.isArray(res.data.state.partyInvoices)) state.partyInvoices=res.data.state.partyInvoices;
@@ -169,11 +172,17 @@
     }
   };
   /* ===== محطات الحفلات: الحلويات (الشيف) والعصائر والمشروبات (الباريستا) ===== */
-  function isBarItem(name){ return typeof isDrinkName==='function' && isDrinkName(String(name||'')); }
+  function isBarItem(name){
+    var n=String(name||'').trim();
+    if(typeof isDrinkName==='function' && isDrinkName(n)) return true;
+    var m=(state.menu||[]).find(function(x){return x&&String(x.name||'').trim()===n});
+    return !!(m && m.kind==='drink');
+  }
   function stationOfPartName(name){ return isBarItem(name)?'bar':'kitchen'; }
   function stationsOfOrder(o){
     if(Array.isArray(o.stations) && o.stations.length) return o.stations;
     var parts=(o.parts&&o.parts.length)?o.parts:(((state.menu||[]).find(function(x){return x&&x.name===o.name})||{}).parts||[]);
+    if(!parts.length) parts=[{name:o.name}];
     var s=[]; parts.forEach(function(p){ var st=stationOfPartName(p.name); if(s.indexOf(st)<0) s.push(st); });
     return s.length?s:['kitchen'];
   }
