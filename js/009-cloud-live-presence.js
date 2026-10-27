@@ -6,16 +6,32 @@
   /* ---- شريط الحالة ---- */
   var bar=document.createElement('div');
   bar.id='pmLiveBar'; bar.className='pm-live';
-  bar.innerHTML='<div class="pm-live-chip" id="pmSyncChip"><span class="pm-dot"></span><span id="pmSyncText">حالة التحديث: —</span></div>'+
-                '<div class="pm-live-chip pres" id="pmPresChip"><span class="pm-dot"></span><span id="pmPresText">الحسابات المتصلة: —</span></div>';
+  bar.innerHTML='<div class="pm-live-chip pres" id="pmPresChip"><span class="pm-dot"></span><span id="pmPresText">الحسابات المتصلة: —</span></div>';
   var main=document.querySelector('main.wrap');
+  /* ---- أيقونة المزامنة جنب زر القائمة ---- */
+  var st=document.createElement('style');
+  st.textContent='@keyframes pmSpin{to{transform:rotate(360deg)}}';
+  document.head.appendChild(st);
+  var syncIcon=document.createElement('button');
+  syncIcon.type='button'; syncIcon.id='pmSyncIcon'; syncIcon.setAttribute('aria-label','حالة المزامنة'); syncIcon.title='حالة التحديث';
+  syncIcon.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M3 21v-5h5"/></svg>';
+  syncIcon.style.cssText='width:44px;height:44px;min-width:44px;border-radius:14px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#7CFC9A;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;margin-inline-start:8px;flex:0 0 auto;padding:0;';
+  var drawerBtn=document.getElementById('drawerBtn');
+  if(drawerBtn&&drawerBtn.parentNode) drawerBtn.parentNode.insertBefore(syncIcon, drawerBtn.nextSibling);
+  syncIcon.addEventListener('click',function(){ alert(syncIcon.title); });
   if(main) main.insertBefore(bar,main.firstChild);
 
   function syncFromLocal(){
     var el=document.getElementById('localSaveStatus'); if(!el)return;
     var sp=el.querySelectorAll('span'); var msg=sp[1]?sp[1].textContent:'';
-    document.getElementById('pmSyncText').textContent='حالة التحديث: '+msg;
-    document.getElementById('pmSyncChip').classList.toggle('err',el.classList.contains('err'));
+    var icon=document.getElementById('pmSyncIcon');
+    if(icon){
+      var err=el.classList.contains('err');
+      var busy=!err && /جاري|حفظ|مزامن|تحميل/.test(msg);
+      icon.title='حالة التحديث: '+msg;
+      icon.style.color=err?'#ff6b6b':(busy?'#ffd166':'#7CFC9A');
+      icon.style.animation=busy?'pmSpin 1s linear infinite':'none';
+    }
   }
   var ls=document.getElementById('localSaveStatus');
   if(ls) new MutationObserver(syncFromLocal).observe(ls,{childList:true,subtree:true,characterData:true,attributes:true});
