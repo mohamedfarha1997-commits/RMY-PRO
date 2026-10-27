@@ -333,10 +333,15 @@
         var requestId=crypto.randomUUID?crypto.randomUUID():('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){var r=Math.random()*16|0;return (c==='x'?r:(r&3|8)).toString(16)}));
         var r=await apiCall({action:'party_order_action',party_action:'produce',order_id:id,station:st,request_id:requestId,employee_name:cloudActorName,pin:cloudActorPin});
         if(r.error) throw r.error;
+        // الخادم ممكن يرجّع الفشل جوه الـ data (HTTP 200) من غير error، فلازم نتأكد
+        var rd=r.data||{};
+        if(rd.ok===false||rd.error) throw new Error(rd.message||rd.error||'الخادم لم يسجّل التجهيز');
         await pmPartyWorkflowRefresh();
+        var still=(state.partyOrders||[]).some(function(x){return x&&x.id===id && x.status!=='cancelled' && !doneOf(x,st)});
+        if(still) throw new Error('التجهيز اتبعت للخادم بس مش مسجّل في الأوردر. حدّث الصفحة وحاول تاني.');
       }catch(e){
         await pmSafeRefresh();
-        btn.disabled=false; btn.textContent='تأكيد التجهيز';
+        btn.disabled=false; btn.textContent='تأكيد تجهيز '+(st==='bar'?'المشروبات':'الحلويات')+' وخصم الخامات';
         alert('تعذر التجهيز: '+await pmErrText(e));
       }
     };});
