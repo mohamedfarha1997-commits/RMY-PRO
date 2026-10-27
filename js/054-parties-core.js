@@ -186,7 +186,7 @@
     var s=[]; parts.forEach(function(p){ var st=stationOfPartName(p.name); if(s.indexOf(st)<0) s.push(st); });
     return s.length?s:['kitchen'];
   }
-  function doneOf(o,st){ if(o.status==='ready'||o.status==='delivered') return true; return !!(o.doneStations && o.doneStations[st]===true); }
+  function doneOf(o,st){ if(o.status==='delivered') return true; return !!(o.doneStations && o.doneStations[st]===true); }
   function roleStation(){ return cloudActorRole==='barista'?'bar':(cloudActorRole==='kitchen'?'kitchen':null); }
   function canProduceStation(st){
     if(st==='kitchen') return cloudActorRole==='kitchen'||cloudActorRole==='admin';
@@ -267,7 +267,7 @@
     // 3) الأوامر: كارت لكل حجز، مقسوم لقسم حلويات وقسم مشروبات
     var books=(window.pmPartyBookings?window.pmPartyBookings(all):[]).filter(function(b){
       if(b.complete||b.cancelled) return false;
-      if(mine) return b.orders.some(function(o){return o.status==='pending' && stationsOfOrder(o).indexOf(mine)>=0 && !doneOf(o,mine)});
+      if(mine) return b.orders.some(function(o){return o.status!=='cancelled' && o.status!=='delivered' && stationsOfOrder(o).indexOf(mine)>=0 && !doneOf(o,mine)});
       return true;
     });
     window.__pmBkFirst=[];
