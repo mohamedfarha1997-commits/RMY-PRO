@@ -1,4 +1,4 @@
-/* مراحل التحضير على الشاشة الرئيسية للمدير: بتتحدّث من السحابة كل 15 ثانية (قراءة بس، ما بتغيّرش بيانات جهاز المدير) */
+/* مراحل التحضير على الشاشة الرئيسية للمدير: بتتحدّث من السحابة كل 5 ثواني (قراءة بس، ما بتغيّرش بيانات جهاز المدير) */
 (function(){
   var STAGES=[['new','جديد'],['doing','جاري التحضير'],['ready','جاهز للتسليم']];
   var card=null, busy=false, data=null, err='', lastAt=0;
@@ -38,6 +38,6 @@
     var b=c.querySelector('.pmpl-refresh'); if(b) b.onclick=function(){ fetchOrders() };
   }
   setInterval(render, 2000);
-  setInterval(fetchOrders, 15000);
+  setInterval(fetchOrders, 5000);
   setTimeout(fetchOrders, 3000);
 })();
