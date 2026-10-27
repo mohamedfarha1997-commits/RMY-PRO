@@ -53,7 +53,7 @@
     if(b){ b.textContent=n>9?'9+':String(n); b.style.display=n?'inline-flex':'none'; }
     el.textContent='☕ عندك '+n+' طلب مشروبات في قائمة الانتظار، اضغط للعرض';
     el.style.display=(n&&!onQueueScreen())?'block':'none';
-    if(isBarista && lastCount>=0 && n>lastCount) beep();
+    if(isBarista && lastCount>=0 && n>lastCount){ beep(); if(window.pmNotify) window.pmNotify('طلب مشروبات جديد','عندك '+n+' طلب في قائمة الانتظار','drinks'); }
     lastCount=isBarista?n:-1;
   }
   function tick(){
@@ -174,6 +174,7 @@
         });
         localStorage.setItem(key,String(Math.max(newest,seen)));
         beep();
+        if(window.pmNotify){ var last=fresh[fresh.length-1]; window.pmNotify(fresh.length>1?'RMY · '+fresh.length+' إشعارات جديدة':'RMY · '+(last.title||'إشعار جديد'), fresh.length>1?'':(last.body||''), 'rmy-notice'); }
       }
       renderNotices();
     });

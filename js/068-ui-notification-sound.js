@@ -54,3 +54,26 @@
     setTimeout(function(){ playing=false; }, CHIME_SEC*1000);
   };
 })();
+
+/* إشعار النظام: لما التطبيق يكون في تبويب تاني أو برا الشاشة، الإشعار بيظهر في الجهاز ومعاه صوت الإشعارات بتاع الجهاز نفسه */
+(function(){
+  if(window.__pmNotifyInit) return; window.__pmNotifyInit=true;
+  var asked=false;
+  function askPermission(){
+    if(asked||!('Notification' in window)) return; asked=true;
+    if(Notification.permission==='default'){ try{ Notification.requestPermission(); }catch(e){} }
+  }
+  /* طلب الإذن لازم يكون بعد لمسة من المستخدم */
+  document.addEventListener('pointerdown',askPermission,{capture:true,passive:true});
+  window.pmNotify=function(title,body,tag){
+    try{
+      if(!('Notification' in window)||Notification.permission!=='granted') return false;
+      if(!document.hidden) return false; /* والتطبيق مفتوح قدامك الصوت والتنبيه اللي فوق كفاية */
+      var opts={body:body||'',icon:'ICONS/icon-192.png',badge:'ICONS/favicon-32.png',tag:tag||'rmy',renotify:true,vibrate:[300,120,300,120,300],data:{url:location.href}};
+      if(navigator.serviceWorker&&navigator.serviceWorker.ready){
+        navigator.serviceWorker.ready.then(function(reg){ return reg.showNotification(title,opts); }).catch(function(){ try{ new Notification(title,opts); }catch(e){} });
+      } else { new Notification(title,opts); }
+      return true;
+    }catch(e){ return false; }
+  };
+})();
