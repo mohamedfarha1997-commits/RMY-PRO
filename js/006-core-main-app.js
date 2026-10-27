@@ -985,7 +985,30 @@ async function loadAuditLog(){
 })();
 }
 $('refreshAudit').addEventListener('click',loadAuditLog);
-async function pollCloudState(){if(!cloudReady||!cloudActorPin||cloudPollBusy)return;cloudPollBusy=true;try{const {data,error}=await apiCall({action:'get_state',employee_name:cloudActorName,pin:cloudActorPin});if(error)throw error;const remoteRevision=Number(data.revision||0);if(!data.state||remoteRevision<=cloudRevision)return;const localHash=JSON.stringify(state);if(localHash!==cloudLastSavedHash){setCloudStatus('يوجد تحديث أحدث على جهاز آخر، لكن لديك تغييرات محلية غير مؤكدة. لم يتم استبدالها. راجعها ثم اضغط تحميل آخر نسخة سحابية.',true);return}const active=document.activeElement;if(active&&active.matches&&active.matches('input,textarea,select'))return;cloudLoading=true;state=migrateStateUnits(data.state);cloudRevision=remoteRevision;cloudLastSavedHash=JSON.stringify(state);cloudLoading=false;renderAll();setCloudStatus(`تمت المزامنة من جهاز آخر ✓ · الإصدار ${cloudRevision}`)}catch(e){setCloudStatus('تعذر فحص التحديثات السحابية: '+(e.message||''),true)}finally{cloudPollBusy=false}}
+/* أقسام التشغيل اللي بتتغير من أجهزة تانية (المطبخ/البار/المبيعات). بنحدّثها تلقائيًا حتى لو عند الجهاز تعديلات محلية، طول ما الجهاز ما عدّلش القسم ده بنفسه. */
+var LIVE_SECTIONS=['readyStock','orders','inventory','history','productionLog','productionPieces','readyRequests','salesLog','drinkOrders','partyOrders','partyStock','drinkNames'];
+function mergeLiveSections(remoteState,remoteRevision){
+  try{
+    var base=JSON.parse(cloudLastSavedHash||'{}')||{};
+    var remote=remoteState&&typeof remoteState==='object'?remoteState:{};
+    var changed=false;
+    cloudLoading=true;
+    LIVE_SECTIONS.forEach(function(k){
+      if(remote[k]===undefined) return;
+      if(JSON.stringify(state[k])===JSON.stringify(base[k])){
+        state[k]=JSON.parse(JSON.stringify(remote[k]));
+        base[k]=JSON.parse(JSON.stringify(remote[k]));
+        changed=true;
+      }
+    });
+    cloudRevision=remoteRevision;
+    cloudLastSavedHash=JSON.stringify(base);
+    cloudLoading=false;
+    if(changed){ renderAll(); setCloudStatus('تم تحديث الأوردرات والمخزون والمنيو من السحابة ✓ · الإصدار '+cloudRevision); }
+    else setCloudStatus('يوجد تعديلات محلية غير محفوظة على هذا الجهاز · الإصدار السحابي '+cloudRevision,true);
+  }catch(e){ cloudLoading=false; }
+}
+async function pollCloudState(){if(!cloudReady||!cloudActorPin||cloudPollBusy)return;cloudPollBusy=true;try{const {data,error}=await apiCall({action:'get_state',employee_name:cloudActorName,pin:cloudActorPin});if(error)throw error;const remoteRevision=Number(data.revision||0);if(!data.state||remoteRevision<=cloudRevision)return;const localHash=JSON.stringify(state);if(localHash!==cloudLastSavedHash){if(isFocusedField())return;mergeLiveSections(data.state,remoteRevision);return}const active=document.activeElement;if(active&&active.matches&&active.matches('input,textarea,select'))return;cloudLoading=true;state=migrateStateUnits(data.state);cloudRevision=remoteRevision;cloudLastSavedHash=JSON.stringify(state);cloudLoading=false;renderAll();setCloudStatus(`تمت المزامنة من جهاز آخر ✓ · الإصدار ${cloudRevision}`)}catch(e){setCloudStatus('تعذر فحص التحديثات السحابية: '+(e.message||''),true)}finally{cloudPollBusy=false}}
 function startCloudPolling(){if(cloudPollTimer)clearInterval(cloudPollTimer);cloudPollTimer=setInterval(function(){ if(document.visibilityState==='visible')pollCloudState(); },30000)}
 async function signOutCloud(){if(!confirm('تسجيل الخروج من RMY؟ تأكد أن آخر تعديل تمت مزامنته قبل الخروج.'))return;try{ if(cloudReady&&cloudActorName&&cloudActorPin&&cloudActorRole==='admin'){ clearTimeout(cloudSaveTimer); if(JSON.stringify(state)!==cloudLastSavedHash) await persistCloudSnapshot(clone(state)); } }catch(e){}cloudReady=false;if(cloudPollTimer)clearInterval(cloudPollTimer);clearTimeout(cloudSaveTimer);cloudActorName='';cloudActorPin='';cloudActorRole='';pendingProductionRequestId='';cloudRevision=0;cloudLastSavedHash='';try{localStorage.removeItem('pm_emp')}catch(e){}document.body.classList.add('auth-required');$('loginScreen').classList.remove('hide');$('sharedLoginPane').classList.add('hide');$('employeePane').classList.remove('hide');$('employeePin').value='';try{await refreshEmployeeList()}catch(e){}setLoginMessage('تم تسجيل خروج الموظف. اختر اسمك وأدخل PIN للدخول.');setCloudStatus('تم تسجيل خروج الموظف؛ الحساب المشترك لسه مفتوح.',true)}
 async function initCloudAuth(){if(!isConfigured()){setLoginMessage('لم يتم إعداد Supabase بعد. افتح supabase-config.js وضع Project URL و anon/public key، ثم أكمل خطوات README_AR.md. لا توجد مزامنة فعالة الآن.','error');$('signInButton').disabled=true;return}cloudClient=window.supabase.createClient(PASTRY_CONFIG.url,PASTRY_CONFIG.anonKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});const {data:{session}}=await cloudClient.auth.getSession();if(session){$('sharedLoginPane').classList.add('hide');$('employeePane').classList.remove('hide');setLoginMessage('الجلسة المشتركة موجودة. تحقق من اسم الموظف وPIN لفتح التطبيق.');try{await refreshEmployeeList()}catch(e){setLoginMessage('تعذر تحميل أسماء الموظفين: '+(e.message||''),'error')}try{try{localStorage.removeItem('pm_emp')}catch(e){}const saved=null;if(saved&&saved.n&&saved.p){$('employeeName').value=saved.n;$('employeePin').value=saved.p;setLoginMessage('جارٍ استعادة جلسة الموظف…');for(var _t=0;_t<3&&!cloudReady;_t++){await new Promise(function(r){setTimeout(r,1500*(_t+1))});if(cloudReady)break;await unlockApp();}}}catch(e){}}}
