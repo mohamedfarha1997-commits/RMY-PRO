@@ -1,6 +1,6 @@
 // Service worker: لازم يكون فيه fetch handler عشان المتصفح يعتبر الموقع قابل للتثبيت.
 // الشبكة أولًا، ولو مفيش نت يرجع النسخة المخزنة (البيانات الحية ما بتتخزنش قديمة).
-const CACHE = 'rmy-shell-v51';
+const CACHE = 'rmy-shell-v52';
 const SHELL = [
   './',
   './index.html',
@@ -253,5 +253,17 @@ self.addEventListener('fetch', (e) => {
         return res;
       })
       .catch(() => caches.match(req).then((r) => r || caches.match('./index.html')))
+  );
+});
+
+/* الضغط على إشعار النظام يفتح التطبيق، أو يرجّع التبويب اللي فيه التطبيق لو مفتوح */
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = (event.notification.data && event.notification.data.url) || './';
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+      for (const c of list) { if ('focus' in c) return c.focus(); }
+      return self.clients.openWindow(url);
+    })
   );
 });
