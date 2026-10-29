@@ -118,9 +118,11 @@
       '<p class="small" style="font-size:12px">انسخ التفاصيل دي وابعتها للمدير، وفيها اسم الجهاز والتبويب والفاتورة.</p>'+
       '<textarea readonly id="pmDiagText"></textarea>'+
       '<div class="pdg-acts">'+
-        '<button type="button" id="pmDiagCopy" style="background:#7E4728;color:#fff">نسخ التفاصيل</button>'+
-        '<button type="button" id="pmDiagRename" style="background:#F5EFEB;color:#3E2415">تسمية الجهاز</button>'+
-        '<button type="button" id="pmDiagClose" style="background:#F5EFEB;color:#3E2415">إغلاق</button>'+
+        '<button type="button" id="pmDiagCopy" style="background:#FFFDF6;color:#1E3A5F">نسخ التفاصيل</button>'+
+        '<button type="button" id="pmDiagRename" style="background:#F5EFEB;color:#1E3A5F">تسمية الجهاز</button>'+
+        'color:#1E3A5F">نسخ التفاصيل</button>'+
+        '<button type="button" id="pmDiagRename" style="background:#F5EFEB;color:#1E3A5F">تسمية الجهاز</button>'+
+        '<button type="button" id="pmDiagClose" style="background:#F5EFEB;color:#1E3A5F">إغلاق</button>'+
       '</div></div>';
     document.body.appendChild(ov);
     ov.querySelector('#pmDiagText').value=text;
