@@ -3,11 +3,13 @@
   if(window.__pmPartySheet) return; window.__pmPartySheet=true;
 
   function $(id){ return document.getElementById(id); }
+  /* الورقة لازم تبقى برا طبقة السلة، عشان الضغط عليها ما يقفلش السلة كلها */
+  function liftSheet(){ var s=$('cartPartySheet'); if(s && s.parentElement!==document.body) document.body.appendChild(s); }
   function isOn(){ var cb=$('cartAsParty'); return !!(cb && cb.checked); }
 
   function setOpen(v){
     var s=$('cartPartySheet'); if(!s) return;
-    s.hidden=!v;
+    liftSheet(); s.hidden=!v;
     if(v){ var cb=$('cartAsParty'); if(cb) setTimeout(function(){ cb.focus({preventScroll:true}); },50); }
     paint();
   }
@@ -51,6 +53,6 @@
     window.renderCart=function(){ var r=orig.apply(this,arguments); paint(); return r; };
   }
   wrapRender();
-  setInterval(function(){ wrapRender(); paint(); }, 800);
-  paint();
+  setInterval(function(){ wrapRender(); liftSheet(); paint(); }, 800);
+  liftSheet(); paint();
 })();

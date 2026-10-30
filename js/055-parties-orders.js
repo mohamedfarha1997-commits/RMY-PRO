@@ -237,7 +237,8 @@
       if(noteEl) noteEl.value='';
       if(phEl) phEl.value='';
       refreshCartUI();
-      var dc=document.getElementById('drawerClose'); if(dc) dc.click();
+      var dc=document.getElementById('cartModalClose')||document.getElementById('drawerClose'); if(dc) dc.click();
+      var __sh=document.getElementById('cartPartySheet'); if(__sh) __sh.hidden=true;
       try{ await window.pmPartyWorkflowRefresh(); }catch(_){}
       alert('تم إرسال الأوردر للشيف وجاري العمل عليه ✓\nالعميل: '+cust+' · التسليم: '+date+(time?' '+time:'')+payMsg);
     };
