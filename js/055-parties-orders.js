@@ -142,6 +142,28 @@
   };
   window.pmPartyCheckout=function(lines){
     if(!cloudReady||!cloudActorName||!cloudActorPin){ alert('لازم تكون متصل بالسحابة عشان تسجّل أوردر الحفلات.'); return; }
+    /* الأصناف العادية في السلة بتتحول تلقائي لأصناف حفلة: صنف باسم «الاسم (حفلة)» بوصفة الصنف نفسه */
+    var __regs=lines.filter(function(l){ var m=(state.menu||[]).find(function(x){return x&&x.name===l.name}); return !m||m.kind!=='party'; });
+    if(__regs.length){
+      var __noRecipe=__regs.filter(function(l){ return !Object.prototype.hasOwnProperty.call(state.recipes||{}, l.name); });
+      if(__noRecipe.length){ alert('مفيش وصفة إنتاج للأصناف دي، فمينفعش تتحول لحفلة:\n'+__noRecipe.map(function(l){return '- '+l.name}).join('\n')+'\nضيف وصفتها الأول من تبويب المنيو.'); return; }
+      if(!confirm('الأصناف دي هتتحول لأصناف حفلة في الأوردر:\n'+__regs.map(function(l){return '- '+l.name+' × '+l.qty}).join('\n')+'\nمتابعة؟')) return;
+      var __ren={};
+      for(var __i=0;__i<__regs.length;__i++){
+        var __l=__regs[__i], __alias=__l.name+' (حفلة)';
+        var __ex=(state.menu||[]).find(function(x){return x&&x.name===__alias});
+        if(__ex && __ex.kind!=='party'){ alert('الاسم «'+__alias+'» مستخدم لصنف عادي. غيّر اسم الصنف الأصلي.'); return; }
+        __ren[__l.name]=__alias;
+        if(!__ex){
+          state.menu=Array.isArray(state.menu)?state.menu:[];
+          state.menu.push({name:__alias, price:priceOf(__l.name), image:'', kind:'party', parts:[{name:__l.name, qty:1}], active:true});
+        }
+      }
+      save();
+      cartWrite(cartRaw().map(function(c){ return __ren[c.name]?Object.assign({},c,{name:__ren[c.name]}):c; }));
+      lines=lines.map(function(l){ return __ren[l.name]?Object.assign({},l,{name:__ren[l.name]}):l; });
+      refreshCartUI();
+    }
     var noteEl=document.getElementById('cartNote'), phEl=document.getElementById('cartPhone');
     var today=new Date();
     var iso=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
