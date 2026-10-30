@@ -35,12 +35,22 @@
   }
 
   // أقرب خلفية لها لون أو صورة
+  function overlaps(a,b){
+    return a.left<b.right && a.right>b.left && a.top<b.bottom && a.bottom>b.top;
+  }
   function effectiveBg(el){
-    var cur=el;
+    var cur=el, er=el.getBoundingClientRect();
     while(cur && cur.nodeType===1){
       var cs=getComputedStyle(cur);
       var m=cs.backgroundImage.match(/url\(["']?(.*?)["']?\)/);
       if(m && m[1]) return {kind:'img', url:m[1], el:cur};
+      // صورة <img> تحت النص (زي صورة الصنف في المنيو)
+      var imgs=cur.querySelectorAll('img');
+      for(var k=0;k<imgs.length;k++){
+        var im=imgs[k];
+        if(!im.src || im.naturalWidth===0) continue;
+        if(overlaps(er, im.getBoundingClientRect())) return {kind:'img', url:im.src, el:im};
+      }
       var c=parse(cs.backgroundColor);
       if(c && c.a>0.5) return {kind:'color', c:c};
       cur=cur.parentElement;
