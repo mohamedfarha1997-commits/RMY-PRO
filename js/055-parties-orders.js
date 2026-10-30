@@ -154,6 +154,7 @@
       '<label>هاتف العميل (اختياري)</label><input id="ptyCkPhone" inputmode="tel" maxlength="30" placeholder="رقم الهاتف" value="'+esc(phEl?phEl.value.trim():'')+'">'+
       '<label>تاريخ التسليم</label><input id="ptyCkDate" type="date" lang="en-GB" dir="ltr" value="'+iso+'">'+
       '<label>وقت التسليم</label><input id="ptyCkTime" type="time" lang="en-GB" dir="ltr" value="12:00">'+
+      '<label>عدد الأفراد (اختياري، للمعلومات بس)</label><input id="ptyCkGuests" inputmode="numeric" maxlength="6" placeholder="0">'+
       '<label>ملاحظات الأوردر</label><input id="ptyCkNote" maxlength="300" placeholder="ملاحظات اختيارية">'+
       '<label>المبلغ اللي اتدفع دلوقتي (اختياري)</label><input id="ptyCkPaid" inputmode="decimal" maxlength="10" placeholder="0">'+
       '<div class="pty-parts">'+rowsHtml+'</div>'+
@@ -168,6 +169,7 @@
       var date=document.getElementById('ptyCkDate').value;
       var time=document.getElementById('ptyCkTime').value||'';
       var note=document.getElementById('ptyCkNote').value.trim();
+      var guests=Math.max(0,parseInt(document.getElementById('ptyCkGuests').value,10)||0);
       var paid=Number(document.getElementById('ptyCkPaid').value)||0;
       if(paid<0){ alert('المبلغ المدفوع مينفعش يكون سالب.'); return; }
       if(!cust){ alert('اكتب اسم العميل.'); return; }
@@ -179,7 +181,7 @@
         for(var i=0;i<lines.length;i++){
           var l=lines[i];
           var res=await apiCall({action:'party_order_action',party_action:'create',
-            order:{name:l.name,customer:cust,customerPhone:phone,customerAddress:String((document.getElementById('cartAddr')||{}).value||'').trim(),date:date,time:time,qty:l.qty,note:note,groupId:groupId,price:priceOf(l.name)},
+            order:{name:l.name,customer:cust,customerPhone:phone,customerAddress:String((document.getElementById('cartAddr')||{}).value||'').trim(),date:date,time:time,qty:l.qty,note:note,guests:guests,groupId:groupId,price:priceOf(l.name)},
             employee_name:cloudActorName,pin:cloudActorPin});
           if(res.error) throw res.error;
           sent++;

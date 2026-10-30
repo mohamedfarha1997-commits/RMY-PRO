@@ -114,7 +114,7 @@
     }
     var tot=document.getElementById('cartTotal'); if(tot) tot.textContent=moneyFmt(t.total)+' ج.م';
     var cb=document.getElementById('cartCheckout'); if(cb) cb.disabled=!cart.length;
-     if(cb) cb.textContent=cart.some(function(l){var m=menuItem(l.name);return !!(m&&(m.kind==='party'||(m.kind==='drink'&&m.onDemand===true)))})?'إرسال الأوردر للشيف':'إتمام البيع';
+     if(cb) cb.textContent=((window.pmCartAsParty&&window.pmCartAsParty())||cart.some(function(l){var m=menuItem(l.name);return !!(m&&(m.kind==='party'||(m.kind==='drink'&&m.onDemand===true)))}))?'إرسال الأوردر للشيف':'إتمام البيع';
     
   }
 
@@ -148,6 +148,10 @@
   window.pmCartCheckout=async function(){
     var cart=loadCart();
     if(!cart.length){alert('السلة فاضية.');return}
+    // تحويل الأوردر لحجز حفلة: نفس الأصناف بأسعار المنيو، ونافذة الحفلات بتسجّل الحجز
+    if(window.pmCartAsParty && window.pmCartAsParty()){
+      return window.pmPartyCheckout(cart.map(function(l){ return {name:l.name, qty:l.qty}; }));
+    }
     // المشروبات التي تُحضّر عند الطلب تُرسل ضمن نفس السلة والفاتورة؛ لا نفصلها عن الأكل.
     var __pl=cart.filter(function(l){var m=menuItem(l.name);return !!(m&&m.kind==='party')});
     if(__pl.length){
