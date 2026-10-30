@@ -71,20 +71,25 @@
     });
   }
 
-  // يفتح تبويب الحفلات ويضغط زرار التحصيل الخاص بالحجز ده
+  // يفتح نافذة التحصيل والتسليم مباشرة من الشاشة دي (من غير ما نغيّر التبويب)
+  function findIndex(firstId){
+    var info=(window.__pmBkInfo||[]);
+    for(var i=0;i<info.length;i++){ if(info[i] && info[i].ids && info[i].ids.indexOf(firstId)>=0) return i; }
+    return -1;
+  }
   function openCollect(book){
     var firstId=book.orders[0] && book.orders[0].id;
-    if(typeof window.pmGo==='function') window.pmGo('parties');
-    var tries=0;
-    var timer=setInterval(function(){
-      tries++;
-      var info=(window.__pmBkInfo||[]);
-      var idx=-1;
-      for(var i=0;i<info.length;i++){ if(info[i] && info[i].ids && info[i].ids.indexOf(firstId)>=0){ idx=i; break; } }
-      var btn=idx>=0 ? document.querySelector('#partiesBody [data-po-collect="'+idx+'"]') : null;
-      if(btn && !btn.disabled){ clearInterval(timer); btn.click(); }
-      else if(tries>40){ clearInterval(timer); alert('تعذر فتح الحجز. حدّث الصفحة وحاول تاني.'); }
-    },100);
+    var idx=findIndex(firstId);
+    var go=function(i){
+      if(typeof window.pmCollectOpen==='function') window.pmCollectOpen(i);
+    };
+    if(idx>=0){ go(idx); return; }
+    // بيانات الحفلات مش متحمّلة في الذاكرة، نحدّثها الأول
+    if(typeof window.pmPartyWorkflowRefresh!=='function'){ alert('تعذر فتح الحجز. حدّث الصفحة.'); return; }
+    window.pmPartyWorkflowRefresh().then(function(){
+      var j=findIndex(firstId);
+      if(j>=0) go(j); else alert('الحجز ده اتغيّر. حدّث الصفحة وحاول تاني.');
+    }).catch(function(){ alert('تعذر تحميل البيانات. حاول تاني.'); });
   }
 
   // تحديث الشاشة لما بيانات الحفلات تتغير
