@@ -370,7 +370,7 @@
   <section id="drawerBasket" class="drawer-basket" hidden>
     <h3>🧺 السلة</h3>
     <div id="cartItems"></div>
-    <label for="cartPhone">رقم التليفون (اختياري)</label><input id="cartPhone" type="tel" inputmode="tel" placeholder="01xxxxxxxxx"><label for="cartNote">اسم العميل (اختياري)</label><input id="cartNote" placeholder="اسم العميل"><label class="pm-cart-party-toggle"><input type="checkbox" id="cartAsParty"> حجز حفلة (تحويل الأوردر لحجز حفلة)</label><label for="cartAddr">عنوان التسليم (للحفلات)</label><input id="cartAddr" placeholder="العنوان">
+    <label for="cartPhone">رقم التليفون (اختياري)</label><input id="cartPhone" type="tel" inputmode="tel" placeholder="01xxxxxxxxx"><label for="cartNote">اسم العميل (اختياري)</label><input id="cartNote" placeholder="اسم العميل"><div class="pm-party-bar"><span id="cartPartyChip" class="pm-party-chip-txt">بيع عادي</span><button type="button" id="cartPartyOpen" class="pm-party-open">تحويل لحجز حفلة</button></div><div id="cartPartySheet" class="pm-party-sheet" hidden><div class="pm-party-card" role="dialog" aria-modal="true" aria-labelledby="cartPartyTitle"><div class="pm-party-head"><b id="cartPartyTitle">حجز حفلة</b><button type="button" id="cartPartyClose" aria-label="إغلاق">×</button></div><label class="pm-party-switch"><input type="checkbox" id="cartAsParty"><span class="pm-party-track"></span><span>حوّل الأوردر لحجز حفلة</span></label><p class="pm-party-hint">الأوردر هيتسجّل كحجز للشيف، ومفيش خصم مخزون عند الحجز.</p><label for="cartAddr">عنوان التسليم</label><input id="cartAddr" placeholder="العنوان"><div class="actions"><button type="button" class="primary" id="cartPartyDone">تم</button></div></div></div>
     <div class="sale-total">الإجمالي: <b id="cartTotal">0 ج.م</b></div>
     <div class="actions">
       <button id="cartClear" class="secondary mini" type="button" onclick="pmCartClear()">تفريغ</button>
@@ -430,6 +430,7 @@
 
 
 <script src="js/067-customers-address-scope.js"></script>
+<script src="js/136-cart-party-sheet.js"></script>
 
 <script src="js/068-ui-notification-sound.js"></script>
 
@@ -538,6 +539,7 @@
 <link rel="stylesheet" href="css/133-menu-text-contrast.css">
 <link rel="stylesheet" href="css/134-contrast-fix.css">
 <link rel="stylesheet" href="css/137-ready-delivery-sales.css">
+<link rel="stylesheet" href="css/138-cart-party-sheet.css">
 <script src="js/091-header-date-time.js"></script>
 <script src="js/121-prep-live.js"></script>
 <script src="js/092-brand-sounds.js"></script>
