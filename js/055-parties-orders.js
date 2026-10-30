@@ -239,6 +239,10 @@
       refreshCartUI();
       var dc=document.getElementById('cartModalClose')||document.getElementById('drawerClose'); if(dc) dc.click();
       var __sh=document.getElementById('cartPartySheet'); if(__sh) __sh.hidden=true;
+      /* قفل مباشر للسلة كـ fallback: ما يعتمدش على الضغط على الزرار بس */
+      if(typeof window.pmCloseCart==='function') window.pmCloseCart();
+      var __ov=document.getElementById('cartModalOverlay'); if(__ov){ __ov.hidden=true; }
+      document.body.classList.remove('cart-modal-open');
       try{ await window.pmPartyWorkflowRefresh(); }catch(_){}
       alert('تم إرسال الأوردر للشيف وجاري العمل عليه ✓\nالعميل: '+cust+' · التسليم: '+date+(time?' '+time:'')+payMsg);
     };
