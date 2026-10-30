@@ -1,0 +1,27 @@
+/* ===== نافذة "حصلت مشكلة": أزرار واضحة ومتناسقة مع عرض الهاتف ===== */
+#pmDiagOv .pdg-box{width:min(94vw,520px);max-height:88vh;overflow:auto;box-sizing:border-box}
+#pmDiagOv .pdg-acts{display:flex!important;flex-wrap:wrap;gap:8px;width:100%;margin-top:12px}
+#pmDiagOv .pdg-acts button{
+  flex:1 1 calc(50% - 8px);min-height:44px;padding:10px 12px;
+  border-radius:999px!important;border:1px solid #F0D9A3!important;
+  font-size:14px!important;font-weight:800!important;white-space:nowrap;
+  color:#1E3A5F!important;
+}
+#pmDiagOv .pdg-acts button#pmDiagCopy{background:#E8B04B!important;border-color:#E8B04B!important}
+#pmDiagOv textarea#pmDiagText{width:100%;min-height:170px;box-sizing:border-box;font-size:13px;line-height:1.7;direction:rtl}
+@media (max-width:360px){
+  #pmDiagOv .pdg-acts button{flex:1 1 100%}
+}
+
+/* ===== تحسينات النافذة: رسالة عربية، عداد التكرار، زرار واتساب، تفاصيل مطوية ===== */
+#pmDiagOv .pdg-msg{font-size:15px;line-height:1.8;color:#24384F;margin:6px 0 10px;font-weight:700}
+#pmDiagOv .pdg-dev{font-size:13px;color:#5B6B7D;margin:0 0 6px}
+#pmDiagOv .pdg-cnt{font-size:12px;color:#8A5A00;background:#FBF0D9;border:1px solid #F0D9A3;border-radius:999px;display:inline-block;padding:4px 12px;margin:4px 0}
+#pmDiagOv .pdg-cnt[hidden]{display:none}
+#pmDiagOv .pdg-retry{background:#E8B04B!important;border-color:#E8B04B!important}
+#pmDiagOv .pdg-wa{background:#DDF3E4!important;border-color:#9FD8B4!important}
+#pmDiagOv .pdg-copy{background:#FBF0D9!important}
+#pmDiagOv .pdg-ren,#pmDiagOv .pdg-close{background:#F5EFEB!important}
+#pmDiagOv .pdg-det{margin-top:12px;border-top:1px solid #E8DCC6;padding-top:8px}
+#pmDiagOv .pdg-det summary{cursor:pointer;font-size:13px;font-weight:700;color:#24384F;padding:6px 0}
+#pmDiagOv .pdg-det textarea{margin-top:6px}
