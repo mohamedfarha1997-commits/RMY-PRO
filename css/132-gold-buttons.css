@@ -1,0 +1,27 @@
+/* ===== كل الأزرار في الشاشات بنفس اللون الذهبي زي زرار الرئيسية ===== */
+html body main button:not(.pm-center),
+html body .card button,
+html body .pm-back-bar button,
+html body .pm-sheet-box button,
+html body .tablewrap button,
+html body #analytics button{
+  background:#F2B233!important;
+  color:#1E3A5F!important;
+  border:1px solid #E0A526!important;
+  box-shadow:0 2px 8px rgba(242,178,51,.25)!important;
+  font-weight:800!important;
+}
+html body main button:hover:not(:disabled),
+html body .card button:hover:not(:disabled),
+html body .pm-back-bar button:hover:not(:disabled){
+  background:#E9A623!important;
+}
+html body main button:disabled,
+html body .card button:disabled{
+  opacity:.55!important;
+  box-shadow:none!important;
+}
+/* زرار تسجيل الخروج والدوك والهيدر ليهم ألوانهم الخاصة وما اتغيروش */
+html body #signOutButton{background:#B42318!important;color:#FFFDF8!important;border-color:#B42318!important;box-shadow:none!important}
+html body #pmDock button,
+html body header button{box-shadow:none!important}
