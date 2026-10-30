@@ -214,6 +214,9 @@
         }
       }
       ov.remove();
+      /* الحجز اتسجل: نطفي علامة الحفلة عشان الأوردر الجاي يكون بيع عادي */
+      var __cbOff=document.getElementById('cartAsParty');
+      if(__cbOff){ __cbOff.checked=false; __cbOff.dispatchEvent(new Event('change',{bubbles:true})); }
       if(noteEl) noteEl.value='';
       if(phEl) phEl.value='';
       refreshCartUI();

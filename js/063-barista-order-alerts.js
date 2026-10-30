@@ -32,7 +32,6 @@
     if(!el){
       el=document.createElement('div'); el.id='pmDqBanner';
       el.style.cssText='display:none;position:fixed;top:10px;left:12px;right:12px;max-width:520px;margin:0 auto;z-index:9500;background:#FFFDF6;color:#1E3A5F;border-radius:14px;padding:12px 14px;font-weight:700;font-size:14px;text-align:center;box-shadow:0 10px 24px #0005;cursor:pointer';
-      el.addEvencolor:#1E3A5F;border-radius:14px;padding:12px 14px;font-weight:700;font-size:14px;text-align:center;box-shadow:0 10px 24px #0005;cursor:pointer';
       el.addEventListener('click',function(){ if(typeof window.go==='function') window.go('drinkQueue'); });
       document.body.appendChild(el);
     }
