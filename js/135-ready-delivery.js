@@ -71,6 +71,11 @@
     });
   }
 
+  // أول أوردر مش ملغي في الحجز (الملغي ممكن يكون أول واحد وميبقاش موجود في بيانات التحصيل)
+  function firstLiveId(book){
+    var live=(book.orders||[]).filter(function(o){ return o.status!=='cancelled'; });
+    return live.length ? live[0].id : (book.orders[0] && book.orders[0].id);
+  }
   // يفتح نافذة التحصيل والتسليم مباشرة من الشاشة دي (من غير ما نغيّر التبويب)
   function findIndex(firstId){
     var info=(window.__pmBkInfo||[]);
@@ -78,7 +83,7 @@
     return -1;
   }
   function openCollect(book){
-    var firstId=book.orders[0] && book.orders[0].id;
+    var firstId=firstLiveId(book);
     var idx=findIndex(firstId);
     var go=function(i){
       if(typeof window.pmCollectOpen==='function') window.pmCollectOpen(i);
