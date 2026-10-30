@@ -123,28 +123,11 @@
     return false;
   }
   function showModal(entry){
-    var now=Date.now();
     if(navigator.onLine===false) return;               // أوفلاين: بنسجل بس
     var key=String(entry.message||'').slice(0,160);
-    var day=dayKey(), seen=seenStore();
-    if(!seen[day]) seen[day]={};
-    var count=(seen[day][key]||0)+1;
-    seen[day][key]=count;
-    Object.keys(seen).sort().slice(0,-7).forEach(function(k){ delete seen[k]; });
-    saveSeen(seen);
-
-    // لو النافذة مفتوحة لنفس المشكلة: نحدّث العداد بس
-    var open=document.getElementById('pmDiagOv');
-    if(open){
-      if(open.dataset.key===key){
-        var c=open.querySelector('#pmDiagCnt');
-        if(c){ c.hidden=false; c.textContent='تكررت المشكلة '+count+' مرات النهارده'; }
-      }
-      return;
-    }
-    if(count>1) return;                                // نفس المشكلة اليوم: مش بنفتح نافذة تانية
-    if(now-lastModalAt<3000) return;
-    lastModalAt=now; lastMsg=entry.message;
+    var old=document.getElementById('pmDiagOv');
+    if(old) old.remove();                              // كل خطأ بيفتح نافذة جديدة، من غير منع للتكرار
+    lastModalAt=Date.now(); lastMsg=entry.message;
 
     var text=fullReport(entry);
     var ov=document.createElement('div'); ov.id='pmDiagOv'; ov.dataset.key=key;
@@ -166,6 +149,7 @@
     '</div>';
     document.body.appendChild(ov);
     ov.querySelector('.pdg-msg').textContent=friendlyMsg(entry.message);
+    ov.querySelector('#pmDiagCnt').hidden=true;
     ov.querySelector('#pmDiagText').value=text;
     ov.querySelector('#pmDiagName').textContent=entry.device;
 
