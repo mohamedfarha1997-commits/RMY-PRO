@@ -71,7 +71,7 @@
     el.style.setProperty('text-shadow', col==='#FFFDF8' ? '0 1px 3px rgba(0,0,0,.55)' : 'none','important');
   }
 
-  var SKIP='#pmDock,header,#pmTopBar,.toast,.toast-stack,#pmDiagOv,#pmMaint,.side-drawer,.drawer,.sync-pill';
+  var SKIP='#pmDock,header,#pmTopBar,.toast,.toast-stack,#pmDiagOv,#pmMaint,.side-drawer,.drawer,.sync-pill,.prep-board';
   function scan(root){
     var els=(root||document.body).querySelectorAll('*');
     for(var i=0;i<els.length;i++){
