@@ -1,6 +1,6 @@
 // Service worker: لازم يكون فيه fetch handler عشان المتصفح يعتبر الموقع قابل للتثبيت.
 // الشبكة أولًا، ولو مفيش نت يرجع النسخة المخزنة (البيانات الحية ما بتتخزنش قديمة).
-const CACHE = 'rmy-shell-v81';
+const CACHE = 'rmy-shell-v82';
 const SHELL = [
   './',
   './index.html',
@@ -122,7 +122,6 @@ const SHELL = [
   './css/102-theme-harmony.css',
   './css/103-theme-dark-inline-fix.css',
   './css/104-theme-final.css',
-  './css/105-reports-analytics-clean.css',
   './css/106-invoices-language.css',
   './css/107-invoices-english-names.css',
   './css/108-ui-notifications-bell.css',
