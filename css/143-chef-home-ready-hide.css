@@ -8,3 +8,13 @@ html body.role-barista .pm-tile:has(#pmTileReady){display:none!important}
    المحدد بيستهدف الخلفية الكحلي بالظبط عشان مايأثرش على باقي المراحل */
 html body tr.stage-head td[style*="background:#1E3A5F"]{color:#FFFDF8!important}
 html body tr.stage-head td[style*="background:#1E3A5F"] .pm-arrow{color:#FFFDF8!important}
+
+/* الشيف والباريستا: تبويب/تايل «جاهز للتسليم» في القائمة الرئيسية مخفي تمامًا (للمبيعات والمدير فقط) */
+html body[data-role="kitchen"] nav.tabs .tab[data-tab="readyDelivery"],
+html body[data-role="barista"] nav.tabs .tab[data-tab="readyDelivery"],
+html body.role-kitchen nav.tabs .tab[data-tab="readyDelivery"],
+html body.role-barista nav.tabs .tab[data-tab="readyDelivery"],
+html body[data-role="kitchen"] #readyDelivery.panel,
+html body[data-role="barista"] #readyDelivery.panel,
+html body.role-kitchen #readyDelivery.panel,
+html body.role-barista #readyDelivery.panel{display:none!important}
