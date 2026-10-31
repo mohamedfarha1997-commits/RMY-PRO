@@ -115,9 +115,13 @@
 
     // استهلاك الخامات الفعلي من حركة المخزون (الخصومات)
     var useBy={};
+    var invNames={}; arr(m.inventory).forEach(function(s){ if(s&&s.name) invNames[String(s.name)]=true; });
+    var hasInv=Object.keys(invNames).length>0;
     arr(m.history).forEach(function(x){
       var d=num(x.deduct); if(d<=0) return;
       var n=String(x.name||'—'), u=String(x.unit||'');
+      /* خامات اتحذفت أو مش موجودة بالمخزون دلوقتي مش بتظهر في الاستهلاك */
+      if(hasInv && !invNames[n]) return;
       var k=n+'||'+u; var r=useBy[k]||(useBy[k]={name:n,unit:u,qty:0});
       r.qty+=d;
     });

@@ -258,7 +258,8 @@
     }
 
     // 2) الأوردرات المطلوبة: كل صنف مع عميله وحالته
-    var sorted=all.slice().sort(function(a,b){return String(a.date||'').localeCompare(String(b.date||''))||String(a.time||'').localeCompare(String(b.time||''));});
+    /* الشيف والباريستا بيشوفوا بس الأوردرات اللي لسه محتاجة تجهيز، الجاهز والمُسلّم بيتشاف في تبويب جاهز للتسليم */
+    var sorted=all.slice().filter(function(o){ return !(mine && (o.status==='ready'||o.status==='delivered'||o.status==='cancelled')); }).sort(function(a,b){return String(a.date||'').localeCompare(String(b.date||''))||String(a.time||'').localeCompare(String(b.time||''));});
     var ordersHtml=sorted.length
       ? '<div class="pm-po-tablewrap"><table><tr><th>الصنف</th><th>العميل</th><th>التسليم</th><th>الكمية</th><th>الحالة</th></tr>'+sorted.map(function(o){
           return '<tr><td>'+pmPartyEsc(o.name)+'</td><td>'+pmPartyEsc(o.customer)+(o.customerPhone?'<br><small>'+pmPartyEsc(o.customerPhone)+'</small>':'')+'</td><td>'+pmPartyEsc(o.date)+' '+pmPartyEsc(o.time||'')+'</td><td>'+nfmt(o.qty)+'</td><td>'+statusPill(o)+'</td></tr>';
