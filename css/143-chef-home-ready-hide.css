@@ -22,3 +22,10 @@ html body.role-barista #readyDelivery.panel{display:none!important}
 /* أمان إضافي: «جاهز للتسليم» يظهر للمدير والمبيعات فقط، أي دور تاني (مهما كان اسمه) مخفي */
 html body:not([data-role="admin"]):not([data-role="sales"]) nav.tabs .tab[data-tab="readyDelivery"],
 html body:not([data-role="admin"]):not([data-role="sales"]) #readyDelivery.panel{display:none!important}
+
+/* إصلاح: قاعدة 075 (#partiesGroup .tab{display:flex!important}) كانت بتغلب على القواعد اللي فوق
+   لأنها بتستخدم ID فأعلى في الخصوصية، فكان تبويب «جاهز للتسليم» بيظهر للشيف والباريستا.
+   القاعدة دي بتستخدم #partiesGroup عشان تغلب عليها، ومش بتأثر على المدير والمبيعات. */
+html body:not([data-role="admin"]):not([data-role="sales"]) #partiesGroup .tab[data-tab="readyDelivery"],
+html body:not([data-role="admin"]):not([data-role="sales"]) nav.tabs #partiesGroup .tab[data-tab="readyDelivery"],
+html body:not([data-role="admin"]):not([data-role="sales"]) .tab.pm-tab-off[data-tab="readyDelivery"]{display:none!important}
