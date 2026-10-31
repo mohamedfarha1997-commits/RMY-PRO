@@ -165,7 +165,12 @@
       notifCache=list;
       var newest=list.reduce(function(m,n){ return Math.max(m,notifTime(n)) },0);
       var key=notifSeenKey(), stored=localStorage.getItem(key);
-      if(stored===null){ localStorage.setItem(key,String(newest)); renderNotices(); return; }
+      if(stored===null){
+        /* أول مرة الجهاز يفتح: كل الإشعارات القديمة بتتعتبر مقروءة، والجرس يعرض الجديد بس */
+        localStorage.setItem(key,String(newest));
+        if(localStorage.getItem('pmNotifClearedAt')===null) localStorage.setItem('pmNotifClearedAt',String(newest||Date.now()));
+        renderNotices(); return;
+      }
       var seen=Number(stored)||0;
       var fresh=list.filter(function(n){ return notifTime(n)>seen }).sort(function(x,y){ return notifTime(x)-notifTime(y) });
       if(fresh.length){
