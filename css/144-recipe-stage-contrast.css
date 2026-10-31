@@ -16,3 +16,6 @@ html body tr.stage-head td span:not(.pm-arrow){color:#1E3A5F!important;backgroun
 html body td[style*="background:#fff7ec"]{color:#1E3A5F!important}
 /* عناوين مراحل شاشة المدير */
 html body #recipeEditor .ph{color:#1E3A5F!important}
+
+/* اسم الصنف في الوصفة: نفس مقاس خانات الإضافة (صفوف المكونات) عشان يبقى متناسق */
+#recipeEditor #recipeName{min-height:44px;height:44px;padding:8px;font-size:12px;box-sizing:border-box}
