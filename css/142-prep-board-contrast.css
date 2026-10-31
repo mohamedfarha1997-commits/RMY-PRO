@@ -1,0 +1,10 @@
+/* قسم التحضير: نص كحلي واضح على خلفيات فاتحة ثابتة (مش معتمد على متغيرات الثيم) */
+html body #order .prep-board,
+html body #order .prep-box{background-color:#FFFDF8!important}
+html body #order .prep-box{color:#1E3A5F!important;border-color:#E7DCD5!important}
+html body #order .prep-head h3{color:#1E3A5F!important}
+html body #order .prep-count{background:#F4ECE7!important;color:#1E3A5F!important}
+html body #order .prep-card{background:#FBF6F1!important;color:#1E3A5F!important;border-color:#EADFD6!important}
+html body #order .prep-card b{color:#1E3A5F!important}
+html body #order .prep-info span{color:#4A6583!important}
+html body #order .prep-board .empty{color:#4A6583!important;background:transparent!important}
