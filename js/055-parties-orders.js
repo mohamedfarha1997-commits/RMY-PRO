@@ -3,7 +3,7 @@
 
   function priceOf(name){ var m=(state.menu||[]).find(function(x){return x&&x.name===name}); return Number(m&&m.price)||0; }
   function hashKey(str){ var h=5381; for(var i=0;i<str.length;i++){ h=((h*33)^str.charCodeAt(i))>>>0; } return h.toString(36); }
-  function bookingKey(o){ return o.groupId ? 'g:'+o.groupId : 'b:'+[o.customer||'',o.date||'',o.time||'',o.customerPhone||''].join('|'); }
+  function bookingKey(o){ return o.groupId ? 'g:'+o.groupId : 'o:'+String(o.id||''); }
   window.pmPartyBookingKey=bookingKey;
   function dateText(iso){ if(!iso) return ''; var d=new Date(iso); return isNaN(d.getTime())?'':d.toLocaleDateString('ar-EG'); }
   function cartRaw(){ try{ var a=JSON.parse(localStorage.getItem('pmCart:'+(cloudActorName||'anon'))||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
