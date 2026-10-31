@@ -244,24 +244,39 @@ function renderRecipeCostResult(){const name=$('costRecipe').value;if(!name){$('
 }
 function renderAllRecipeCosts(){const rows=names().map(n=>recipeCost(n));$('allRecipeCosts').innerHTML=rows.length?`<table><tr><th>الصنف</th><th>تكلفة الوزنة</th><th>الناتج</th><th>تكلفة الوحدة</th><th>سعر مقترح</th><th>حالة التسعير</th></tr>${rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${r.unknown.length?'غير مكتملة':moneyFmt(r.batchCost)+' ج.م'}</td><td>${nfmt(r.yieldQty)}</td><td>${r.unitCost===null?'غير مكتملة':moneyFmt(r.unitCost)+' ج.م'}</td><td>${r.suggested===null?'غير متاح':moneyFmt(r.suggested)+' ج.م'}</td><td>${r.unknown.length?`<span class="pill warn">${r.unknown.length} خامة غير مسعرة</span>`:'<span class="pill">مكتمل</span>'}</td></tr>`).join('')}</table>`:'<div class="empty">لا توجد وصفات.</div>'}
 function getPurchaseRows(){
- // النواقص تخص المخزون فقط: كل خامة معروفة للتطبيق لا يوجد لها رصيد موجب.
+ // النواقص نوعين:
+ // (1) خامات مش مسجلة بالمخزون أو رصيدها صفر
+ // (2) خامات مطلوبة لأوردرات التحضير الحالية (قسم التحضير) ورصيدها مش مكفي
  const inv=Array.isArray(state.inventory)?state.inventory:[];
- return allIngredientNames().map(name=>{
+ const rows=allIngredientNames().map(name=>{
    const entries=inv.filter(x=>x.name===name);
    const unit=(entries.find(x=>x.unit)||Object.values(state.recipes||{}).flat().find(c=>c.name===name)||{}).unit||'';
    const have=entries.reduce((sum,x)=>sum+Math.max(0,Number(x.qty)||0),0);
-   const missingEntry=entries.length===0;
-   return {name,have,unit,missingEntry,short:have<=1e-9?1:0,status:missingEntry?'غير مضافة للمخزون':have<=1e-9?'الرصيد صفر':'متوفرة'};
- }).filter(x=>x.missingEntry||x.have<=1e-9);
+   return {name,have,unit,missingEntry:entries.length===0,prepNeed:0,prepShort:0,prepUnit:''};
+ });
+ const byName=new Map(rows.map(r=>[r.name,r]));
+ (Array.isArray(state.orders)?calculate():[]).forEach(n=>{
+   const row=byName.get(n.name); if(!row) return;
+   const have=getStock(n.name,n.unit);
+   const short=Math.max(0,n.qty-have);
+   if(!(short>1e-9)) return;
+   row.prepNeed=n.qty; row.prepShort=short; row.prepUnit=n.unit;
+ });
+ return rows.filter(x=>x.missingEntry||x.have<=1e-9||x.prepShort>1e-9).map(x=>{
+   const status=x.missingEntry?'غير مضافة للمخزون':(x.have<=1e-9?'الرصيد صفر':'ناقص للتحضير');
+   return {...x,status};
+ });
 }
+function fmtPrep(q,u){ if(!(q>0)) return '—'; const f=formatAggregate(q,u); return nfmt(f.qty)+' '+f.unit; }
 function renderPurchaseList(){
  if(!$('purchaseList'))return;
  const rows=getPurchaseRows();
- const html=rows.length?`<div class="notice-warn">عدد الخامات غير الموجودة بالمخزون أو ذات الرصيد الصفري: ${rows.length}.</div><div class="tablewrap"><table><tr><th>الخامة</th><th>الرصيد الحالي</th><th>الوحدة</th><th>الحالة</th></tr>${rows.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.missingEntry?'—':nfmt(x.have)}</td><td>${esc(x.unit||'—')}</td><td><span class="pill low">${esc(x.status)}</span></td></tr>`).join('')}</table></div>`:'<div class="notice-ok">كل الخامات المعروفة مسجلة بالمخزون ولها رصيد أكبر من صفر.</div>';
+ const prepCount=rows.filter(x=>x.prepShort>1e-9).length;
+ const html=rows.length?`<div class="notice-warn">عدد النواقص: ${rows.length}${prepCount?` · منها ${prepCount} ناقصة لأوردرات التحضير الحالية`:''}.</div><div class="tablewrap"><table><tr><th>الخامة</th><th>الرصيد الحالي</th><th>المطلوب للتحضير</th><th>الناقص للتحضير</th><th>الوحدة</th><th>الحالة</th></tr>${rows.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.missingEntry?'—':nfmt(x.have)}</td><td>${x.prepShort>1e-9?fmtPrep(x.prepNeed,x.prepUnit):'—'}</td><td>${x.prepShort>1e-9?`<span class="pill low">${fmtPrep(x.prepShort,x.prepUnit)}</span>`:'—'}</td><td>${esc(x.unit||'—')}</td><td><span class="pill low">${esc(x.status)}</span></td></tr>`).join('')}</table></div>`:'<div class="notice-ok">مفيش نواقص: كل الخامات المطلوبة للتحضير متوفرة، وكل الخامات المعروفة ليها رصيد أكبر من صفر.</div>';
  $('purchaseList').innerHTML=html;
 }
 function exportCsv(filename,rows){const escCsv=v=>{const s=String(v??'');return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};const csv='\ufeff'+rows.map(r=>r.map(escCsv).join(',')).join('\r\n');download(filename,csv,'text/csv;charset=utf-8')}
-function exportPurchaseCsv(){const rows=getPurchaseRows();exportCsv('RMY_Stock_Shortages.csv',[['الخامة','الرصيد الحالي','الوحدة','الحالة'],...rows.map(x=>[x.name,x.missingEntry?'غير مضافة للمخزون':x.have,x.unit,x.status])])}
+function exportPurchaseCsv(){const rows=getPurchaseRows();exportCsv('RMY_Stock_Shortages.csv',[['الخامة','الرصيد الحالي','الوحدة','الحالة','المطلوب للتحضير','الناقص للتحضير','وحدة التحضير'],...rows.map(x=>[x.name,x.missingEntry?'غير مضافة للمخزون':x.have,x.unit,x.status,x.prepShort>1e-9?x.prepNeed:'',x.prepShort>1e-9?x.prepShort:'',x.prepUnit])])}
 function exportCostCsv(){exportCsv('RMY_Recipe_Cost_Report.csv',[['الصنف','تكلفة الخامات للوزنة','التكاليف الإضافية','تكلفة الوزنة','الناتج','تكلفة الوحدة','الهامش المستهدف %','سعر البيع المقترح','خامات بلا سعر'],...names().map(n=>{const r=recipeCost(n);return [n,r.total,r.extra,r.batchCost,r.yieldQty,r.unitCost,r.margin,r.suggested,r.unknown.join('، ')]})])}
 function calcSalePreview(){const name=$('saleProduct').value,qty=Number($('saleQty').value),price=Number($('salePrice').value);if(!name||!(qty>0)||!(price>=0)){ $('salePreview').textContent='اختر الصنف وأدخل الكمية والسعر لعرض تقدير الربح.';return}const c=recipeCost(name),revenue=qty*price,cost=qty*c.unitCost,profit=revenue-cost;$('salePreview').innerHTML=`الإيراد المتوقع: <b>${moneyFmt(revenue)} ج.م</b> · تكلفة الخامات التقديرية: <b>${moneyFmt(cost)} ج.م</b> · الفرق قبل المصروفات العامة: <b>${moneyFmt(profit)} ج.م</b>${c.unknown.length?`<div class="danger-note">تنبيه: التكلفة ناقصة لعدم تسعير ${c.unknown.map(esc).join('، ')}.</div>`:''}`}
 function addSale(){const name=$('saleProduct').value,qty=Number($('saleQty').value),price=Number($('salePrice').value);if(!name||!Number.isFinite(qty)||qty<=0||!Number.isFinite(price)||price<0){alert('اختر صنفًا وأدخل كمية موجبة وسعر بيع صحيحًا.');return}if(cloudActorRole==='sales'){pmSalesRecord(name,qty,price);return}const c=recipeCost(name);state.salesLog=state.salesLog||[];state.salesLog.unshift({receiptNo:(window.pmIsDrinkName(name)?nextDrinkInvoiceNo():nextInvoiceNo()),group:(window.pmIsDrinkName(name)?'drink':'food'),receiptId:(window.crypto&&crypto.randomUUID?crypto.randomUUID():'m'+Date.now()+Math.random().toString(36).slice(2)),by:cloudActorName||'',at:new Date().toISOString(),date:formatDate(),name,qty,unitPrice:price,revenue:qty*price,unitCostAtSale:c.unitCost===null?null:c.unitCost,costAtSale:c.unitCost===null?null:qty*c.unitCost,unpricedComponents:c.unknown.length,note:$('saleNote').value.trim()});$('saleQty').value='1';$('salePrice').value='';$('saleNote').value='';save();renderSales();alert('تم حفظ عملية البيع. الربح المعروض تقديري وفق أسعار الخامات المسجلة وقت البيع.')}
