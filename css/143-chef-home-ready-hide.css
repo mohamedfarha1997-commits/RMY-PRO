@@ -1,0 +1,7 @@
+/* الشيف والباريستا: مفيش تايل «جاهز للتسليم» في الرئيسية (ده للمبيعات والمدير) */
+html body[data-role="kitchen"] .pm-tile:has(#pmTileReady),
+html body[data-role="barista"] .pm-tile:has(#pmTileReady){display:none!important}
+
+/* عنوان «مرحلة التحضير» في الوصفة: خلفية كحلي والنص أبيض (كان كحلي على كحلي ومختفي) */
+html body tr.stage-head td[style*="#1E3A5F"]{color:#FFFDF8!important}
+html body tr.stage-head td[style*="#1E3A5F"] .pm-arrow{color:#FFFDF8!important}
