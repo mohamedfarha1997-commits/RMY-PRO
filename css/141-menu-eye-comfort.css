@@ -1,0 +1,142 @@
+/* شاشة المنيو المريحة للعين: خلفية دافية هادية بدل الأبيض الناصع، نص بني غامق بدل الكحلي/الأسود الحاد،
+   خطوط أكبر شوية وتباعد أوضح، وظلال خفيفة. بتتطبق بس لما شاشة المنيو تكون ظاهرة. */
+
+/* خلفية الصفحة كلها وهي في شاشة المنيو */
+html body:has(#menu.panel.active){
+  background:#EAE4DA!important;
+}
+
+/* الشاشة نفسها */
+html body #menu.panel.active{
+  color:#2B2420!important;
+  font-size:15px!important;
+  line-height:1.6!important;
+}
+
+html body #menu.panel.active .card{
+  background:#F4EFE6!important;
+  border:1px solid #DCD3C6!important;
+  box-shadow:0 2px 10px -6px rgba(43,36,32,.18)!important;
+}
+
+html body #menu .sectionhead h2,
+html body #menu > .card > .sectionhead h2{
+  color:#2B2420!important;
+  font-size:22px!important;
+  font-weight:800!important;
+}
+
+html body #menu p.small{
+  color:#6B6158!important;
+  font-size:14px!important;
+}
+
+/* حقل البحث */
+html body #menu input.menu-search,
+html body #menu input[type="search"]{
+  background:#FBF8F2!important;
+  color:#2B2420!important;
+  border:1px solid #D6CCBD!important;
+  border-radius:14px!important;
+  font-size:16px!important;
+  min-height:46px!important;
+  padding:10px 14px!important;
+  box-shadow:none!important;
+}
+html body #menu input.menu-search::placeholder,
+html body #menu input[type="search"]::placeholder{
+  color:#8C8278!important;
+  opacity:1!important;
+}
+
+/* تبويبات المنيو */
+html body #menu .menu-tabs{
+  gap:8px!important;
+}
+html body #menu .menu-tabs button{
+  font-size:15px!important;
+  font-weight:700!important;
+  min-height:42px!important;
+  border-radius:12px!important;
+  border:1px solid #D6CCBD!important;
+}
+html body #menu .menu-tabs button:not(.on){
+  background:#FBF8F2!important;
+  color:#5C5249!important;
+  box-shadow:none!important;
+}
+html body #menu .menu-tabs button.on{
+  background:#D9A441!important;
+  color:#2B2420!important;
+  border-color:#C99232!important;
+  box-shadow:0 2px 6px -2px rgba(160,110,30,.35)!important;
+}
+
+/* كروت الأصناف */
+html body #menu #menuGrid.menu-grid{
+  gap:16px!important;
+}
+html body #menu #menuGrid .mx-card,
+html body #menu #menuGrid .mx-card.mx-feat{
+  background:#F7F2EA!important;
+  border-radius:20px!important;
+  box-shadow:0 2px 8px -4px rgba(43,36,32,.22),0 0 0 1px #DCD3C6 inset!important;
+}
+html body #menu #menuGrid .mx-card:not([data-sold="1"]):hover{
+  box-shadow:0 6px 16px -8px rgba(43,36,32,.28),0 0 0 1px #CFC4B3 inset!important;
+}
+html body #menu #menuGrid .mx-thumb,
+html body #menu #menuGrid .mx-card.mx-feat .mx-thumb{
+  background:radial-gradient(circle at 30% 20%,#EFE5D2,#E6DCCB 75%)!important;
+}
+html body #menu #menuGrid .mx-thumb img{
+  filter:saturate(.85) brightness(.97)!important;
+}
+html body #menu #menuGrid .mx-card[data-sold="1"] .mx-thumb img{
+  filter:grayscale(1) brightness(.75)!important;
+}
+
+/* اسم الصنف والسعر: حجم أكبر وقراءة أسهل */
+html body #menu #menuGrid .mx-name,
+html body #menu #menuGrid .mx-card.mx-feat .mx-name{
+  font-size:16px!important;
+  font-weight:800!important;
+  line-height:1.35!important;
+}
+html body #menu #menuGrid .mx-price,
+html body #menu #menuGrid .mx-card .mx-price{
+  font-size:15px!important;
+  font-weight:700!important;
+}
+
+/* الأزرار الأساسية والإجراءات */
+html body #menu button.primary,
+html body #menu .actions button.primary{
+  background:#D9A441!important;
+  color:#2B2420!important;
+  border:1px solid #C99232!important;
+  box-shadow:none!important;
+}
+
+/* الحقول داخل إدارة المنيو */
+html body #menu input:not([type="checkbox"]):not([type="file"]),
+html body #menu select,
+html body #menu textarea{
+  background:#FBF8F2!important;
+  color:#2B2420!important;
+  border:1px solid #D6CCBD!important;
+  font-size:15px!important;
+}
+html body #menu label{
+  color:#4A4139!important;
+  font-weight:700!important;
+  font-size:14px!important;
+}
+
+/* إزالة أي أبيض ناصع متبقي داخل الشاشة */
+html body #menu [style*="background:#fff"],
+html body #menu [style*="background: #fff"],
+html body #menu [style*="background:#FFF"],
+html body #menu [style*="background: #FFF"]{
+  background:#F7F2EA!important;
+}
