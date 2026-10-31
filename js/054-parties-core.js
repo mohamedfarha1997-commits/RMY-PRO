@@ -138,9 +138,10 @@
       if(!(q>0)){ alert('عدد الحفلات لازم يكون 1 أو أكتر.'); return; }
       if(!cloudReady || !cloudActorName || !cloudActorPin){ alert('لازم تكون متصل بالسحابة لتسجيل أوردر الحفلة.'); return; }
       var btn=document.getElementById('ptyOk'); btn.disabled=true; btn.textContent='جارٍ تسجيل الأوردر…';
-      apiCall({action:'party_order_action',party_action:'create',order:{name:x.name,customer:cust,customerPhone:(document.getElementById('ptyPhone').value||''),customerAddress:String((document.getElementById('ptyAddr')||{}).value||'').trim(),date:date,time:(document.getElementById('ptyTime').value||''),qty:q,note:(document.getElementById('ptyNote').value||'')},employee_name:cloudActorName,pin:cloudActorPin})
+      var __baseName=/\s\(حفلة\)$/.test(String(x.name||''))?String(x.name).replace(/\s\(حفلة\)$/,''):'';
+      apiCall({action:'party_order_action',party_action:'create',order:{name:x.name,base_name:__baseName,customer:cust,customerPhone:(document.getElementById('ptyPhone').value||''),customerAddress:String((document.getElementById('ptyAddr')||{}).value||'').trim(),date:date,time:(document.getElementById('ptyTime').value||''),qty:q,note:(document.getElementById('ptyNote').value||'')},employee_name:cloudActorName,pin:cloudActorPin})
         .then(function(res){ if(res.error) throw res.error; ov.remove(); return pmPartyWorkflowRefresh().then(function(){ renderMenu(); alert('تم تسجيل أوردر «'+x.name+'» للعميل '+cust+'، ولم يتم خصم أي خامات أو مخزون عند الحجز.'); }); })
-        .catch(function(err){ btn.disabled=false; btn.textContent='تسجيل الحفلة'; var msg=(err&&err.message)||String(err||'خطأ غير معروف'); alert('تعذر تسجيل الأوردر: '+msg); });
+        .catch(function(err){ btn.disabled=false; btn.textContent='تسجيل الحفلة'; var msg=(err&&err.message)||String(err||'خطأ غير معروف'); alert('تعذر تسجيل الأوردر: '+msg+'\nلو الرسالة إن الصنف مش موجود: حدّث الصفحة الأول، وبعدين أعد المحاولة.'); });
     };
   }
   window.pmPartyOpen = pmPartyOpen;
