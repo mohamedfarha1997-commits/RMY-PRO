@@ -67,6 +67,10 @@
     for(var k=0;k<b.orders.length;k++){ if(dm[b.orders[k].id]) return String(dm[b.orders[k].id]); }
     return '';
   }
+  function creatorOf(b){
+    for(var i=0;i<b.orders.length;i++){ var o=b.orders[i]; if(o && o.by) return String(o.by); }
+    return '';
+  }
   window.pmPartyInvoicesList=function(){
     var done=window.pmPartyBookings(openPartyOrders()).filter(function(b){return b.complete && !b.orders.some(function(o){return o.closedArchiveId})});
     done.sort(function(a,b){ return (a.completedAt||'').localeCompare(b.completedAt||'') || a.key.localeCompare(b.key); });
@@ -80,10 +84,10 @@
       var notes=live.map(function(o){return o.note||''}).filter(Boolean);
       return {
         id:'pinv-'+hashKey(b.key), key:b.key, no:i+1,
-        date:dateText(b.completedAt), deliveredAt:b.completedAt, by:delivererOf(b),
+        date:dateText(b.completedAt), deliveredAt:b.completedAt, by:delivererOf(b), createdBy:creatorOf(b),
         customer:f.customer||'', customerPhone:f.customerPhone||'',
         eventDate:f.date||'', eventTime:f.time||'', orderNote:notes.join(' · '),
-        total:Math.round(total*100)/100, cost:Math.round(pcost*100)/100, uncostedLines:puncosted, lines:lines, paid:(window.__pmPaySummary&&window.__pmPaySummary[b.key])?(Number(window.__pmPaySummary[b.key].paid)||0):null
+        total:Math.round(total*100)/100, cost:Math.round(pcost*100)/100, uncostedLines:puncosted, lines:lines, paid:b.orders.reduce(function(a,o){return a+(o&&o.status!=='cancelled'?(Number(o.paid)||0):0)},0)
       };
     });
   };
@@ -335,7 +339,7 @@
   /* ---------- تبويب فواتير الحفلات ---------- */
   var __pinvOpen={};
   function pmInvRc(i){
-    return {no:'ح-'+i.no, date:i.date, by:i.by||'—', note:i.customer, customerPhone:i.customerPhone, total:i.total, lines:i.lines, isParty:true};
+    return {no:'ح-'+i.no, date:i.date, by:([i.createdBy?'أخد: '+i.createdBy:'', i.by?'سلّم: '+i.by:''].filter(Boolean).join(' · ')||'—'), note:i.customer, customerPhone:i.customerPhone, total:i.total, lines:i.lines, isParty:true};
   }
   function pmPartyInvRender(){
     var box=document.getElementById('partyInvBody'); if(!box) return;

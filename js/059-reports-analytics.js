@@ -73,6 +73,7 @@
     var pinv=arr(m.partyInvoices);
     R.partyRev=0; R.partyCost=0; R.partyUncosted=0;
     pinv.forEach(function(p){ if(!p||typeof p!=='object') return; R.partyRev+=num(p.total); R.partyCost+=num(p.cost); R.partyUncosted+=(p.uncostedLines!=null?num(p.uncostedLines):((p.lines&&p.lines.length)||(num(p.total)>0?1:0))); });
+    R.partyCollected=0; arr(m.partyOrders).forEach(function(o){ if(o && o.status!=='cancelled' && !(window.pmIsPartyOrderClosed && window.pmIsPartyOrderClosed(o))) R.partyCollected+=num(o.paid); });
     R.gross=(R.rev+R.partyRev)-(R.cost+R.partyCost);
 
     // العملاء: من الفواتير اللي فيها اسم أو تليفون
@@ -251,7 +252,7 @@
       kpi('المشتريات', money(R.pur), R.purList.length+' خامة · '+R.purCount+' عملية'+(R.purMax.v?' · أكبر عملية: '+money(R.purMax.v)+' ('+R.purMax.name+')':'')) +
       kpi('قيمة الهالك', money(R.wasteCost), qtyOf(R.wasteQty)) +
       kpi('متوسط الفاتورة', money(R.avgInvoice), qtyOf(R.qty)+' مباعة') +
-      kpi('الحفلات', fmt(R.parties.n)+' حفلة', 'متبقي '+money(R.parties.remaining)+' من '+money(R.parties.total));
+      kpi('الحفلات', fmt(R.parties.n)+' حفلة', 'متبقي '+money(R.parties.remaining)+' من '+money(R.parties.total)+' · محصّل جاري '+money(R.partyCollected||0));
 
     var totalSplit=R.foodRev+R.drinkRev, pct=totalSplit?Math.round(R.drinkRev/totalSplit*100):0;
     var split='<div class="db-split"><div><span>الأكل</span><b>'+esc(money(R.foodRev))+'</b><small>'+esc(qtyOf(R.foodQty))+'</small></div>'+
