@@ -1,0 +1,9 @@
+/* وضوح كلمة نوع الإشعار (معلومة / جارٍ التنفيذ / قابل للتراجع / لم يحدث تغيير):
+   الخلفية بتاخد لون النوع، فالكلام لازم يبقى أبيض على الألوان الغامقة */
+.toast.info .toast-kind,
+.toast.undo .toast-kind,
+.toast.nochange .toast-kind,
+.toast.progress .toast-kind {
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 1px rgba(0,0,0,.18);
+}
