@@ -1,0 +1,18 @@
+/* تباين عناوين مراحل الوصفة (الفرن/النار/الفنش): خلفيات فاتحة = نص كحلي غامق.
+   المرحلة الكحلي (التحضير) تفضل نصها فاتح (في 143). الـ !important + html body
+   عشان نغلب قواعد td{color} في ثيمات 102/104/128 (الليلي خصوصًا). */
+html body tr.stage-head td[style*="background:#fde8d0"],
+html body tr.stage-head td[style*="background:#f6e7f5"],
+html body tr.stage-head td[style*="background:#e8eefb"],
+html[data-theme] body tr.stage-head td[style*="background:#fde8d0"],
+html[data-theme] body tr.stage-head td[style*="background:#f6e7f5"],
+html[data-theme] body tr.stage-head td[style*="background:#e8eefb"]{color:#1E3A5F!important}
+html body tr.stage-head td[style*="background:#fde8d0"] .pm-arrow,
+html body tr.stage-head td[style*="background:#f6e7f5"] .pm-arrow,
+html body tr.stage-head td[style*="background:#e8eefb"] .pm-arrow{color:#1E3A5F!important}
+/* كبسولة الحرارة/الوقت (خلفية بيضاء) */
+html body tr.stage-head td span:not(.pm-arrow){color:#1E3A5F!important;background:#fff!important}
+/* صف الملحوظة (خلفية كريمي) */
+html body td[style*="background:#fff7ec"]{color:#1E3A5F!important}
+/* عناوين مراحل شاشة المدير */
+html body #recipeEditor .ph{color:#1E3A5F!important}
