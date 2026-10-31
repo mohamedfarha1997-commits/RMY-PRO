@@ -1,0 +1,12 @@
+/* الشريط السفلي: الأيقونة اللي انت واقف عليها بس متلونة */
+html body #pmDock button:not(.cur){color:#8A94A6!important;background:transparent!important;box-shadow:none!important}
+html body #pmDock button:not(.cur) svg{stroke:#8A94A6!important;color:#8A94A6!important}
+html body #pmDock button.cur:not(.pm-center){color:#B87700!important;background:rgba(242,178,51,.18)!important}
+html body #pmDock button.cur svg{stroke:#B87700!important;color:#B87700!important}
+html body #pmDock button.pm-center:not(.cur){background:#FFFDF6!important;color:#8A94A6!important;box-shadow:none!important;border-color:transparent!important}
+html body #pmDock button.pm-center.cur{background:#F2B233!important;color:#1E3A5F!important;border-color:#F2B233!important}
+html body #pmDock button.pm-center.cur svg{stroke:#1E3A5F!important;color:#1E3A5F!important}
+
+/* تبويبات المنيو: التبويب الحالي بس متلون */
+html body .menu-tabs button:not(.on){background:#FFFFFF!important;color:#8A94A6!important;box-shadow:none!important}
+html body .menu-tabs button.on{background:#F2B233!important;color:#1E3A5F!important;box-shadow:0 2px 6px rgba(242,178,51,.45)!important}
