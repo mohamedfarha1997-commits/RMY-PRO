@@ -1109,7 +1109,6 @@ html body nav.tabs .tab{height:100%!important}
 .pm-dock{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:11200;width:min(94vw,440px);display:flex;justify-content:space-between;align-items:center;gap:2px;padding:7px;border-radius:26px;background:rgba(255,255,255,.84);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);border:1px solid #D6D6D6;box-shadow:0 18px 40px -16px rgba(0,0,0,.35)}
 .pm-dock button{flex:1;min-width:0;border:0;background:none;color:#1B1B1B;font:inherit;font-size:11px;font-weight:750;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 0;border-radius:18px;cursor:pointer;transition:color .2s ease,background .2s ease;touch-action:manipulation}
 .pm-dock button svg{width:22px;height:22px}
-.pm-dock button.on{color:#1B1B1B;background:rgba(0,103,184,.10)}
 body.auth-required .pm-dock{display:none!important}
 body.role-kitchen .pm-dock [data-act="cart"]{display:none!important}
 .pm-devsheet{position:fixed;inset:0;z-index:11300;background:rgba(0,103,184,.45);display:flex;align-items:flex-end;justify-content:center}
@@ -1409,7 +1408,6 @@ html body #pmDock{bottom:max(12px,env(safe-area-inset-bottom,0px))!important;wid
 html body #pmDock button,html body #pmDock #pmMsgWrap>button,html body #pmDock #pmGearWrap>button{flex:1 1 0!important;min-width:0!important;width:auto!important;border:0!important;border-radius:22px!important;background:transparent!important;color:#1B1B1B!important;box-shadow:none!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;font-weight:800!important;transition:background .2s ease,color .2s ease,transform .15s ease!important}
 html body #pmDock button svg,html body #pmDock #pmMsgWrap>button svg,html body #pmDock #pmGearWrap>button svg{flex:0 0 auto}
 html body #pmDock button:active{transform:scale(.94)}
-html body #pmDock button.on,html body #pmDock #pmMsgWrap>button.on,html body #pmDock #pmGearWrap>button.on{background:linear-gradient(135deg,#FFFFFF,#FFFFFF)!important;color:#1B1B1B!important;box-shadow:0 10px 20px -10px rgba(0,0,0,.22)!important}
 
 html body #pmDock .pmd-lbl{font-size:10.5px!important;line-height:1.1!important;white-space:nowrap!important;margin:0!important}/* ---- 080-menu-grid.css ---- */
 html body #menu #menuGrid.menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
@@ -1522,7 +1520,6 @@ html body #pmDock .pmd-txt{display:block;white-space:normal}
 html body #pmDock button.cur:not(.pm-center),html body #pmDock #pmMsgWrap>button.cur,html body #pmDock #pmGearWrap>button.cur{color:#1B1B1B!important;background:rgba(0,103,184,.11)!important}
 html body #pmDock button.pm-center{height:66px!important;min-height:66px!important;border-radius:24px!important;background:linear-gradient(135deg,#FFFFFF,#FFFFFF)!important;color:#1B1B1B!important;box-shadow:0 14px 26px -10px rgba(0,0,0,.8)!important;font-size:10.5px!important;font-weight:850!important}
 html body #pmDock button.pm-center svg{width:24px!important;height:24px!important;stroke:#fff!important}
-html body #pmDock button.pm-center.on{background:linear-gradient(135deg,#FFFFFF,#FFFFFF)!important}
 body[data-role="sales"] #pmDock [data-act="customers"],body[data-role="sales"] #pmDock [data-act="purchases"],body[data-role="sales"] #pmDock [data-act="devices"],
 body.role-sales #pmDock [data-act="customers"],body.role-sales #pmDock [data-act="purchases"],body.role-sales #pmDock [data-act="devices"]{display:none!important}
 body[data-role="kitchen"] #pmDock [data-act="menu"],body[data-role="kitchen"] #pmDock [data-act="customers"],body[data-role="kitchen"] #pmDock [data-act="purchases"],
@@ -1839,12 +1836,7 @@ html body #analytics .db-vc i{border-radius:6px 6px 0 0!important}
 html body #signOutButton,
 html body #localSaveStatus button#signOutButton{background:#B42318!important;color:#FFFFFF!important;border:1px solid #B42318!important;font-weight:800!important}
 html body #pmDock .pm-center{color:#1B1B1B!important}
-
-html body #pmDock .pm-center.on,
-html body #pmDock button.pm-center.on{background:rgba(0,103,184,.2)!important;color:#1B1B1B!important;border-color:#D6D6D6!important}
-html body #pmDock .pm-center.on svg{stroke:#1B1B1B!important}
-html body #pmDock .pm-center span,html body #pmDock .pm-center small{color:#1B1B1B!important}
-html body #pmDock button.on svg{stroke:#1B1B1B!important}/* ---- 124-final-polish.css ---- */
+html body #pmDock .pm-center span,html body #pmDock .pm-center small{color:#1B1B1B!important}/* ---- 124-final-polish.css ---- */
 body.auth-required .login-screen .staff-av,
 body.auth-required .login-screen .pin-who .staff-av,
 body.auth-required .login-screen #pinAvatar{
@@ -2011,7 +2003,6 @@ html body .toast{background:var(--card)!important;color:var(--ink)!important;bor
 html body .pm-dock,html body #pmDock{background:var(--card)!important;border:1px solid var(--line)!important}
 html body #pmDock button,html body #pmDock .pm-center{color:var(--navy)!important}
 html body #pmDock .pm-center{background:var(--card)!important}
-html body #pmDock button.on,html body #pmDock .pm-center.on{background:var(--gold)!important;color:#FFFFFF!important}
 html body #pmDock .pm-center svg,html body #pmDock button svg{stroke:var(--navy)!important}
 html body #analytics .db-vc i{background:rgba(0,103,184,.2)!important}
 html body #analytics .db-vc span{color:var(--muted)!important}
@@ -2418,10 +2409,8 @@ html body .pm-dock {
 }
 html body .pm-dock button {
   color:var(--ms-muted) !important;
-}
-html body .pm-dock button.on,
-html body .pm-dock button.cur,
-html body #pmDock button.cur:not(.pm-center) {
+}html body .pm-dock button.cur,
+html body #pmDock button.cur:not(.pm-center){
   color:var(--ms-accent) !important;
   background:var(--ms-accent-tint) !important;
 }html body input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), html body select, html body textarea {
@@ -2562,13 +2551,10 @@ html body .pm-logo-img::after {
   -webkit-mask:var(--pm-logo) center/contain no-repeat;
           mask:var(--pm-logo) center/contain no-repeat;
   opacity:.9;
-}
-html body #pmDock .pm-center,
+}html body #pmDock .pm-center,
 html body #pmDock button.pm-center,
-html body #pmDock .pm-center.on,
 html body #pmDock .pm-center.cur,
-html body #pmDock button.pm-center.on,
-html body #pmDock button.pm-center.cur {
+html body #pmDock button.pm-center.cur{
   background:rgba(0,103,184,.2)!important;
   color:#1B1B1B!important;
   border-color:#D6D6D6!important;
@@ -2645,9 +2631,7 @@ html body #pmDock{border-radius:28px!important;padding:8px 6px!important;align-i
 html body #pmDock button,html body #pmDock #pmNotifWrap>button,html body #pmDock #pmMsgWrap>button{color:#6B7280!important;background:none!important;box-shadow:none!important;border:0!important;font-weight:700!important}
 html body #pmDock button svg{box-sizing:border-box!important;width:56px!important;height:32px!important;padding:5px 17px!important;border-radius:999px!important;stroke:currentColor!important;transition:background .2s}
 html body #pmDock button.pm-center{margin:0!important;flex:1 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;height:auto!important;min-height:56px!important;border-radius:18px!important}
-html body #pmDock button.pm-center svg{width:56px!important;height:32px!important;stroke:currentColor!important}
-html body #pmDock button.on,html body #pmDock button.cur,html body #pmDock button.pm-center.on{background:none!important;color:#0067B8!important}
-html body #pmDock button.on svg,html body #pmDock button.cur svg,html body #pmDock button.pm-center.on svg{background:#E6F0FA!important;stroke:#0067B8!important}
+html body #pmDock button.pm-center svg{width:56px!important;height:32px!important;stroke:currentColor!important}html body #pmDock button.cur{background:none!important;color:#0067B8!important}html body #pmDock button.cur svg{background:#E6F0FA!important;stroke:#0067B8!important}
 html body #pmDock #pmNotifBtn .pmd-lbl::after{content:"التنبيهات"}
 html body #pmDock{width:min(96vw,460px)!important;gap:0!important;align-items:center!important}
 html body #pmDock #pmDockA,html body #pmDock #pmDockB,html body #pmDock #pmMsgWrap:not([style*="display: none"]){display:contents!important}
@@ -2657,11 +2641,7 @@ html body #pmDock button,html body #pmDock #pmNotifWrap>button,html body #pmDock
 html body #pmDock button svg,html body #pmDock #pmMsgWrap>button svg,html body #pmDock #pmNotifWrap>button svg,html body #pmDock .pm-dk-grp>button svg,html body #pmDock button.pm-center svg{width:46px!important;max-width:100%!important;height:30px!important;padding:5px 12px!important;box-sizing:border-box!important;border-radius:999px!important;stroke:currentColor!important}
 html body #pmDock .pmd-lbl,html body #pmDock .pmd-txt{font-size:10.5px!important;line-height:1.15!important;margin:0!important;color:inherit!important;text-align:center!important;white-space:normal!important}
 html body #pmDock #pmNotifBtn .pmd-lbl::after{content:"التنبيهات"}
-html body #pmDock #pmNotifCount,html body #pmDock #pmBellCount{top:0!important;right:calc(50% - 22px)!important}
-html body #pmDock button.on,html body #pmDock button.cur,html body #pmDock button.pm-center.on{background:none!important;color:#0067B8!important}
-html body #pmDock button.on svg,html body #pmDock button.cur svg,html body #pmDock button.pm-center.on svg{background:#E6F0FA!important;stroke:#0067B8!important}
-html body #pmDock button:not(.on):not(.cur) .pmd-txt,html body #pmDock button:not(.on):not(.cur) .pmd-lbl{color:#4B5563!important}
-html body #pmDock button.on .pmd-txt,html body #pmDock button.on .pmd-lbl{color:#0067B8!important}
+html body #pmDock #pmNotifCount,html body #pmDock #pmBellCount{top:0!important;right:calc(50% - 22px)!important}html body #pmDock button.cur{background:none!important;color:#0067B8!important}html body #pmDock button.cur svg{background:#E6F0FA!important;stroke:#0067B8!important}
 html body #pmDock .pmd-lbl,html body #pmDock .pmd-txt{font-size:10px!important;letter-spacing:-.2px!important;overflow:visible!important}
 html body #pmDock button{overflow:visible!important;padding-inline:0!important}
 
@@ -2724,7 +2704,7 @@ html body #pmDock button{overflow:visible!important;padding-inline:0!important}
 .cart-modal-card .drawer-basket .pm-party-switch .pm-party-track{display:none!important}
 .cart-modal-card .drawer-basket .pm-party-switch>span:last-child{font-size:13px;font-weight:700;color:#1B1B1B}
 
-/* ---- إصلاح الشريط السفلي: الزرار اللي إنت عليه بس يتلون، والباقي رمادي ---- */
+/* ---- الشريط السفلي: حالة الزرار الحالي (cur) هي المصدر الوحيد للتلوين ---- */
 html body #pmDock button:not(.cur),
 html body #pmDock #pmMsgWrap>button:not(.cur),
 html body #pmDock #pmGearWrap>button:not(.cur){color:#6B7280!important;background:transparent!important;box-shadow:none!important;border-color:transparent!important}
@@ -2732,3 +2712,5 @@ html body #pmDock button:not(.cur) svg{background:none!important;stroke:currentC
 html body #pmDock #pmMsgWrap,html body #pmDock #pmGearWrap,html body #pmDock .pm-dk-grp,html body #pmDock #pmDockA,html body #pmDock #pmDockB{background:transparent!important;box-shadow:none!important}
 html body #pmDock button.cur{color:#0067B8!important;background:transparent!important;box-shadow:none!important}
 html body #pmDock button.cur svg{background:#E6F0FA!important;stroke:#0067B8!important}
+html body #pmDock button:not(.cur) .pmd-txt,html body #pmDock button:not(.cur) .pmd-lbl{color:#4B5563!important}
+html body #pmDock button.cur .pmd-txt,html body #pmDock button.cur .pmd-lbl{color:#0067B8!important}
