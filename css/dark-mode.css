@@ -639,3 +639,31 @@ html[data-theme="dark"] #themeToggle .i-moon{opacity:0;transform:rotate(70deg) s
 
 /* ===== إزالة الطبقة الزرقاء من العناصر الغير متاحة (في الوضعين) ===== */
 html body #menu #menuGrid .mx-card[data-sold="1"]::after{background:rgba(0,0,0,.55)!important}
+
+
+/* RMY logo: preserve the original artwork in dark mode */
+html[data-theme="dark"] body .pm-logo-img{
+  background-color:transparent !important;
+  background-image:var(--pm-logo) !important;
+  background-position:center !important;
+  background-size:contain !important;
+  background-repeat:no-repeat !important;
+  filter:none !important;
+  opacity:1 !important;
+}
+html[data-theme="dark"] body .pm-logo-img::before,
+html[data-theme="dark"] body .pm-logo-img::after{
+  display:none !important;
+  content:none !important;
+}
+html[data-theme="dark"] body.auth-required .login-screen .login-logo{
+  background:transparent !important;
+  background-image:none !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+}
+html[data-theme="dark"] body.auth-required .login-screen .login-logo::after{
+  display:none !important;
+}
+html[data-theme="dark"] #bootSplash{background:#262626 !important}
+html[data-theme="dark"] #bootSplash img{background:transparent !important;filter:none !important}
