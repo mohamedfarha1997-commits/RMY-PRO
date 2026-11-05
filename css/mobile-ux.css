@@ -1,0 +1,35 @@
+/* ==================================================================
+   RMY PRO · تحسينات تجربة الجوال والإشعارات
+   ================================================================== */
+
+/* ---------- تحسينات اللمس والجوال ---------- */
+@media (max-width: 768px) {
+  /* منع تكبير الصفحة التلقائي عند التركيز على الحقول في iOS */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  /* الجداول العريضة تتمرر أفقياً داخل حاويتها بدل كسر الصفحة */
+  .tablewrap {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+  }
+}
+
+/* احترام الحواف الآمنة في الأجهزة ذات الشاشات المنحنية */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .pm-toast-stack {
+    padding-bottom: 0;
+  }
+}
+
+/* تقليل الحركة لمن يفضلون ذلك في إعدادات الجهاز */
+@media (prefers-reduced-motion: reduce) {
+  .pm-toast,
+  .pm-toast-out {
+    animation: none;
+    transition: none;
+  }
+}
