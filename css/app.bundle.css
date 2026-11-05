@@ -2723,3 +2723,12 @@ html body #pmDock button{overflow:visible!important;padding-inline:0!important}
 .cart-modal-card .drawer-basket .pm-party-switch input{position:static!important;opacity:1!important;display:inline-block!important;width:20px!important;height:20px!important;min-width:20px;min-height:20px!important;flex:0 0 20px;margin:0!important;padding:0!important;accent-color:#0067B8;cursor:pointer}
 .cart-modal-card .drawer-basket .pm-party-switch .pm-party-track{display:none!important}
 .cart-modal-card .drawer-basket .pm-party-switch>span:last-child{font-size:13px;font-weight:700;color:#1B1B1B}
+
+/* ---- إصلاح الشريط السفلي: الزرار اللي إنت عليه بس يتلون، والباقي رمادي ---- */
+html body #pmDock button:not(.cur),
+html body #pmDock #pmMsgWrap>button:not(.cur),
+html body #pmDock #pmGearWrap>button:not(.cur){color:#6B7280!important;background:transparent!important;box-shadow:none!important;border-color:transparent!important}
+html body #pmDock button:not(.cur) svg{background:none!important;stroke:currentColor!important}
+html body #pmDock #pmMsgWrap,html body #pmDock #pmGearWrap,html body #pmDock .pm-dk-grp,html body #pmDock #pmDockA,html body #pmDock #pmDockB{background:transparent!important;box-shadow:none!important}
+html body #pmDock button.cur{color:#0067B8!important;background:transparent!important;box-shadow:none!important}
+html body #pmDock button.cur svg{background:#E6F0FA!important;stroke:#0067B8!important}
