@@ -6,9 +6,6 @@ try{
   if(!dock||!sheet)return;
   var timer=null;
   function $(id){return document.getElementById(id)}
-  function setOn(act){
-    dock.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-act')===act) });
-  }
   var ROLE={admin:'مدير',kitchen:'المطبخ',sales:'المبيعات',barista:'الباريستا',employee:'موظف'};
   var CLS={admin:'r-admin',kitchen:'r-kitchen',sales:'r-sales',barista:'r-barista',employee:'r-employee'};
   function esc(t){ var d=document.createElement('div'); d.textContent=String(t==null?'':t); return d.innerHTML }
@@ -54,15 +51,12 @@ try{
     var b=e.target.closest('button'); if(!b)return;
     var act=b.getAttribute('data-act');
     if(act==='devices'){ openSheet(); return; }
-    setOn(act);
     if(act==='home'){ var back=$('pmBack'); if(back)back.click(); }
     else if(act==='cart'){ if(window.pmGo)pmGo('cartpage'); }
     else if(act==='stock'){ if(window.pmGo)pmGo('stock'); }
   });
   $('pmDevClose').addEventListener('click',closeSheet);
   sheet.addEventListener('click',function(e){ if(e.target===sheet)closeSheet(); });
-  // المؤشر يتبع الصفحة الحالية: لو رجعنا للرئيسية يرجع "الرئيسية" نشطة
-  setInterval(function(){ if(!document.body.classList.contains('pm-view')) setOn('home'); },400);
 })();
 }catch(e){console.error('[PastryMY] 035-ui-bottom-dock.js failed',e)}
 /* ---- 041-ui-dock-icons.js ---- */
