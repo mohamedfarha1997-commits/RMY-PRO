@@ -72,41 +72,11 @@ try{
   panel.style.cssText = 'position:absolute;top:auto;bottom:calc(100% + 8px);right:0;width:min(300px,calc(100vw - 24px));max-height:70vh;overflow:auto;background:#fff;color:#1B1B1B;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.25);z-index:9000;display:none;padding:12px;direction:rtl;box-sizing:border-box;text-align:right';
 
 
-  var gearWrap = document.createElement('span');
-  gearWrap.id = 'pmGearWrap';
-  gearWrap.style.cssText = 'position:relative;display:none;align-items:center;flex:0 0 auto';
-
-  var gearBtn = document.createElement('button');
-  gearBtn.id = 'pmGearBtn'; gearBtn.type = 'button';
-  gearBtn.title = 'الإعدادات'; gearBtn.setAttribute('aria-label', 'الإعدادات');
-  gearBtn.style.cssText = 'width:40px;height:40px;border-radius:50%;border:1px solid rgba(0,0,0,.14);background:#fff;color:#1B1B1B;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 2px 6px rgba(0,0,0,.08)';
-  gearBtn.innerHTML = ((window.__PMUI__&&window.__PMUI__.ICONS.gear)||'');
-
-  var gearMenu = document.createElement('div');
-  gearMenu.id = 'pmGearMenu';
-  gearMenu.style.cssText = 'position:absolute;top:calc(100% + 8px);right:0;width:min(240px,calc(100vw - 24px));background:#fff;color:#1B1B1B;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.25);z-index:9000;display:none;padding:8px;direction:rtl;box-sizing:border-box';
-
-  // نقل الأزرار الثلاثة (بنفس العناصر والأحداث) من تحت الحالة للقائمة
-  [['retryCloudButton', 'تحديث الصفحة'], ['reloadCloudButton', 'آخر نسخة سحابية'], ['signOutButton', 'تسجيل خروج المستخدم']]
-    .forEach(function(p){
-      var b = document.getElementById(p[0]); if(!b) return;
-      b.textContent = p[1];
-      b.className = '';
-      b.style.cssText = 'display:block;width:100%;text-align:right;background:#FFFFFF;color:#1B1B1B;border:1px solid rgba(0,0,0,.14);border-radius:10px;padding:10px 12px;margin:4px 0;font:inherit;font-size:14px;cursor:pointer';
-      gearMenu.appendChild(b);
-      if(p[0] === 'retryCloudButton'){
-        b.addEventListener('click', function(){ setTimeout(function(){ b.textContent = 'تحديث الصفحة' }, 4000) });
-      }
-    });
-
-  gearWrap.appendChild(gearBtn);
-  gearWrap.appendChild(gearMenu);
-
   wrap.appendChild(bell);
   // القايمة برا الشريط السفلي، عشان قواعد أزرار الشريط ما تأثرش على الفورم والفلاتر
   document.body.appendChild(panel);
   var pe = document.createElement('style');
-  pe.textContent = '#pmMsgWrap,#pmMsgWrap *,#pmGearWrap,#pmGearWrap *{pointer-events:auto!important}';
+  pe.textContent = '#pmMsgWrap,#pmMsgWrap *{pointer-events:auto!important}';
   document.head.appendChild(pe);
   // الأيقونتين في نفس صف "الحسابات المتصلة" جنبها
   var liveBar = document.getElementById('pmLiveBar');
@@ -121,10 +91,8 @@ try{
     presChip.style.direction = 'rtl';
     row.appendChild(presChip);
     row.appendChild(wrap);
-    row.appendChild(gearWrap);
   } else {
     document.body.appendChild(wrap);
-    document.body.appendChild(gearWrap);
   }
 
   function updateBadge(){
@@ -180,20 +148,7 @@ try{
       markRead(unread());
     }
   }
-  var gearOpen = false;
-  function setGear(open){
-    gearOpen = open;
-    gearMenu.style.display = open ? 'block' : 'none';
-    if(open && panelOpen) setPanel(false);
-  }
-  gearBtn.onclick = function(e){ e.stopPropagation(); setGear(!gearOpen) };
-  gearMenu.addEventListener('click', function(e){
-    if(e.target && e.target.tagName === 'BUTTON') setTimeout(function(){ setGear(false) }, 50);
-  });
-  document.addEventListener('click', function(e){
-    if(gearOpen && !gearWrap.contains(e.target)) setGear(false);
-  });
-  bell.onclick = function(e){ e.stopPropagation(); if(gearOpen) setGear(false); setPanel(!panelOpen) };
+  bell.onclick = function(e){ e.stopPropagation(); setPanel(!panelOpen) };
   document.addEventListener('click', function(e){
     // composedPath: الضغط على زرار جوه القايمة (زي فلتر الرسايل) بيعيد رسم العنصر فبنحكم بالمسار الأصلي
     var path=e.composedPath?e.composedPath():[];
@@ -236,7 +191,6 @@ try{
   setInterval(function(){
     var ready = isReady();
     wrap.style.display = ready ? 'flex' : 'none';
-    gearWrap.style.display = ready ? 'inline-flex' : 'none';
     if(!ready){
       sessionKey = ''; messages = []; updateBadge(); setPanel(false); recipientsReady = false;
       card.style.display = 'none';

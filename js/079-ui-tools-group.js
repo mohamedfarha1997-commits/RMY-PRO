@@ -68,7 +68,7 @@ try{
   function ensureStyle(){
     if(document.getElementById('pmRoleGateStyle')) return;
     var st=document.createElement('style'); st.id='pmRoleGateStyle';
-    st.textContent='body.pm-not-admin #pmGearWrap,body.pm-not-admin #pmSettingsFold,body.pm-not-admin #retryCloudButton{display:none!important}';
+    st.textContent='body.pm-not-admin #pmSettingsFold,body.pm-not-admin #retryCloudButton{display:none!important}';
     document.head.appendChild(st);
   }
   function move(){

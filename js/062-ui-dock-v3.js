@@ -21,7 +21,7 @@
   function visibleEl(el){
     if(!el) return false;
     /* الغلاف ممكن يكون display:contents، فبنحكم على الزرار اللي جواه ومساحته الفعلية */
-    if(el.id==='pmMsgWrap'||el.id==='pmGearWrap'){ var b=el.querySelector('button'); return !!b && getComputedStyle(b).display!=='none' && b.getBoundingClientRect().width>0; }
+    if(el.id==='pmMsgWrap'){ var b=el.querySelector('button'); return !!b && getComputedStyle(b).display!=='none' && b.getBoundingClientRect().width>0; }
     return getComputedStyle(el).display!=='none' && el.getBoundingClientRect().width>0;
   }
   function sameList(parent,list){
@@ -36,12 +36,11 @@
     // المراجع بتتحدّث كل مرة: الرسايل والإعدادات وأي زرار ممكن يتعمل بعد التحميل
     var dev=d.querySelector('[data-act="devices"]')||R.dev;
     var msg=document.getElementById('pmMsgWrap')||R.msg;
-    var gear=document.getElementById('pmGearWrap')||R.gear;
     var pur=d.querySelector('[data-act="purchases"]')||R.pur;
     var cust=d.querySelector('[data-act="customers"]')||R.cust;
     var menu=d.querySelector('[data-act="menu"]')||R.menu;
     var notifW=document.getElementById('pmNotifWrap');
-    var seq=[d.querySelector('[data-act="devView"]'),dev,msg,notifW,gear,pur,cust,menu].filter(Boolean);
+    var seq=[d.querySelector('[data-act="devView"]'),dev,msg,notifW,pur,cust,menu].filter(Boolean);
     var vis=seq.filter(visibleEl), hid=seq.filter(function(x){ return !visibleEl(x); });
     var half=Math.ceil(vis.length/2);
     /* عدد الخانات في كل نص من الشريط: كل الأزرار بنفس العرض والرئيسية في النص */
@@ -59,14 +58,13 @@
     var d=dock(); if(!d) return false;
     var menu=ensure('menu','المنيو',SV.menu), cust=ensure('customers','العملاء',SV.customers), pur=ensure('purchases','المشتريات',SV.purchases);
     var home=d.querySelector('[data-act="home"]'), dev=d.querySelector('[data-act="devices"]');
-    var msg=document.getElementById('pmMsgWrap'), gear=document.getElementById('pmGearWrap');
+    var msg=document.getElementById('pmMsgWrap');
     if(!home||!dev) return false;
     home.classList.add('pm-center'); setLabel(home,'الرئيسية');
     setLabel(dev,'الحسابات المتصلة');
     if(msg){ var ml=msg.querySelector('.pmd-lbl'); if(ml) ml.textContent='الرسائل'; }
-    if(gear){ var gl=gear.querySelector('.pmd-lbl'); if(gl) gl.textContent='الإعدادات'; }
     /* ترتيب DOM من اليمين لليسار: الحسابات، الرسائل، الإعدادات | الرئيسية | المشتريات، العملاء، المنيو */
-    window.__pmDockRefs={dev:dev,msg:msg,gear:gear,home:home,pur:pur,cust:cust,menu:menu};
+    window.__pmDockRefs={dev:dev,msg:msg,home:home,pur:pur,cust:cust,menu:menu};
     layoutDock();
     return true;
   }

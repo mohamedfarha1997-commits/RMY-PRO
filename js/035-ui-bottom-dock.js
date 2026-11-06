@@ -65,18 +65,17 @@ try{
   var done=false;
   function place(){
     if(done)return;
-    var dock=document.getElementById('pmDock'), msg=document.getElementById('pmMsgWrap'), gear=document.getElementById('pmGearWrap');
+    var dock=document.getElementById('pmDock'), msg=document.getElementById('pmMsgWrap');
     var stock=dock&&dock.querySelector('[data-act="stock"]');
-    if(!dock||!msg||!gear||!stock)return;
+    if(!dock||!msg||!stock)return;
     dock.insertBefore(msg, stock);
-    dock.insertBefore(gear, stock);
     function label(wrap,text){
       if(wrap.querySelector('.pmd-lbl'))return;
       var l=document.createElement('span'); l.className='pmd-lbl'; l.textContent=text; (wrap.querySelector('button')||wrap).appendChild(l);
     }
-    label(msg,'الرسايل'); label(gear,'الإعدادات');
+    label(msg,'الرسايل');
     // اللوحات المنسدلة تطلع فوق الشريط بدل ما تطلع تحت الشاشة
-    [msg,gear].forEach(function(w){
+    [msg].forEach(function(w){
       Array.prototype.forEach.call(w.children,function(ch){
         if(ch.tagName==='DIV'){
           ch.style.setProperty('position','fixed','important');

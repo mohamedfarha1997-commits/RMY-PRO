@@ -1,5 +1,5 @@
 (function(){
-  var TITLES={pmMsgWrap:'الرسايل',pmGearWrap:'الإعدادات'};
+  var TITLES={pmMsgWrap:'الرسايل'};
   var bg=null;
   function ensureBg(){
     if(bg) return bg;
