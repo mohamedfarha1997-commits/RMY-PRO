@@ -134,7 +134,7 @@ try{
       '<p class="small">اكتب الكمية الفعلية الموجودة في المخزن لكل خامة، والتطبيق بيقارنها بالرصيد المسجل.</p>'+
       lastTxt+
       (list.length
-        ? '<div class="tablewrap"><table><tr><th>الخامة</th><th>الوحدة</th><th>المسجل</th><th>الفعلي</th><th>الفرق</th></tr>'+countRows+'</table></div>'+
+        ? '<div class="tablewrap"><table><tr><th>الخامة</th><th>الوحدة</th><th>المسجل</th><th>الفعلي</th><th>العجز</th></tr>'+countRows+'</table></div>'+
           '<div class="actions"><button type="button" class="primary" id="pmAcctSave">حفظ الجرد</button></div>'
         : '<div class="empty">لا توجد خامات في المخزون.</div>')+
       '<h3>هامش كل صنف</h3>'+
@@ -205,7 +205,7 @@ try{
     var list=invList();
     if(!list.length){ alert('لا توجد خامات في المخزون لطباعتها.'); return; }
     var rows=list.map(function(x,i){
-      return '<tr><td>'+(i+1)+'</td><td class="nm">'+E(x.name)+'</td><td>'+E(x.unit||'')+'</td><td>'+fmt(x.qty||0)+'</td><td class="blank"></td><td class="blank"></td></tr>';
+      return '<tr><td>'+(i+1)+'</td><td class="nm">'+E(x.name)+'</td><td>'+E(x.unit||'')+'</td><td>'+fmt(x.qty||0)+'</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>';
     }).join('');
     var dt=new Date().toLocaleDateString('ar-EG',{dateStyle:'medium'});
     var html='<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>ورقة جرد المخزون</title><style>'+
@@ -224,7 +224,7 @@ try{
       '</style></head><body>'+
       '<h1>RMY — ورقة جرد المخزون</h1>'+
       '<div class="meta"><span><b>التاريخ:</b> '+E(dt)+'</span><span><b>عدد الخامات:</b> '+list.length+'</span></div>'+
-      '<table><thead><tr><th>#</th><th>الخامة</th><th>الوحدة</th><th>الرصيد المسجل</th><th>الفعلي</th><th>ملاحظات</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+      '<table><thead><tr><th>#</th><th>الخامة</th><th>الوحدة</th><th>الرصيد المسجل</th><th>الفعلي</th><th>العجز</th><th>ملاحظات</th></tr></thead><tbody>'+rows+'</tbody></table>'+
       '<div class="sign"><span>اسم الجارد</span><span>توقيع المدير</span></div>'+
       '</body></html>';
     if(typeof window.pmShowDoc==='function') window.pmShowDoc(html,'ورقة جرد المخزون');
