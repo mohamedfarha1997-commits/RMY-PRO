@@ -63,7 +63,7 @@ try{
    تسجيل الخروج بيتحط تحت القايمة الجانبية على طول.
    الإعدادات بتظهر للمدير بس. "آخر نسخة سحابية" بتظهر لكل الأقسام في القايمة الجانبية. */
 (function(){
-  var MOVE_TO_SETTINGS=['الدعم الفني','نسخة استرداد'];
+  var MOVE_TO_SETTINGS=['الدعم الفني'];
   function isAdmin(){ return (typeof cloudActorRole!=='undefined' ? cloudActorRole : '') === 'admin'; }
   function ensureStyle(){
     if(document.getElementById('pmRoleGateStyle')) return;
@@ -113,6 +113,20 @@ try{
           drawer.insertBefore(rb, wantBefore);
         }
       }
+    }
+
+    // نسخة الاسترداد اتشالت من الإعدادات
+    [drawer,bodyEl].forEach(function(root){ root.querySelectorAll('button').forEach(function(b){ if((b.textContent||'').replace(/\s+/g,' ').trim().indexOf('نسخة استرداد')===0) b.remove(); }); });
+
+    // سجل التعديلات والنسخ الاحتياطي: جوه الإعدادات، بيفتحوا التبويب ويقفلوا القايمة
+    if(!bodyEl.querySelector('[data-pm-set]')){
+      var ref=bodyEl.querySelector('button');
+      [['audit','سجل التعديلات'],['backup','النسخ الاحتياطي']].forEach(function(p){
+        var nb=document.createElement('button'); nb.type='button'; nb.setAttribute('data-pm-set',p[0]); nb.textContent=p[1];
+        if(ref) nb.className=ref.className;
+        nb.addEventListener('click',function(){ if(typeof window.go==='function') window.go(p[0]); var dc=document.getElementById('drawerClose'); if(dc) dc.click(); });
+        bodyEl.appendChild(nb);
+      });
     }
 
     // تسجيل الخروج تحت القايمة الجانبية

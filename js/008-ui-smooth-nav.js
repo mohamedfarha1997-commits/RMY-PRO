@@ -307,7 +307,6 @@ function paletteItems(){
   out.push({ic:'check',t:'تأكيد الإنتاج وخصم الخامات',run:function(){ go('order'); clickBtn('deductOrder') }});
   out.push({ic:'plus',t:'إضافة رصيد مخزون',run:function(){ go('stock'); focusEl('stockIngredient') }});
   out.push({ic:'list',t:'فتح المنيو',run:function(){ go('menu') }});
-  out.push({ic:'receipt',t:'تسجيل مصروف',run:function(){ go('monthly'); focusEl('expenseAmount') }});
   out.push({ic:'bag',t:'تسجيل شراء خامة',run:function(){ go('purchases'); focusEl('purchaseIngredient') }});
   out.push({ic:'tag',t:'تسجيل سعر خامة',run:function(){ go('prices'); focusEl('priceIngredient') }});
   out.push({ic:'excel',t:'تصدير نسخة احتياطية Excel',run:function(){ clickBtn('exportBackup') }});

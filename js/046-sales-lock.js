@@ -3,7 +3,7 @@
 try{
 (function(){
   var HIDE_ACTS=['stock','devices'];
-  var ADMIN_TOOLS=['فحص وإصلاح','نسخة استرداد'];
+  var ADMIN_TOOLS=['فحص وإصلاح'];
   function hideAdminTools(restricted){
     document.querySelectorAll('#pmFabs .pm-mi').forEach(function(b){
       var t=(b.textContent||'').trim();

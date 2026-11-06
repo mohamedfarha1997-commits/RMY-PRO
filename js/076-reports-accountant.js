@@ -155,6 +155,7 @@ try{
       });
     });
     var b=document.getElementById('pmAcctSave'); if(b) b.onclick=saveCount;
+    moveCount();
   }
 
   function saveCount(){
@@ -162,7 +163,7 @@ try{
     var s=S(); if(!s) return;
     var list=invList(), items=[], any=false, bad=false;
     list.forEach(function(x,i){
-      var inp=document.querySelector('#pmAcctCard input[data-acct-i="'+i+'"]');
+      var inp=document.querySelector('#pmCountCard input[data-acct-i="'+i+'"]');
       if(!inp||inp.value==='') return;
       any=true;
       var actual=Number(inp.value);
@@ -180,9 +181,26 @@ try{
     build();
   }
 
+  function moveCount(){
+    var card=document.getElementById('pmAcctCard'), host=document.getElementById('pmCountCard');
+    if(!host) return;
+    var nodes=[];
+    if(card){
+      var hs=[].slice.call(card.querySelectorAll('h3'));
+      var start=hs.find(function(h){return h.textContent.indexOf('جرد المخزون الفعلي')>=0});
+      var end=hs.find(function(h){return h.textContent.indexOf('هامش كل صنف')>=0});
+      if(start){ for(var n=start;n&&n!==end;n=n.nextElementSibling) nodes.push(n); }
+    }
+    if(nodes.length){
+      [].slice.call(host.children).forEach(function(c){ if(c.tagName!=='H2') c.remove(); });
+      nodes.forEach(function(n){ host.appendChild(n); });
+    }
+    host.style.display=isAdmin()?'':'none';
+  }
+
   var _go=window.go;
   if(typeof _go==='function'){
-    window.go=function(id){ var r=_go.apply(this,arguments); if(id==='accountant') setTimeout(build,0); return r; };
+    window.go=function(id){ var r=_go.apply(this,arguments); if(id==='accountant'||id==='monthCount'||id==='monthly') setTimeout(function(){ build(); moveCount(); },0); return r; };
   }
   function start(){ setTimeout(build,300); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
@@ -211,7 +229,6 @@ try{
     out.push({ok:!!L, t:'تم جرد المخزون', d:L?'آخر جرد موجود':'لم يتم الجرد بعد'});
     out.push({ok:!!L&&arr(L.items).every(function(x){return Number(x.diff)===0}), t:'الجرد بدون فروق',
       d:L?(arr(L.items).filter(function(x){return Number(x.diff)!==0}).length+' خامة فيها فرق'):'—'});
-    out.push({ok:arr(s.expensesLog).length>0, t:'المصروفات متسجلة', d:arr(s.expensesLog).length+' مصروف مسجل'});
     var openInv=arr(s.salesLog).filter(function(x){return x&&x.invoiceStatus==='open'}).length;
     out.push({ok:openInv===0, t:'مفيش فواتير مفتوحة', d:openInv?openInv+' صنف في فواتير مفتوحة':'تمام'});
     var unc=arr(s.salesLog).filter(function(x){return x&&x.costAtSale==null}).length;
@@ -272,12 +289,17 @@ try{
     var cl=checklist(), al=alerts(), cmp=compare();
     var okCount=cl.filter(function(x){return x.ok}).length;
     var div=document.createElement('div'); div.id='pmAcctExtra';
-    div.innerHTML=
+    var mcx=document.getElementById('pmMonthCheck'); if(mcx) mcx.style.display=isAdmin()?'':'none';
+    var mc=document.getElementById('pmMonthCheck');
+    if(!mc){ mc=document.createElement('div'); mc.id='pmMonthCheck'; mc.className='card'; var mon=document.getElementById('monthly'); if(mon) mon.insertBefore(mc, mon.firstChild); }
+    mc.innerHTML=
       '<h3>قائمة المراجعة قبل التقفيل</h3>'+
       '<p class="small">'+okCount+' من '+cl.length+' بند تمام.</p>'+
       '<div class="tablewrap"><table>'+cl.map(function(x){
         return '<tr><td style="width:36px;font-weight:800;color:'+(x.ok?'#16794B':'#B42318')+'">'+(x.ok?'✓':'✗')+'</td><td>'+E(x.t)+'</td><td class="small">'+E(x.d)+'</td></tr>';
       }).join('')+'</table></div>'+
+''
+    div.innerHTML=
       '<h3>تنبيهات</h3>'+
       (al.length
         ? '<ul class="small">'+al.map(function(a){return '<li style="color:'+(a.bad?'#B42318':'#1B1B1B')+'">'+E(a.t)+'</li>'}).join('')+'</ul>'
