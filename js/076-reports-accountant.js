@@ -193,10 +193,53 @@ try{
       if(start){ for(var n=start;n&&n!==end;n=n.nextElementSibling) nodes.push(n); }
     }
     if(nodes.length){
-      [].slice.call(host.children).forEach(function(c){ if(c.tagName!=='H2') c.remove(); });
+      [].slice.call(host.children).forEach(function(c){ if(c.tagName!=='H2' && c.id!=='pmCountPrint') c.remove(); });
       nodes.forEach(function(n){ host.appendChild(n); });
     }
+    ensurePrintBtn(host);
     host.style.display=isAdmin()?'':'none';
+  }
+
+  /* ---------- طباعة ورقة الجرد (الخامات + الرصيد المسجل + خانة الفعلي فاضية) ---------- */
+  function printCountSheet(){
+    var list=invList();
+    if(!list.length){ alert('لا توجد خامات في المخزون لطباعتها.'); return; }
+    var rows=list.map(function(x,i){
+      return '<tr><td>'+(i+1)+'</td><td class="nm">'+E(x.name)+'</td><td>'+E(x.unit||'')+'</td><td>'+fmt(x.qty||0)+'</td><td class="blank"></td><td class="blank"></td></tr>';
+    }).join('');
+    var dt=new Date().toLocaleDateString('ar-EG',{dateStyle:'medium'});
+    var html='<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>ورقة جرد المخزون</title><style>'+
+      '@page{margin:12mm}'+
+      'body{font-family:Arial,Tahoma,sans-serif;color:#1B1B1B;margin:0;padding:14px;direction:rtl;font-size:13px}'+
+      'h1{font-size:20px;margin:0 0 4px}'+
+      '.meta{display:flex;justify-content:space-between;border-bottom:2px solid #1B1B1B;padding-bottom:6px;margin-bottom:10px}'+
+      'table{width:100%;border-collapse:collapse}'+
+      'th,td{border:1px solid #666;padding:7px 5px;text-align:center}'+
+      'th{background:#eee;font-weight:700}'+
+      'td.nm{text-align:start}'+
+      'td.blank{height:26px}'+
+      'tr{page-break-inside:avoid}'+
+      '.sign{display:flex;justify-content:space-between;margin-top:28px;font-size:13px}'+
+      '.sign span{border-top:1px solid #1B1B1B;padding-top:4px;width:30%;text-align:center}'+
+      '</style></head><body>'+
+      '<h1>RMY — ورقة جرد المخزون</h1>'+
+      '<div class="meta"><span><b>التاريخ:</b> '+E(dt)+'</span><span><b>عدد الخامات:</b> '+list.length+'</span></div>'+
+      '<table><thead><tr><th>#</th><th>الخامة</th><th>الوحدة</th><th>الرصيد المسجل</th><th>الفعلي</th><th>ملاحظات</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+      '<div class="sign"><span>اسم الجارد</span><span>توقيع المدير</span></div>'+
+      '</body></html>';
+    if(typeof window.pmShowDoc==='function') window.pmShowDoc(html,'ورقة جرد المخزون');
+    else window.print();
+  }
+
+  function ensurePrintBtn(host){
+    if(!host||host.querySelector('#pmCountPrint')) return;
+    var b=document.createElement('button');
+    b.type='button'; b.id='pmCountPrint'; b.className='secondary mini noprint';
+    b.textContent='🖨 طباعة ورقة الجرد';
+    b.style.margin='6px 0 10px';
+    b.onclick=printCountSheet;
+    var h=host.querySelector('h2');
+    if(h) h.insertAdjacentElement('afterend',b); else host.insertBefore(b,host.firstChild);
   }
 
   var _go=window.go;
