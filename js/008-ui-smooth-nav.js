@@ -623,7 +623,7 @@ document.addEventListener('pointerdown',function(e){
 
 /* ==================== 13) اختصارات لوحة المفاتيح ==================== */
 document.addEventListener('keydown',function(e){
-  if((e.ctrlKey||e.metaKey)&&(e.key==='k'||e.key==='K')){ e.preventDefault(); openPalette(); return }
+  if((e.ctrlKey||e.metaKey)&&(e.code==='KeyK'||e.key==='k'||e.key==='K')){ e.preventDefault(); openPalette(); return }
   if(e.key==='Escape'){ closePalette(); closeSheet(); return }
   if(pal&&pal.classList.contains('show')){
     if(e.key==='ArrowDown'){ e.preventDefault(); setSel(palSel+1); return }
@@ -631,12 +631,13 @@ document.addEventListener('keydown',function(e){
     if(e.key==='Enter'){ e.preventDefault(); runSel(); return }
   }
   if(e.altKey&&!e.ctrlKey&&!e.metaKey){
-    if(e.key==='ArrowRight'){ e.preventDefault(); goRel(-1); return }
-    if(e.key==='ArrowLeft'){ e.preventDefault(); goRel(1); return }
-    if(/^[1-9]$/.test(e.key)){
+    if(e.code==='ArrowRight'||e.key==='ArrowRight'){ e.preventDefault(); goRel(-1); return }
+    if(e.code==='ArrowLeft'||e.key==='ArrowLeft'){ e.preventDefault(); goRel(1); return }
+    var dm=/^Digit([1-9])$/.exec(e.code||'')||/^Numpad([1-9])$/.exec(e.code||'')||/^([1-9])$/.exec(e.key||'');
+    if(dm){
       e.preventDefault();
-      var tabs=[].slice.call(document.querySelectorAll('nav.tabs .tab')).filter(function(b){ return b.style.display!=='none' });
-      var t=tabs[Number(e.key)-1]; if(t)t.click();
+      var tabs=[].slice.call(document.querySelectorAll('nav.tabs .tab')).filter(function(b){ return b.style.display!=='none'&&!b.classList.contains('pm-tab-off') });
+      var t=tabs[Number(dm[1])-1]; if(t)t.click();
       return;
     }
   }
