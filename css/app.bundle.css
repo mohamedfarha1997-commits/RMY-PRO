@@ -1227,12 +1227,12 @@ html body #pmBellPanel #pmMsgSend{width:100%!important;min-height:48px!important
 html body #pmBellPanel .pm-filters{flex-wrap:wrap!important;justify-content:flex-start!important}/* ---- 065-ui-hide-fab-on-sheet.css ---- */
 body.pm-overlay-open .pm-fabs, body.pm-overlay-open #pmFabs{display:none!important}/* ---- 066-sales-lock.css ---- */
 body[data-role="sales"] nav.tabs .nav-group:not(:nth-child(2)){display:none!important}
-body[data-role="sales"] nav.tabs .nav-group:nth-child(2) .tab:not([data-tab="menu"]):not([data-tab="cartpage"]):not([data-tab="salesInvoices"]):not([data-tab="openInvoices"]){display:none!important}
+body[data-role="sales"] nav.tabs .nav-group:nth-child(2) .tab:not([data-tab="menu"]):not([data-tab="cartpage"]):not([data-tab="salesInvoices"]):not([data-tab="openInvoices"]):not([data-tab="readyDelivery"]){display:none!important}
 body[data-role="sales"] .pm-dock [data-act="stock"],
 body[data-role="sales"] .pm-dock [data-act="devices"],
 body[data-role="sales"] #menuAdminCard, body[data-role="sales"] .pm-owner-card{display:none!important}/* ---- 067-sales-lock-nav.css ---- */
 body.role-sales nav.tabs .nav-group:not(:nth-child(2)){display:none!important}
-body.role-sales nav.tabs .nav-group:nth-child(2) .tab:not([data-tab="menu"]):not([data-tab="cartpage"]):not([data-tab="salesInvoices"]):not([data-tab="openInvoices"]){display:none!important}/* ---- 068-invoices-archive.css ---- */
+body.role-sales nav.tabs .nav-group:nth-child(2) .tab:not([data-tab="menu"]):not([data-tab="cartpage"]):not([data-tab="salesInvoices"]):not([data-tab="openInvoices"]):not([data-tab="readyDelivery"]){display:none!important}/* ---- 068-invoices-archive.css ---- */
 html body #monthly.active>.card:has(#archivesTable){grid-column:span 12!important}
 html body #archivesTable{overflow-x:auto!important;overflow-y:hidden!important;width:100%!important;-webkit-overflow-scrolling:touch}
 html body #archivesTable table{table-layout:auto!important;width:max-content!important;min-width:100%!important;max-width:none!important;border-collapse:separate!important;border-spacing:0!important}
@@ -1311,14 +1311,14 @@ body.role-sales #pmBackBar, body.role-sales .pm-back-bar{display:flex!important}
 .pm-po-actions button{min-height:40px}
 .pm-po-actions button:disabled{opacity:.5;cursor:not-allowed}
 .pm-po-empty{padding:18px;text-align:center;color:#1B1B1B;font-size:13px}/* ---- 076-parties-v3.css ---- */
-body[data-role="kitchen"] nav.tabs #partiesGroup .tab[data-tab="partyInvoices"],
+body[data-role="kitchen"] nav.tabs .tab[data-tab="partyInvoices"],
 body[data-role="kitchen"] nav.tabs #partiesGroup .tab[data-tab="partyTemplate"],
-body.role-kitchen nav.tabs #partiesGroup .tab[data-tab="partyInvoices"],
+body.role-kitchen nav.tabs .tab[data-tab="partyInvoices"],
 body.role-kitchen nav.tabs #partiesGroup .tab[data-tab="partyTemplate"],
 body[data-role="sales"] nav.tabs #partiesGroup .tab[data-tab="partyTemplate"],
 body.role-sales nav.tabs #partiesGroup .tab[data-tab="partyTemplate"]{display:none!important}
-body[data-role="sales"] nav.tabs #partiesGroup .tab[data-tab="partyInvoices"],
-body.role-sales nav.tabs #partiesGroup .tab[data-tab="partyInvoices"]{display:flex!important}
+body[data-role="sales"] nav.tabs .tab[data-tab="partyInvoices"],
+body.role-sales nav.tabs .tab[data-tab="partyInvoices"]{display:flex!important}
 #partyInvBody .stats{margin-bottom:10px}
 .pm-po-item{border-top:1px dashed var(--line);padding:10px 0}
 .pm-po-itemhead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}/* ---- 077-parties-stations.css ---- */
@@ -2084,9 +2084,9 @@ html body .sync-pill .ui-ico{color:#FFFFFF!important}
 html body #menu #menuGrid .mx-name{color:#FFFFFF!important}
 html body #menu #menuGrid .mx-card[data-sold="1"]::after{color:#FFFFFF!important}
 html body #pmMaint{color:#1B1B1B!important;background:#F2F2F2!important}/* ---- 137-ready-delivery-sales.css ---- */
-body[data-role="sales"] nav.tabs #partiesGroup .tab[data-tab="readyDelivery"],
-body.role-sales nav.tabs #partiesGroup .tab[data-tab="readyDelivery"],
-body[data-role="admin"] nav.tabs #partiesGroup .tab[data-tab="readyDelivery"]{display:flex!important}
+body[data-role="sales"] nav.tabs .tab[data-tab="readyDelivery"],
+body.role-sales nav.tabs .tab[data-tab="readyDelivery"],
+body[data-role="admin"] nav.tabs .tab[data-tab="readyDelivery"]{display:flex!important}
 body[data-role="sales"] #readyDelivery.panel.active,
 body.role-sales #readyDelivery.panel.active,
 body[data-role="admin"] #readyDelivery.panel.active{display:block!important}/* ---- 138-cart-party-sheet.css ---- */
@@ -2263,8 +2263,8 @@ html body tr.stage-head td[style*="background:#0067B8"] .pm-arrow{color:#FFFFFF!
 html body[data-role="kitchen"] nav.tabs .tab[data-tab="readyDelivery"],html body[data-role="barista"] nav.tabs .tab[data-tab="readyDelivery"],html body.role-kitchen nav.tabs .tab[data-tab="readyDelivery"],html body[data-role="kitchen"] #readyDelivery.panel,html body[data-role="barista"] #readyDelivery.panel,html body.role-kitchen #readyDelivery.panel {display:none!important}
 html body:not([data-role="admin"]):not([data-role="sales"]) nav.tabs .tab[data-tab="readyDelivery"],
 html body:not([data-role="admin"]):not([data-role="sales"]) #readyDelivery.panel{display:none!important}
-html body:not([data-role="admin"]):not([data-role="sales"]) #partiesGroup .tab[data-tab="readyDelivery"],
-html body:not([data-role="admin"]):not([data-role="sales"]) nav.tabs #partiesGroup .tab[data-tab="readyDelivery"],
+html body:not([data-role="admin"]):not([data-role="sales"]) .tab[data-tab="readyDelivery"],
+html body:not([data-role="admin"]):not([data-role="sales"]) nav.tabs .tab[data-tab="readyDelivery"],
 html body:not([data-role="admin"]):not([data-role="sales"]) .tab.pm-tab-off[data-tab="readyDelivery"]{display:none!important}/* ---- 144-recipe-stage-contrast.css ---- */html body tr.stage-head td[style*="background:rgba(0,103,184,.12)"], html body tr.stage-head td[style*="background:#F2F2F2"], html body tr.stage-head td[style*="background:rgba(0,103,184,.14)"], html body tr.stage-head td[style*="background:rgba(0,103,184,.12)"], html body tr.stage-head td[style*="background:#F2F2F2"], html body tr.stage-head td[style*="background:rgba(0,103,184,.14)"] {color:#1B1B1B!important}
 html body tr.stage-head td[style*="background:rgba(0,103,184,.12)"] .pm-arrow,
 html body tr.stage-head td[style*="background:#F2F2F2"] .pm-arrow,
@@ -2692,3 +2692,8 @@ html body #pmDock button.cur svg{background:#E6F0FA!important;stroke:#0067B8!imp
 html body #pmDock button:not(.cur) .pmd-txt,html body #pmDock button:not(.cur) .pmd-lbl{color:#4B5563!important}
 html body #pmDock button.cur .pmd-txt,html body #pmDock button.cur .pmd-lbl{color:#0067B8!important}/* ---- إخفاء زرار الإعدادات من الشريط السفلي (مش جزء من الشريط الأصلي) ---- */
 
+
+/* ---- nav regroup: المبيعات (+جاهز للتسليم) / الحسابات (+الفواتير والتقفيل) ---- */
+body[data-role="sales"] nav.tabs #accountsGroup,body.role-sales nav.tabs #accountsGroup{display:block!important}
+body[data-role="sales"] nav.tabs #accountsGroup .tab:not([data-tab="partyInvoices"]):not([data-tab="openInvoices"]),
+body.role-sales nav.tabs #accountsGroup .tab:not([data-tab="partyInvoices"]):not([data-tab="openInvoices"]){display:none!important}
