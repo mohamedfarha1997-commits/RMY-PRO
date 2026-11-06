@@ -61,7 +61,7 @@
 
     nav.querySelectorAll('.nav-group').forEach(function(group){
       var total = 0;
-      group.querySelectorAll(':scope > .nav-items > .tab').forEach(function(tab){
+      group.querySelectorAll(':scope > .nav-items .tab').forEach(function(tab){
         var n = 0;
         var c = (ready && roleVisible(tab)) ? countFor(tab) : 0;
         if (c != null) {

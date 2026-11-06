@@ -75,7 +75,8 @@
       tab.type='button';tab.className='tab';tab.id='pmOpenInvoicesTab';tab.dataset.tab='openInvoices';
       tab.textContent='الفواتير المفتوحة';
       tab.addEventListener('click',function(){if(roleAllowed()&&typeof window.go==='function')window.go('openInvoices')});
-      if(navItems)navItems.appendChild(tab);
+      var invSub=document.querySelector('#accInvoicesSub .nav-sub-items');
+      if(invSub)invSub.appendChild(tab);else if(navItems)navItems.appendChild(tab);
       else {var group=document.createElement('div');group.className='nav-group';group.innerHTML='<div class="nav-title">الحسابات</div><div class="nav-items"></div>';group.querySelector('.nav-items').appendChild(tab);nav.appendChild(group);}
     }
     var panel=document.getElementById('openInvoices');
