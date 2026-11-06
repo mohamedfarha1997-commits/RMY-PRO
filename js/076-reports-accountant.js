@@ -185,6 +185,7 @@ try{
   function moveCount(){
     var card=document.getElementById('pmAcctCard'), host=document.getElementById('pmCountCard');
     if(!host) return;
+    ensurePrintBtn(host);
     var nodes=[];
     if(card){
       var hs=[].slice.call(card.querySelectorAll('h3'));
@@ -196,7 +197,6 @@ try{
       [].slice.call(host.children).forEach(function(c){ if(c.tagName!=='H2' && c.id!=='pmCountPrint') c.remove(); });
       nodes.forEach(function(n){ host.appendChild(n); });
     }
-    ensurePrintBtn(host);
     host.style.display=isAdmin()?'':'none';
   }
 
@@ -231,6 +231,8 @@ try{
     else window.print();
   }
 
+  window.pmCountSheetPrint=printCountSheet;
+
   function ensurePrintBtn(host){
     if(!host||host.querySelector('#pmCountPrint')) return;
     var b=document.createElement('button');
@@ -244,7 +246,7 @@ try{
 
   var _go=window.go;
   if(typeof _go==='function'){
-    window.go=function(id){ var r=_go.apply(this,arguments); if(id==='accountant'||id==='monthCount'||id==='monthly') setTimeout(function(){ build(); moveCount(); },0); return r; };
+    window.go=function(id){ var r=_go.apply(this,arguments); if(id==='accountant'||id==='monthCount'||id==='monthly') setTimeout(function(){ try{ build(); }catch(e){ console.error('monthCount build',e); } moveCount(); },0); return r; };
   }
   function start(){ setTimeout(build,300); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
@@ -368,3 +370,19 @@ try{
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
 })();
 }catch(e){console.error('[PastryMY] 077-reports-accountant-alerts.js failed',e)}
+
+/* احتياط: زر الطباعة يتضاف عند الضغط على تبويب جرد آخر الشهر حتى لو الـ wrapper ما اشتغلش */
+document.addEventListener('click',function(e){
+  var t=e.target&&e.target.closest?e.target.closest('[data-tab="monthCount"]'):null;
+  if(!t) return;
+  setTimeout(function(){
+    var host=document.getElementById('pmCountCard');
+    if(host && !host.querySelector('#pmCountPrint')){
+      var b=document.createElement('button');
+      b.type='button'; b.id='pmCountPrint'; b.className='secondary mini noprint';
+      b.textContent='🖨 طباعة ورقة الجرد'; b.style.margin='6px 0 10px';
+      b.onclick=function(){ var f=window.pmCountSheetPrint; if(typeof f==='function') f(); };
+      var h=host.querySelector('h2'); if(h) h.insertAdjacentElement('afterend',b); else host.insertBefore(b,host.firstChild);
+    }
+  },300);
+},true);
