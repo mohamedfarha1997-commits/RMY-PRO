@@ -681,8 +681,8 @@ button:focus-visible{outline:3px solid rgba(0,0,0,.14);outline-offset:2px}
 input,select,textarea{border-radius:12px !important;border:1px solid var(--line) !important;transition:border-color .15s ease,box-shadow .15s ease}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--sky) !important;box-shadow:0 0 0 4px rgba(0,0,0,.18)}
 .tablewrap{border-radius:14px;border:1px solid var(--line);overflow:hidden}
-table th{background:var(--pale);color:var(--muted);font-weight:800}
-.pm-pres-menu,#pmGearMenu,#pmBellPanel{border-radius:16px !important;border:1px solid var(--line) !important}
+table th{background:var(--pale);color:var(--muted);font-weight:800}.pm-pres-menu,
+#pmBellPanel{border-radius:16px !important;border:1px solid var(--line) !important}
 @media (max-width:880px){
   .card{padding:14px !important}
   .stat b{font-size:21px}
@@ -1185,10 +1185,7 @@ body:not(.auth-required) #home .pm-hero{grid-column:span 12!important;position:r
 #menu .mx-card.mx-feat .mx-tag{bottom:auto;inset-inline-start:auto;inset-inline-end:10px;top:10px}/* ---- 057-auth-login-shake.css ---- */
 @keyframes pmPinShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
 .login-screen .pin-wrap.shake{animation:pmPinShake .42s ease-in-out}/* ---- 058-cloud-hide-accounts-icon.css ---- */
-#pmPresChip,#pmPresMenu{display:none!important}/* ---- 059-dock-icons.css ---- */
-#pmDock #pmMsgWrap,#pmDock #pmGearWrap{flex:1 1 0!important;min-width:0!important;flex-direction:column!important;justify-content:center!important;gap:3px;}
-#pmDock #pmMsgWrap>button,#pmDock #pmGearWrap>button{width:44px!important;min-width:44px!important;border-radius:16px!important;border:0!important;background:rgba(0,103,184,.08)!important;color:#1B1B1B!important;box-shadow:none!important;padding:0!important;margin:0!important;align-items:center!important;}
-#pmDock #pmMsgWrap>button svg,#pmDock #pmGearWrap>button svg{height:22px!important;}
+#pmPresChip,#pmPresMenu{display:none!important}/* ---- 059-dock-icons.css ---- */#pmDock #pmMsgWrap{flex:1 1 0!important;min-width:0!important;flex-direction:column!important;justify-content:center!important;gap:3px;}#pmDock #pmMsgWrap>button{width:44px!important;min-width:44px!important;border-radius:16px!important;border:0!important;background:rgba(0,103,184,.08)!important;color:#1B1B1B!important;box-shadow:none!important;padding:0!important;margin:0!important;align-items:center!important;}#pmDock #pmMsgWrap>button svg{height:22px!important;}
 #pmDock .pmd-lbl{font-weight:750;color:#1B1B1B;line-height:1;white-space:nowrap;}
 #pmDock #pmBellCount{top:-2px!important;}/* ---- 060-ui-bottom-sheets.css ---- */
 .pm-sheet-s{position:fixed!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;width:100%!important;max-width:520px!important;margin:0 auto!important;max-height:78vh!important;overflow:auto!important;border-radius:26px 26px 0 0!important;padding:14px 18px calc(22px + env(safe-area-inset-bottom,0px))!important;background:#fff!important;color:#1B1B1B!important;z-index:11260!important;box-shadow:0 -20px 50px -20px rgba(0,0,0,.4)!important;box-sizing:border-box!important;animation:pmSheetUp .28s cubic-bezier(.2,.8,.2,1)!important;text-align:right!important;direction:rtl!important}
@@ -1243,12 +1240,7 @@ html body #archivesTable th,html body #archivesTable td{white-space:nowrap!impor
 html body #archivesTable td .mini,html body #archivesTable td .secondary,html body #archivesTable td .danger{white-space:nowrap!important;margin:2px 0!important}/* ---- 069-reports-expenses.css ---- */
 html body #expenses.active{display:block}
 html body #expenses.active>.card{margin:0 0 16px!important;grid-column:auto}
-html body #monthly.active>.card:first-child{grid-column:span 12!important}/* ---- 070-dock-match.css ---- */
-html body #pmDock #pmMsgWrap>button,html body #pmDock #pmGearWrap>button{background:none!important;color:#1B1B1B!important;box-shadow:none!important;border:0!important;}
-html body #pmDock #pmMsgWrap>button svg,html body #pmDock #pmGearWrap>button svg{height:22px!important;}
-html body #pmDock #pmMsgWrap>button,html body #pmDock #pmGearWrap>button{flex:1 1 0!important;width:auto!important;min-width:0!important;height:auto!important;display:flex!important;align-items:center!important;gap:4px!important;padding:7px 0!important;margin:0!important;border-radius:18px!important;}
-
-html body #pmDock #pmGearWrap>button svg{height:19px!important;}/* ---- 072-menu-5col.css ---- */
+html body #monthly.active>.card:first-child{grid-column:span 12!important}/* ---- 070-dock-match.css ---- */html body #pmDock #pmMsgWrap>button{background:none!important;color:#1B1B1B!important;box-shadow:none!important;border:0!important;}html body #pmDock #pmMsgWrap>button svg{height:22px!important;}html body #pmDock #pmMsgWrap>button{flex:1 1 0!important;width:auto!important;min-width:0!important;height:auto!important;display:flex!important;align-items:center!important;gap:4px!important;padding:7px 0!important;margin:0!important;border-radius:18px!important;}/* ---- 072-menu-5col.css ---- */
 html body #menu #menuGrid.menu-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;grid-auto-rows:auto!important;align-items:stretch!important;margin-top:10px!important;max-height:none!important;height:auto!important;overflow:visible!important}
 html body #menu #menuGrid .mx-card,
 html body #menu #menuGrid .mx-card.mx-feat{grid-column:auto!important;flex-direction:column!important;min-height:0!important;min-width:0!important;}
@@ -1403,9 +1395,9 @@ html body #menu .mx-card .mx-plus:disabled{opacity:.3}
 .pm-qp-row input{flex:1;min-height:48px;border:1px solid rgba(0,0,0,.14);border-radius:14px;padding:10px;font:inherit;font-size:16px;text-align:center}
 .pm-qp-ok{min-height:48px;padding:0 20px;border:0;border-radius:14px;background:#FFFFFF;color:#1B1B1B;font:inherit;font-weight:850}
 .pm-qp-x{width:100%;margin-top:10px;min-height:44px;border:0;border-radius:14px;background:#F2F2F2;color:#1B1B1B;font:inherit;font-weight:800}
-html body #pmDock{bottom:max(12px,env(safe-area-inset-bottom,0px))!important;width:min(96vw,460px)!important;border-radius:30px!important;background:rgba(255,255,255,.94)!important;border:1px solid #D6D6D6!important;box-shadow:0 22px 44px -18px rgba(0,0,0,.42)!important;}
-html body #pmDock button,html body #pmDock #pmMsgWrap>button,html body #pmDock #pmGearWrap>button{flex:1 1 0!important;min-width:0!important;border:0!important;border-radius:22px!important;background:transparent!important;color:#1B1B1B!important;box-shadow:none!important;display:flex!important;align-items:center!important;font-weight:800!important;transition:background .2s ease,color .2s ease,transform .15s ease!important;}
-html body #pmDock button svg,html body #pmDock #pmMsgWrap>button svg,html body #pmDock #pmGearWrap>button svg{flex:0 0 auto}
+html body #pmDock{bottom:max(12px,env(safe-area-inset-bottom,0px))!important;width:min(96vw,460px)!important;border-radius:30px!important;background:rgba(255,255,255,.94)!important;border:1px solid #D6D6D6!important;box-shadow:0 22px 44px -18px rgba(0,0,0,.42)!important;}html body #pmDock button,
+html body #pmDock #pmMsgWrap>button{flex:1 1 0!important;min-width:0!important;border:0!important;border-radius:22px!important;background:transparent!important;color:#1B1B1B!important;box-shadow:none!important;display:flex!important;align-items:center!important;font-weight:800!important;transition:background .2s ease,color .2s ease,transform .15s ease!important;}html body #pmDock button svg,
+html body #pmDock #pmMsgWrap>button svg{flex:0 0 auto}
 html body #pmDock button:active{transform:scale(.94)}
 
 html body #pmDock .pmd-lbl{line-height:1.1!important;white-space:nowrap!important;margin:0!important;}/* ---- 080-menu-grid.css ---- */
@@ -1511,12 +1503,11 @@ html body .toast-stack .toast .toast-progress{animation-play-state:running}
 html body .toast-stack .toast:hover .toast-progress{animation-play-state:paused}
 html body .toast-stack .toast-count{min-width:22px;text-align:center}
 html body .toast-stack .toast{background-color:#fff!important;box-shadow:0 16px 34px -14px rgba(0,0,0,.38),0 2px 6px rgba(0,0,0,.08)!important}/* ---- 086-dock-v3.css ---- */
-html body #pmDock [data-act="stock"],html body #pmDock [data-act="cart"]{display:none!important}
-
-html body #pmDock button,html body #pmDock #pmMsgWrap>button,html body #pmDock #pmGearWrap>button{min-height:56px!important;height:auto!important;font-size:10px!important;line-height:1.2!important;padding:6px 1px!important;gap:3px!important;word-break:keep-all!important;}
-html body #pmDock button svg,html body #pmDock #pmMsgWrap>button svg,html body #pmDock #pmGearWrap>button svg{width:20px!important;height:20px!important}
-html body #pmDock .pmd-txt{white-space:normal;}
-html body #pmDock button.cur:not(.pm-center),html body #pmDock #pmMsgWrap>button.cur,html body #pmDock #pmGearWrap>button.cur{color:#1B1B1B!important;background:rgba(0,103,184,.11)!important}
+html body #pmDock [data-act="stock"],html body #pmDock [data-act="cart"]{display:none!important}html body #pmDock button,
+html body #pmDock #pmMsgWrap>button{min-height:56px!important;height:auto!important;font-size:10px!important;line-height:1.2!important;padding:6px 1px!important;gap:3px!important;word-break:keep-all!important;}html body #pmDock button svg,
+html body #pmDock #pmMsgWrap>button svg{width:20px!important;height:20px!important}
+html body #pmDock .pmd-txt{white-space:normal;}html body #pmDock button.cur:not(.pm-center),
+html body #pmDock #pmMsgWrap>button.cur{color:#1B1B1B!important;background:rgba(0,103,184,.11)!important}
 html body #pmDock button.pm-center{min-height:66px!important;border-radius:24px!important;background:linear-gradient(135deg,#FFFFFF,#FFFFFF)!important;color:#1B1B1B!important;box-shadow:0 14px 26px -10px rgba(0,0,0,.8)!important;font-size:10.5px!important;font-weight:850!important;}
 body[data-role="sales"] #pmDock [data-act="customers"],body[data-role="sales"] #pmDock [data-act="purchases"],body[data-role="sales"] #pmDock [data-act="devices"],
 body.role-sales #pmDock [data-act="customers"],body.role-sales #pmDock [data-act="purchases"],body.role-sales #pmDock [data-act="devices"]{display:none!important}
@@ -1622,9 +1613,8 @@ html.pm-maint-open,body.pm-maint-open{overflow:hidden!important;overscroll-behav
 .pm-msheet-act{display:flex;gap:8px;margin-top:16px}
 .pm-msheet-act button{flex:1;min-height:46px;border-radius:12px;border:0;font:inherit;font-weight:800;cursor:pointer}
 #pmMSheetSave{background:#FFFFFF;color:#1B1B1B}
-#pmMSheetCancel{background:#F2F2F2;color:#1B1B1B}/* ---- 096-dock-groups.css ---- */
-
-html body #pmDock .pm-dk-grp>button,html body #pmDock .pm-dk-grp>#pmMsgWrap>button,html body #pmDock .pm-dk-grp>#pmGearWrap>button{flex:1 1 0!important;min-width:0!important;max-width:88px!important}
+#pmMSheetCancel{background:#F2F2F2;color:#1B1B1B}/* ---- 096-dock-groups.css ---- */html body #pmDock .pm-dk-grp>button,
+html body #pmDock .pm-dk-grp>#pmMsgWrap>button{flex:1 1 0!important;min-width:0!important;max-width:88px!important}
 /* ---- 097-admin-diagnostics.css ---- */
 #pmDiagOv{position:fixed;inset:0;z-index:50000;background:rgba(0,103,184,.6);display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
 #pmDiagOv .pdg-box{width:min(100%,460px);background:#fff;border-radius:20px;padding:18px 16px;direction:rtl;text-align:right;color:#1B1B1B;box-shadow:0 28px 80px #061a2b50}
@@ -2691,15 +2681,14 @@ html body #pmDock button{overflow:visible!important;padding-inline:0!important}
 .cart-modal-card .drawer-basket .pm-party-switch{display:flex!important;align-items:center;gap:8px;margin:4px 0 2px;padding:2px 0;position:static;cursor:pointer}
 .cart-modal-card .drawer-basket .pm-party-switch input{position:static!important;opacity:1!important;display:inline-block!important;width:20px!important;height:20px!important;min-width:20px;min-height:20px!important;flex:0 0 20px;margin:0!important;padding:0!important;accent-color:#0067B8;cursor:pointer}
 .cart-modal-card .drawer-basket .pm-party-switch .pm-party-track{display:none!important}
-.cart-modal-card .drawer-basket .pm-party-switch>span:last-child{font-size:13px;font-weight:700;color:#1B1B1B}
-
-/* ---- الشريط السفلي: حالة الزرار الحالي (cur) هي المصدر الوحيد للتلوين ---- */
-html body #pmDock button:not(.cur),
-html body #pmDock #pmMsgWrap>button:not(.cur),
-html body #pmDock #pmGearWrap>button:not(.cur){color:#6B7280!important;background:transparent!important;box-shadow:none!important;border-color:transparent!important}
-html body #pmDock button:not(.cur) svg{background:none!important;stroke:currentColor!important}
-html body #pmDock #pmMsgWrap,html body #pmDock #pmGearWrap,html body #pmDock .pm-dk-grp,html body #pmDock #pmDockA,html body #pmDock #pmDockB{background:transparent!important;box-shadow:none!important}
+.cart-modal-card .drawer-basket .pm-party-switch>span:last-child{font-size:13px;font-weight:700;color:#1B1B1B}/* ---- الشريط السفلي: حالة الزرار الحالي (cur) هي المصدر الوحيد للتلوين ---- */html body #pmDock button:not(.cur),
+html body #pmDock #pmMsgWrap>button:not(.cur){color:#6B7280!important;background:transparent!important;box-shadow:none!important;border-color:transparent!important}
+html body #pmDock button:not(.cur) svg{background:none!important;stroke:currentColor!important}html body #pmDock #pmMsgWrap,
+html body #pmDock .pm-dk-grp,
+html body #pmDock #pmDockA,
+html body #pmDock #pmDockB{background:transparent!important;box-shadow:none!important}
 html body #pmDock button.cur{color:#0067B8!important;background:transparent!important;box-shadow:none!important}
 html body #pmDock button.cur svg{background:#E6F0FA!important;stroke:#0067B8!important}
 html body #pmDock button:not(.cur) .pmd-txt,html body #pmDock button:not(.cur) .pmd-lbl{color:#4B5563!important}
-html body #pmDock button.cur .pmd-txt,html body #pmDock button.cur .pmd-lbl{color:#0067B8!important}
+html body #pmDock button.cur .pmd-txt,html body #pmDock button.cur .pmd-lbl{color:#0067B8!important}/* ---- إخفاء زرار الإعدادات من الشريط السفلي (مش جزء من الشريط الأصلي) ---- */
+
