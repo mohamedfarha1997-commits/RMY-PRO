@@ -1519,7 +1519,6 @@ html body #pmDock button svg,html body #pmDock #pmMsgWrap>button svg,html body #
 html body #pmDock .pmd-txt{display:block;white-space:normal}
 html body #pmDock button.cur:not(.pm-center),html body #pmDock #pmMsgWrap>button.cur,html body #pmDock #pmGearWrap>button.cur{color:#1B1B1B!important;background:rgba(0,103,184,.11)!important}
 html body #pmDock button.pm-center{height:66px!important;min-height:66px!important;border-radius:24px!important;background:linear-gradient(135deg,#FFFFFF,#FFFFFF)!important;color:#1B1B1B!important;box-shadow:0 14px 26px -10px rgba(0,0,0,.8)!important;font-size:10.5px!important;font-weight:850!important}
-html body #pmDock button.pm-center svg{width:24px!important;height:24px!important;stroke:#fff!important}
 body[data-role="sales"] #pmDock [data-act="customers"],body[data-role="sales"] #pmDock [data-act="purchases"],body[data-role="sales"] #pmDock [data-act="devices"],
 body.role-sales #pmDock [data-act="customers"],body.role-sales #pmDock [data-act="purchases"],body.role-sales #pmDock [data-act="devices"]{display:none!important}
 body[data-role="kitchen"] #pmDock [data-act="menu"],body[data-role="kitchen"] #pmDock [data-act="customers"],body[data-role="kitchen"] #pmDock [data-act="purchases"],
@@ -1682,8 +1681,7 @@ html body #pmDock .pm-dk-grp{flex:1 1 0!important;min-width:0!important;display:
 html body #pmDock .pm-dk-grp>button,html body #pmDock .pm-dk-grp>#pmNotifWrap,html body #pmDock .pm-dk-grp>#pmMsgWrap{flex:0 0 auto!important;width:calc(100% / var(--pm-n,2))!important;min-width:0!important;max-width:none!important}
 html body #pmDock #pmNotifWrap>button{width:100%!important;max-width:none!important;min-width:0!important;margin:0!important;flex:none!important}
 html body #pmDock #pmMsgWrap>button{width:calc(100% / var(--pm-n,2))!important;max-width:none!important;min-width:0!important;margin:0!important;flex:none!important}
-html body #pmDock #pmGearWrap{display:none!important}
-html body #pmDock button.pm-center{flex:0 0 74px!important;width:74px!important;min-width:74px!important;max-width:74px!important;margin:-16px 0 0!important}/* ---- 110-settings-drawer.css ---- */
+html body #pmDock #pmGearWrap{display:none!important}/* ---- 110-settings-drawer.css ---- */
 html body #pmSettingsBody{display:flex!important;flex-direction:column!important;gap:8px!important;margin-top:6px!important}
 html body #pmSettingsBody>button,html body #pmSettingsBody>a{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;width:100%!important;min-height:48px!important;height:auto!important;padding:12px 14px!important;box-sizing:border-box!important;background:rgba(255,255,255,.08)!important;color:#1B1B1B!important;border:1px solid rgba(255,255,255,.16)!important;border-radius:14px!important;font:inherit!important;font-size:15px!important;font-weight:700!important;text-align:right!important;direction:rtl!important;cursor:pointer!important;box-shadow:none!important;position:static!important;transform:none!important;float:none!important}
 html body #pmSettingsBody>button svg{width:20px!important;height:20px!important;flex:0 0 auto!important;color:#1B1B1B!important}
@@ -2631,8 +2629,7 @@ html body #pmDock{border-radius:28px!important;padding:8px 6px!important;align-i
 html body #pmDock button,html body #pmDock #pmNotifWrap>button,html body #pmDock #pmMsgWrap>button{color:#6B7280!important;background:none!important;box-shadow:none!important;border:0!important;font-weight:700!important}
 html body #pmDock button svg{box-sizing:border-box!important;width:56px!important;height:32px!important;padding:5px 17px!important;border-radius:999px!important;stroke:currentColor!important;transition:background .2s}
 html body #pmDock button.pm-center{margin:0!important;flex:1 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;height:auto!important;min-height:56px!important;border-radius:18px!important}
-html body #pmDock button.pm-center svg{width:56px!important;height:32px!important;stroke:currentColor!important}html body #pmDock button.cur{background:none!important;color:#0067B8!important}html body #pmDock button.cur svg{background:#E6F0FA!important;stroke:#0067B8!important}
-html body #pmDock #pmNotifBtn .pmd-lbl::after{content:"التنبيهات"}
+html body #pmDock button.pm-center svg{width:56px!important;height:32px!important;stroke:currentColor!important}
 html body #pmDock{width:min(96vw,460px)!important;gap:0!important;align-items:center!important}
 html body #pmDock #pmDockA,html body #pmDock #pmDockB,html body #pmDock #pmMsgWrap:not([style*="display: none"]){display:contents!important}
 html body #pmDock #pmNotifWrap,html body #pmDock .pm-dk-grp>#pmNotifWrap,html body #pmDock .pm-dk-grp>#pmMsgWrap{flex:1 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;display:flex!important;align-items:stretch!important}
@@ -2641,7 +2638,7 @@ html body #pmDock button,html body #pmDock #pmNotifWrap>button,html body #pmDock
 html body #pmDock button svg,html body #pmDock #pmMsgWrap>button svg,html body #pmDock #pmNotifWrap>button svg,html body #pmDock .pm-dk-grp>button svg,html body #pmDock button.pm-center svg{width:46px!important;max-width:100%!important;height:30px!important;padding:5px 12px!important;box-sizing:border-box!important;border-radius:999px!important;stroke:currentColor!important}
 html body #pmDock .pmd-lbl,html body #pmDock .pmd-txt{font-size:10.5px!important;line-height:1.15!important;margin:0!important;color:inherit!important;text-align:center!important;white-space:normal!important}
 html body #pmDock #pmNotifBtn .pmd-lbl::after{content:"التنبيهات"}
-html body #pmDock #pmNotifCount,html body #pmDock #pmBellCount{top:0!important;right:calc(50% - 22px)!important}html body #pmDock button.cur{background:none!important;color:#0067B8!important}html body #pmDock button.cur svg{background:#E6F0FA!important;stroke:#0067B8!important}
+html body #pmDock #pmNotifCount,html body #pmDock #pmBellCount{top:0!important;right:calc(50% - 22px)!important}
 html body #pmDock .pmd-lbl,html body #pmDock .pmd-txt{font-size:10px!important;letter-spacing:-.2px!important;overflow:visible!important}
 html body #pmDock button{overflow:visible!important;padding-inline:0!important}
 
