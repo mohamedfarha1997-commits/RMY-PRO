@@ -625,6 +625,20 @@ document.addEventListener('pointerdown',function(e){
 document.addEventListener('keydown',function(e){
   if((e.ctrlKey||e.metaKey)&&(e.code==='KeyK'||e.key==='k'||e.key==='K')){ e.preventDefault(); openPalette(); return }
   if(e.key==='Escape'){ closePalette(); closeSheet(); return }
+  /* زرار الرجوع (Backspace): يخرج من الصفحة الحالية للرئيسية، ما عدا وإنت بتكتب أو فيه نافذة مفتوحة */
+  if((e.code==='Backspace'||e.key==='Backspace')&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!e.shiftKey){
+    var bt=e.target, tg=bt&&bt.tagName;
+    var typing=bt&&(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT'||bt.isContentEditable);
+    var dlg=document.querySelector('#messageDialog.show,.modal.show,.sheet.open,.pm-sheet.show,dialog[open]');
+    var palOpen=pal&&pal.classList.contains('show');
+    var inPage=document.body.classList.contains('pm-view');
+    if(!typing&&!dlg&&!palOpen&&inPage){
+      e.preventDefault();
+      var back=document.getElementById('pmBack');
+      if(back) back.click(); else if(typeof window.go==='function') window.go('home');
+      return;
+    }
+  }
   if(pal&&pal.classList.contains('show')){
     if(e.key==='ArrowDown'){ e.preventDefault(); setSel(palSel+1); return }
     if(e.key==='ArrowUp'){ e.preventDefault(); setSel(palSel-1); return }
@@ -641,6 +655,20 @@ document.addEventListener('keydown',function(e){
       return;
     }
   }
+});
+
+/* زرار Backspace (سهم الرجوع) برا أي خانة كتابة = الرجوع للرئيسية */
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Backspace'||e.ctrlKey||e.metaKey||e.altKey||e.shiftKey||e.defaultPrevented)return;
+  var t=e.target, tg=t&&t.tagName;
+  if(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT'||(t&&t.isContentEditable))return;
+  if(document.body.classList.contains('auth-required'))return;
+  if(pal&&pal.classList.contains('show'))return;
+  if(document.querySelector('.show#messageDialog,#messageDialog.show,.pm-sheet.show,.modal.show,dialog[open]'))return;
+  var act=document.querySelector('nav.tabs .tab.active');
+  if(!act||act.dataset.tab==='analytics')return;
+  e.preventDefault();
+  if(typeof go==='function')go('home');
 });
 
 /* ==================== 14) شريط الاستعادة بعد إقلاع غير سليم ==================== */
