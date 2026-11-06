@@ -142,17 +142,16 @@
     /* زرار في تبويب الشهر/التقفيل، فوق تقرير الشهر */
     function mount(){
       if (document.getElementById('pmDailyClosingCard')) return true;
-      var host = document.getElementById('monthly');
-      var anchor = document.getElementById('monthLabel');
-      if (!host || !anchor) return false;
+      var host = document.getElementById('dailyClosing');
+      if (!host) return false;
       var card = document.createElement('div');
       card.id = 'pmDailyClosingCard';
       card.className = 'card';
       card.innerHTML = '<h2>تقرير تقفيل اليوم</h2>' +
+        '<p class="small">تقرير حركة يوم واحد: المبيعات حسب وسيلة الدفع، والمصروفات، والمشتريات، وأعلى الأصناف.</p>' +
         '<label>اليوم</label><input id="pmDailyClosingDay" type="date" value="' + todayKey() + '">' +
         '<button id="pmDailyClosingBtn" class="primary" type="button" style="width:100%;margin-top:10px">عرض وطباعة تقرير اليوم</button>';
-      var parentCard = anchor.closest('.card') || anchor.parentNode;
-      parentCard.parentNode.insertBefore(card, parentCard);
+      host.insertBefore(card, host.firstChild);
       document.getElementById('pmDailyClosingBtn').addEventListener('click', function(){
         var v = document.getElementById('pmDailyClosingDay').value || todayKey();
         show(v);

@@ -82,7 +82,7 @@ try{
 
   /* ---------- بناء الكارت (للمدير فقط) ---------- */
   function build(){
-    var host=document.getElementById('monthly'); if(!host) return;
+    var host=document.getElementById('accountant'); if(!host) return;
     var card=document.getElementById('pmAcctCard');
     if(!card){ card=document.createElement('div'); card.id='pmAcctCard'; card.className='card'; host.insertBefore(card, host.firstChild); }
     if(!isAdmin()){ card.style.display='none'; card.innerHTML=''; return; }
@@ -182,7 +182,7 @@ try{
 
   var _go=window.go;
   if(typeof _go==='function'){
-    window.go=function(id){ var r=_go.apply(this,arguments); if(id==='monthly') setTimeout(build,0); return r; };
+    window.go=function(id){ var r=_go.apply(this,arguments); if(id==='accountant') setTimeout(build,0); return r; };
   }
   function start(){ setTimeout(build,300); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
