@@ -1,0 +1,7 @@
+$('signInButton').addEventListener('click',signInShared);$('unlockButton').addEventListener('click',unlockApp);$('backToLoginButton').addEventListener('click',async()=>{try{localStorage.removeItem('pm_emp');localStorage.removeItem('pm_sess')}catch(e){}try{if(cloudActorPin&&cloudActorPin.startsWith('tok_'))apiCall({action:'revoke_session',token:cloudActorPin}).catch(function(){})}catch(e){}if(cloudClient)await cloudClient.auth.signOut();cloudActorName='';cloudActorPin='';cloudActorRole='';pendingProductionRequestId='';cloudReady=false;$('employeePane').classList.add('hide');$('sharedLoginPane').classList.remove('hide');$('employeePin').value='';setLoginMessage('سجّل الدخول بالحساب المشترك.');});$('sharedPassword').addEventListener('keydown',e=>{if(e.key==='Enter')signInShared()});$('employeePin').addEventListener('keydown',e=>{if(e.key==='Enter')unlockApp()});
+// Prevent local-only writes from being mistaken for cloud saves; online autosave is confirmed by server response.
+window.addEventListener('online',()=>{if(cloudReady)scheduleCloudSave(clone(state),true)});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&cloudReady&&cloudSaveTimer){clearTimeout(cloudSaveTimer);scheduleCloudSave(clone(state),true)}});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&cloudReady)pollCloudState()});
+window.addEventListener('pagehide',()=>{try{localStorage.setItem(KEY,JSON.stringify(state));localStorage.setItem(KEY+'_savedAt',String(Date.now()))}catch(e){}});
+initCloudAuth();
