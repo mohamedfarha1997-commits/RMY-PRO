@@ -147,7 +147,8 @@ try{
     card.querySelectorAll('input[data-acct-i]').forEach(function(inp){
       inp.addEventListener('input', function(){
         var i=Number(inp.getAttribute('data-acct-i')), x=list[i];
-        var td=card.querySelector('td[data-acct-d="'+i+'"]');
+        var td=document.querySelector('#pmCountCard td[data-acct-d="'+i+'"]');
+        if(!td) return;
         if(!x||inp.value===''){ td.textContent='—'; td.style.color=''; td.style.fontWeight=''; return; }
         var d=Math.round((Number(inp.value)-Number(x.qty||0))*1000)/1000;
         td.textContent=(d>0?'+':'')+fmt(d)+' '+(x.unit||'');
