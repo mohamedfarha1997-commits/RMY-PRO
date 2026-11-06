@@ -69,14 +69,14 @@
       var nav=document.getElementById('appNav')||document.querySelector('nav.tabs');
       if(!nav)return false;
       var navGroups=Array.prototype.slice.call(nav.querySelectorAll('.nav-group'));
-      var salesGroup=navGroups.find(function(g){var t=g.querySelector('.nav-title');return t&&t.textContent.trim().indexOf('المبيعات')!==-1;});
+      var salesGroup=navGroups.find(function(g){var t=g.querySelector('.nav-title');return t&&t.textContent.trim().indexOf('الحسابات')!==-1;});
       var navItems=salesGroup&&salesGroup.querySelector('.nav-items');
       tab=document.createElement('button');
       tab.type='button';tab.className='tab';tab.id='pmOpenInvoicesTab';tab.dataset.tab='openInvoices';
       tab.textContent='الفواتير المفتوحة';
       tab.addEventListener('click',function(){if(roleAllowed()&&typeof window.go==='function')window.go('openInvoices')});
       if(navItems)navItems.appendChild(tab);
-      else {var group=document.createElement('div');group.className='nav-group';group.innerHTML='<div class="nav-title">المبيعات</div><div class="nav-items"></div>';group.querySelector('.nav-items').appendChild(tab);nav.appendChild(group);}
+      else {var group=document.createElement('div');group.className='nav-group';group.innerHTML='<div class="nav-title">الحسابات</div><div class="nav-items"></div>';group.querySelector('.nav-items').appendChild(tab);nav.appendChild(group);}
     }
     var panel=document.getElementById('openInvoices');
     if(!panel){
