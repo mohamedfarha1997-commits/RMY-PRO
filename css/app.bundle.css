@@ -2695,5 +2695,5 @@ html body #pmDock button.cur .pmd-txt,html body #pmDock button.cur .pmd-lbl{colo
 
 /* ---- nav regroup: المبيعات (+جاهز للتسليم) / الحسابات (+الفواتير والتقفيل) ---- */
 body[data-role="sales"] nav.tabs #accountsGroup,body.role-sales nav.tabs #accountsGroup{display:block!important}
-body[data-role="sales"] nav.tabs #accountsGroup .tab:not([data-tab="partyInvoices"]):not([data-tab="openInvoices"]),
-body.role-sales nav.tabs #accountsGroup .tab:not([data-tab="partyInvoices"]):not([data-tab="openInvoices"]){display:none!important}
+body[data-role="sales"] nav.tabs #accountsGroup .tab:not([data-tab="partyInvoices"]):not([data-tab="openInvoices"]):not([data-tab="cartpage"]),
+body.role-sales nav.tabs #accountsGroup .tab:not([data-tab="partyInvoices"]):not([data-tab="openInvoices"]):not([data-tab="cartpage"]){display:none!important}
