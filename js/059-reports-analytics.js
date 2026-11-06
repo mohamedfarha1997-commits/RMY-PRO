@@ -21,12 +21,12 @@
   function periods(){
     var s=S(), out=[], archives=arr(s.monthlyArchives);
     out.push({key:'cur',label:'الشهر الحالي',live:true,src:{
-      salesLog:pmRecostMissing(arr(s.salesLog)), expensesLog:arr(s.expensesLog), purchasesLog:arr(s.purchasesLog),
+      salesLog:pmRecostMissing(arr(s.salesLog)), expensesLog:[], purchasesLog:arr(s.purchasesLog),
       wasteLog:pmRecostWaste(arr(s.wasteLog)), productionLog:arr(s.productionPieces), history:arr(s.history),
       partyOrders:arr(s.partyOrders).filter(function(o){return !(o&&o.closedArchiveId)}), drinkOrders:arr(s.drinkOrders), inventory:arr(s.inventory), partyInvoices:(window.pmOpenPartyInvoices?window.pmOpenPartyInvoices():[])}});
     archives.forEach(function(a,i){
       out.push({key:'arc:'+i, label:'أرشيف: '+(a.label||('#'+(i+1))), live:false, src:{
-        salesLog:arr(a.salesLog), expensesLog:arr(a.expensesLog), purchasesLog:arr(a.purchasesLog),
+        salesLog:arr(a.salesLog), expensesLog:[], purchasesLog:arr(a.purchasesLog),
         wasteLog:arr(a.wasteLog), productionLog:arr(a.productionPieces), history:arr(a.history),
         partyOrders:[], drinkOrders:[], inventory:arr(a.inventory), partyInvoices:arr(a.partyInvoices)}});
     });
@@ -239,7 +239,7 @@
     var P=periods();
     if(sel!=='all' && !P.some(function(p){return p.key===sel;})) sel='cur';
     var m=collect(sel), R=compute(m);
-    var net=R.gross-R.exp-R.wasteCost;
+    var net=R.gross-R.wasteCost;
     var NA=empty('غير متاح للأرشيف.');
 
     var opts='<option value="cur"'+(sel==='cur'?' selected':'')+'>الشهر الحالي</option>'+
@@ -251,8 +251,7 @@
     var kpis=
       kpi('إجمالي المبيعات', money(R.rev+R.partyRev), R.invoices+' فاتورة'+(R.openLines?' · '+R.openLines+' سطر مفتوح':'')+(R.partyRev?' · حفلات '+money(R.partyRev):'')) +
       kpi('الربح الإجمالي', money(R.gross), (R.costUnknown+R.partyUncosted)?('تكلفة غير معروفة لـ '+(R.costUnknown+R.partyUncosted)+' سطر'):'بعد تكلفة الخامات والحفلات', toneOf(R.gross)) +
-      kpi('المصروفات التشغيلية', money(R.exp), R.expList.length+' بند') +
-      kpi('الصافي بعد الهالك والمصروفات', money(net), (R.costUnknown+R.partyUncosted+R.wasteUnpriced)?('الرقم ناقص '+(R.costUnknown+R.partyUncosted+R.wasteUnpriced)+' بند بلا تكلفة'):'الربح الإجمالي − الهالك − المصروفات', toneOf(net)) +
+      kpi('الصافي بعد الهالك', money(net), (R.costUnknown+R.partyUncosted+R.wasteUnpriced)?('الرقم ناقص '+(R.costUnknown+R.partyUncosted+R.wasteUnpriced)+' بند بلا تكلفة'):'الربح الإجمالي − الهالك', toneOf(net)) +
       kpi('المشتريات', money(R.pur), R.purList.length+' خامة · '+R.purCount+' عملية'+(R.purMax.v?' · أكبر عملية: '+money(R.purMax.v)+' ('+R.purMax.name+')':'')) +
       kpi('قيمة الهالك', money(R.wasteCost), qtyOf(R.wasteQty)) +
       kpi('متوسط الفاتورة', money(R.avgInvoice), qtyOf(R.qty)+' مباعة') +
@@ -292,14 +291,13 @@
     var lowRows=R.low.map(function(x){return [esc(x.name), esc(qtyOf(x.qty,x.unit)), esc(qtyOf(x.reorder,x.unit))];});
 
     var cmpRows=P.map(function(p){
-      var r=compute(collect(p.key)), n=r.gross-r.exp-r.wasteCost;
-      return [esc(p.label), esc(money(r.rev)), esc(money(r.exp)), esc(money(r.pur)), esc(money(r.wasteCost)), '<span class="'+toneOf(n)+'">'+esc(money(n))+'</span>'];
+      var r=compute(collect(p.key)), n=r.gross-r.wasteCost;
+      return [esc(p.label), esc(money(r.rev)), esc(money(r.pur)), esc(money(r.wasteCost)), '<span class="'+toneOf(n)+'">'+esc(money(n))+'</span>'];
     });
 
     var grid =
       card('db-w12','المبيعات اليومية', vbars(R.days)) +
       card('db-w6','الأكل والمشروبات', split) +
-      card('db-w6','المصروفات حسب البند', hbars(R.expList, money)) +
       card('db-w12','أفضل الأصناف (أعلى 8)', table(['#','الصنف','الكمية','الإيراد','التكلفة','الربح','الهامش'], prodRows)) +
       card('db-w6','المشتريات حسب الخامة', hbars(R.purList, money)) +
       card('db-w6','استهلاك الخامات الفعلي', hbars(R.useList.map(function(x){return {label:x.name+(x.unit?' ('+x.unit+')':''),value:x.qty};}), function(v){return fmt(v);}), 'من حركة المخزون (الخصومات).') +
@@ -311,10 +309,10 @@
       card('db-w6','المنيو والتغطية', menuBody) +
       card('db-w6','الحفلات', partiesBody) +
       card('db-w12','تكلفة الوصفات والهامش', table(['الوصفة','تكلفة الوحدة','السعر المقترح','سعر البيع','الهامش'], costRows), 'بالوصفات الحالية وأسعار المنيو الحالية.') +
-      card('db-w12','مقارنة الفترات', table(['الفترة','المبيعات','المصروفات','المشتريات','الهالك','الصافي'], cmpRows));
+      card('db-w12','مقارنة الفترات', table(['الفترة','المبيعات','المشتريات','الهالك','الصافي'], cmpRows));
 
     root.innerHTML =
-      '<div class="db-head"><div><h2>التحليلات</h2><p class="db-muted">متابعة المبيعات والمصروفات والمخزون والوصفات في شاشة واحدة.</p>'+(liveNote?'<p class="db-muted">'+esc(liveNote)+'</p>':'')+'</div>'+
+      '<div class="db-head"><div><h2>التحليلات</h2><p class="db-muted">متابعة المبيعات والمخزون والوصفات في شاشة واحدة.</p>'+(liveNote?'<p class="db-muted">'+esc(liveNote)+'</p>':'')+'</div>'+
       '<div class="db-ctrl"><select id="anPeriod">'+opts+'</select><button type="button" class="db-btn" id="anRefresh">تحديث</button><div style="display:flex;gap:10px;align-items:center;margin:10px 0;direction:rtl"><label style="flex:1;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:14px;padding:10px 12px;min-width:0"><span style="font-weight:800;color:#1B1B1B;white-space:nowrap">من</span><input type="text" id="finFrom" inputmode="numeric" placeholder="25" maxlength="2" dir="ltr" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:16px;text-align:right" value="'+((window.__finRange&&window.__finRange.from)||'')+'"></label><label style="flex:1;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:14px;padding:10px 12px;min-width:0"><span style="font-weight:800;color:#1B1B1B;white-space:nowrap">إلى</span><input type="text" id="finTo" inputmode="numeric" placeholder="26" maxlength="2" dir="ltr" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:16px;text-align:right" value="'+((window.__finRange&&window.__finRange.to)||'')+'"></label></div><button type="button" class="db-btn pm-fin-export" id="anExportFinance">طباعة التقرير المالي</button></div></div>'+
       '<div class="db-kpis">'+kpis+'</div>'+
       '<div class="db-grid">'+grid+'</div>';

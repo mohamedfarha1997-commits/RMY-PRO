@@ -121,7 +121,7 @@ function openFinReport(){
      '<tr class="sub"><td>الربح الإجمالي</td><td class="num">'+fr_money(gross)+'</td><td class="how">إجمالي الإيرادات − تكلفة البضاعة المباعة.</td></tr>'+
      '<tr><td>المصروفات التشغيلية</td><td class="num">− '+fr_money(exp)+'</td><td class="how">إيجار وكهرباء ومرتبات ونفقات التشغيل المسجلة في سجل المصروفات.</td></tr>'+
      '<tr><td>تكلفة الهالك</td><td class="num">− '+fr_money(waste)+'</td><td class="how">قيمة الخامات التالفة أو المهدرة وقت تسجيل الهالك.</td></tr>'+
-     '<tr class="total"><td>صافي الربح</td><td class="num">'+fr_money(net)+'</td><td class="how">الربح الإجمالي − المصروفات التشغيلية − تكلفة الهالك.</td></tr>'+
+     '<tr class="total"><td>صافي الربح</td><td class="num">'+fr_money(net)+'</td><td class="how">الربح الإجمالي − تكلفة الهالك.</td></tr>'+
      '</tbody></table>';
 
   // 3) التدفق النقدي

@@ -44,7 +44,7 @@
     function build(dayKey){
       var s = S();
       var sales = arr(s.salesLog).filter(function(x){ return x && typeof x === 'object' && dayKeyOf(x.date) === dayKey; });
-      var expenses = arr(s.expensesLog).filter(function(x){ return x && dayKeyOf(x.date) === dayKey; });
+      var expenses = [];
       var purchases = arr(s.purchasesLog).filter(function(x){ return x && dayKeyOf(x.date) === dayKey; });
 
       var revenue = 0, cost = 0, costUnknown = 0, openLines = 0, qty = 0;
@@ -148,7 +148,7 @@
       card.id = 'pmDailyClosingCard';
       card.className = 'card';
       card.innerHTML = '<h2>تقرير تقفيل اليوم</h2>' +
-        '<p class="small">تقرير حركة يوم واحد: المبيعات حسب وسيلة الدفع، والمصروفات، والمشتريات، وأعلى الأصناف.</p>' +
+        '<p class="small">تقرير حركة يوم واحد: المبيعات حسب وسيلة الدفع، والمشتريات، وأعلى الأصناف.</p>' +
         '<label>اليوم</label><input id="pmDailyClosingDay" type="date" value="' + todayKey() + '">' +
         '<button id="pmDailyClosingBtn" class="primary" type="button" style="width:100%;margin-top:10px">عرض وطباعة تقرير اليوم</button>';
       host.insertBefore(card, host.firstChild);

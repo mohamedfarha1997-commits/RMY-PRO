@@ -2,7 +2,7 @@
    مراجعة الحسابات في ملخص الشهر:
    1) صافي الحركة النقدية = المحصّل فعلاً (الحفلات بالمدفوع بس، والمصروفات والمشتريات مخصومة).
    2) تنبيهات: صنف تكلفته أعلى من سعره، مبيعات بدون وسيلة دفع، حفلات لسه ليها باقي،
-      مفيش مصروفات تشغيلية مسجلة، ومطابقة الخامات المخصومة مع المبيعات المتوقعة.
+      مطابقة الخامات المخصومة مع المبيعات المتوقعة.
    3) جدول أسعار الشراء بالوحدة الأساسية عشان المراجعة اليدوية.
    الملف بيلف renderMonthly زي 146-payment-breakdown.js، ومش بيغيّر أي بيانات. */
 (function(){
@@ -96,7 +96,7 @@
     var m=monthMetrics({
       productionLog:state.productionLog||[],
       salesLog:pmRecostMissing(sales),
-      expensesLog:state.expensesLog||[],
+      expensesLog:[],
       purchasesLog:state.purchasesLog||[],
       wasteLog:pmRecostWaste(state.wasteLog||[]),
       partyInvoices:parties,
@@ -106,7 +106,7 @@
     });
     var warn=[], ok=[];
 
-    if(m.expenseTotal===0){
+    if(false){
       warn.push('لا توجد مصروفات تشغيلية مسجلة في الفترة (إيجار، مرتبات، كهربا، غاز…). صافي الربح ده قبل كل المصروفات دي.');
     }
 
@@ -172,7 +172,7 @@
         var m=monthMetrics({
           productionLog:state.productionLog||[],
           salesLog:pmRecostMissing(sales),
-          expensesLog:state.expensesLog||[],
+          expensesLog:[],
           purchasesLog:state.purchasesLog||[],
           wasteLog:pmRecostWaste(state.wasteLog||[]),
           partyInvoices:parties,
@@ -184,7 +184,7 @@
           var sp=st.querySelector('span'), b=st.querySelector('b');
           if(sp && b && sp.textContent.indexOf('صافي حركة نقدية')===0){
             b.textContent=money(m.cashNet);
-            sp.textContent='صافي النقد المحصّل (المبيعات − المصروفات − المشتريات، والحفلات بالمدفوع فقط)';
+            sp.textContent='صافي النقد المحصّل (المبيعات − المشتريات، والحفلات بالمدفوع فقط)';
           }
         });
 

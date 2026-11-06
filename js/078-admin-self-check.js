@@ -41,7 +41,7 @@
     if(noPrice.length) out.push({sev:1,msg:'خامات فيها رصيد من غير سعر: '+noPrice.join('، ')});
     var wNo=arr(s.wasteLog).filter(function(x){return x&&x.costAtWaste==null}).length;
     if(wNo) out.push({sev:2,msg:wNo+' عملية هالك بدون تكلفة'});
-    var badExp=arr(s.expensesLog).filter(function(x){return !(Number(x.amount)>=0)}).length;
+    var badExp=0;
     if(badExp) out.push({sev:0,msg:badExp+' مصروف قيمته غلط'});
     var badPur=arr(s.purchasesLog).filter(function(x){return !(Number(x.totalCost)>=0)||!(Number(x.qty)>0)}).length;
     if(badPur) out.push({sev:0,msg:badPur+' عملية شراء كميتها أو إجماليها غلط'});
