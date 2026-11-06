@@ -102,6 +102,7 @@
     var d=dock(); if(!d) return;
     var act=null, p=document.querySelector('main .panel.active');
     if(p && MAP[p.id]) act=MAP[p.id];
+    else if(!p) act='home'; /* لو مفيش قسم مفتوح (الشاشة الرئيسية) الرئيسية هي النشطة */
     d.querySelectorAll('button[data-act]').forEach(function(b){
       b.classList.toggle('cur', !!act && b.getAttribute('data-act')===act);
     });
