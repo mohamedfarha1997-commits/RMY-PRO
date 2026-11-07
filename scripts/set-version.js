@@ -31,12 +31,17 @@ function changesFor(v) {
   const lines = read('CHANGELOG.md').split(/\r?\n/);
   const start = lines.findIndex(l => new RegExp('^#\\s+RMY PRO ' + v.replace(/\./g, '\\.') + '(\\s|$)').test(l));
   if (start < 0) throw new Error('مفيش قسم للإصدار ' + v + ' في CHANGELOG.md. اكتب ملاحظات التحديث الأول.');
+  // بنات بند من قسم "للمستخدم" بس. أي قسم تاني (للمطوّر، الاختبارات...) مابيظهرش للمستخدم.
   const items = [];
+  let inUser = false;
   for (let i = start + 1; i < lines.length && !/^#\s/.test(lines[i]); i++) {
+    const h = lines[i].match(/^##\s+(.*)$/);
+    if (h) { inUser = /للمستخدم/.test(h[1]); continue; }
+    if (!inUser) continue;
     const m = lines[i].match(/^\s*[-*]\s+(.*\S)\s*$/);
     if (m) items.push(m[1].replace(/\*\*/g, '').replace(/`/g, ''));
   }
-  if (!items.length) throw new Error('قسم الإصدار ' + v + ' فاضي. اكتب على الأقل بند واحد.');
+  if (!items.length) throw new Error('قسم الإصدار ' + v + ' مفيهوش بنود تحت "## للمستخدم". اكتب ملاحظات التحديث اللي تهم المستخدم.');
   return items.slice(0, 12);
 }
 const changes = changesFor(version);
