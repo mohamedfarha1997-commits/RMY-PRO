@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+/* بيحدّث رقم النسخة في كل الأماكن مرة واحدة:
+   - js/000-app-info.js (المصدر، وبيظهر في "معلومات النسخة")
+   - index.html (العنوان + meta application-version / application-updated)
+   - sw.js (اسم الكاش، عشان المتصفح يعرف إن فيه نسخة جديدة)
+   الاستخدام: node scripts/set-version.js 3.10.0 */
+'use strict';
+const fs = require('fs');
+const path = require('path');
+
+const version = process.argv[2];
+if (!/^\d+\.\d+\.\d+$/.test(version || '')) {
+  console.error('الاستخدام: node scripts/set-version.js 3.10.0');
+  process.exit(1);
+}
+const root = path.join(__dirname, '..');
+const read = f => fs.readFileSync(path.join(root, f), 'utf8');
+const write = (f, s) => fs.writeFileSync(path.join(root, f), s, 'utf8');
+const replaceOnce = (s, re, to, label) => {
+  if (!re.test(s)) throw new Error('مش لاقي: ' + label);
+  return s.replace(re, to);
+};
+
+const now = new Date();
+const iso = now.toISOString().slice(0, 10);
+const arMonths = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const label = now.getDate() + ' ' + arMonths[now.getMonth()] + ' ' + now.getFullYear();
+
+// 1) المصدر
+let info = read('js/000-app-info.js');
+info = replaceOnce(info, /version: '[^']*'/, "version: '" + version + "'", 'version في app-info');
+info = replaceOnce(info, /updated: '[^']*'/, "updated: '" + iso + "'", 'updated في app-info');
+info = replaceOnce(info, /updatedLabel: '[^']*'/, "updatedLabel: '" + label + "'", 'updatedLabel في app-info');
+write('js/000-app-info.js', info);
+
+// 2) index.html
+let html = read('index.html');
+html = replaceOnce(html, /<title>RMY PRO [0-9.]+ \|/, '<title>RMY PRO ' + version + ' |', 'title');
+html = replaceOnce(html, /<meta name="application-version" content="[^"]*">/, '<meta name="application-version" content="' + version + '">', 'application-version');
+html = replaceOnce(html, /<meta name="application-updated" content="[^"]*">/, '<meta name="application-updated" content="' + iso + '">', 'application-updated');
+write('index.html', html);
+
+// 3) sw.js: اسم الكاش بيزيد رقمه مع كل نسخة
+let sw = read('sw.js');
+const m = sw.match(/const CACHE = 'rmy-shell-v(\d+)';/);
+if (!m) throw new Error('مش لاقي CACHE في sw.js');
+sw = sw.replace(m[0], "const CACHE = 'rmy-shell-v" + (Number(m[1]) + 1) + "';");
+write('sw.js', sw);
+
+console.log('تم تحديث النسخة إلى ' + version + ' (' + label + '). الكاش: rmy-shell-v' + (Number(m[1]) + 1));
