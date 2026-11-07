@@ -183,6 +183,7 @@
     // checkout_cart على السيرفر بيدعم فاتورة واحدة للأكل والمشروبات العادية معًا.
     var __pmSel=document.querySelector('input[name="cartPayMethod"]:checked'); var payMethod=__pmSel?__pmSel.value:'cash';
     var btn=document.getElementById('cartCheckout'); if(btn)btn.disabled=true;
+    var __committed=false; /* بيتبقى true بعد ما السيرفر يأكد الطلب، عشان أي خطأ بعدها ما يظهرش كأن الطلب فشل */
     try{
       window.__pmCheckoutRequestId=window.__pmCheckoutRequestId||(function(){var id='';try{id=sessionStorage.getItem('pmCheckoutRequestId')||''}catch(e){}if(!id)id=crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){var r=Math.random()*16|0;return (c==='x'?r:(r&3|8)).toString(16)});try{sessionStorage.setItem('pmCheckoutRequestId',id)}catch(e){}return id})();
       var res=await apiCall({
@@ -197,6 +198,9 @@
       }
       cloudRevision=Number((res.data&&res.data.revision)||cloudRevision);
       var rc=res.data.receipt; window.__pmCheckoutRequestId=null; try{sessionStorage.removeItem('pmCheckoutRequestId')}catch(e){}
+      __committed=true;
+      /* الطلب اتسجل على السيرفر: نفضّي السلة فورًا، عشان أي إعادة محاولة ما تكررش الطلب */
+      try{ var __doneEarly=cart.map(function(l){return l.name}); saveCart(loadCart().filter(function(l){return __doneEarly.indexOf(l.name)===-1})); }catch(e){}
       if(taxOn() && window.pmSetReceiptTax){ window.pmSetReceiptTax(rc,{rate:TAX_RATE, amount:Math.round((Number(rc.total)||0)*TAX_RATE)/100}); }
       rc.paymentMethod=rc.paymentMethod||payMethod;
       rc.lines.forEach(function(l){ if(l&&typeof l==='object'){ l.paymentMethod=rc.paymentMethod;/* تكلفة البيع بتتحفظ وقت البيع (بسعر الخامات اللحظة)، مش وقت التقفيل */if(l.costAtSale==null&&state.recipes&&state.recipes[l.name]&&typeof recipeCost==='function'){try{var __rc=recipeCost(l.name);if(__rc&&__rc.unitCost!=null){l.unitCostAtSale=__rc.unitCost;l.costAtSale=Math.round(Number(l.qty||0)*__rc.unitCost*100)/100;l.unpricedComponents=0;}}catch(e){}} } });
@@ -216,7 +220,8 @@
       // فاتورة كيك بس أو مشروبات بس: تتقفل وتظهر عادي. لو الاتنين مع بعض تفضل مفتوحة لحين التحضير.
       var __isDr=function(n){return !!(window.pmIsDrinkName&&window.pmIsDrinkName(n))};
       var __onlyOneKind=cart.every(function(l){return __isDr(l.name)})||cart.every(function(l){return !__isDr(l.name)});
-      if(rc.status==='open' && __onlyOneKind && rc.id){
+      var __hasDrink=cart.some(function(l){return __isDr(l.name)});
+      if(rc.status==='open' && !__hasDrink && rc.id){
         try{
           var __cl=await apiCall({action:'close_invoice',receipt_id:rc.id,employee_name:cloudActorName,pin:cloudActorPin});
           if(__cl&&__cl.error) throw __cl.error;
@@ -225,7 +230,8 @@
         }catch(e){ /* لو السيرفر رفض الإغلاق، الفاتورة تفضل مفتوحة زي ما هي */ }
       }
       if(rc.status==='open'){
-        alert('تم تسجيل الطلب رقم '+rc.no+' · الإجمالي '+moneyFmt(window.pmRcGrand?window.pmRcGrand(rc):rc.total)+' ج.م. الفاتورة ما زالت مفتوحة لحين تجهيز كل المشروبات، وسيتم إغلاقها بعد اكتمال التحضير.');
+        if(window.pmOrderSentCard) window.pmOrderSentCard({status:'running', title:'تم إرسال الطلب للشيف', lines:['✓ جارٍ العمل عليه', 'فاتورة رقم '+rc.no+' · الإجمالي '+moneyFmt(window.pmRcGrand?window.pmRcGrand(rc):rc.total)+' ج.م', custPhone?('العميل: '+custPhone):'']});
+        else alert('تم إرسال الطلب للشيف وجاري العمل عليه ✓');
       }else{
         alert('تم تسجيل الفاتورة رقم '+rc.no+' · البائع: '+cloudActorName+' · الإجمالي '+moneyFmt(window.pmRcGrand?window.pmRcGrand(rc):rc.total)+' ج.م · الدفع: '+({cash:'كاش',instapay:'انستا باي',visa:'فيزا'}[rc.paymentMethod]||'كاش'));
         if(typeof window.pmThermalAuto==='function')window.pmThermalAuto(rc);
@@ -234,7 +240,12 @@
       if(typeof window.pmCloseCart==='function') window.pmCloseCart();
       if(loadCart().length) return window.pmCartCheckout();
     }catch(e){
-      alert('تعذر إتمام البيع: '+(e.message||''));
+      if(__committed){
+        /* الطلب اتسجل فعلاً (المطبخ/الباريستا والفاتورة شايفينه). الخطأ ده في عرض الشاشة بس */
+        alert('تم إرسال الطلب للشيف بنجاح ✔' + (rc && rc.no != null ? ' · فاتورة رقم ' + rc.no : '') + '\n(حصلت مشكلة بسيطة في تحديث الشاشة. متعيدش الطلب، حدّث الصفحة.)');
+      }else{
+        alert('تعذر إتمام البيع: '+(e.message||''));
+      }
     }finally{
       if(btn)btn.disabled=false;
     }

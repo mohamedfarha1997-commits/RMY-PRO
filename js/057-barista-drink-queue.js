@@ -222,10 +222,16 @@
         if(!confirm('تأكيد تحضير الطلب؟ هيتخصم الخامات المطلوبة.')) return;
         pendingReq[id]=pendingReq[id]||newId();
         b.disabled=true;
+        var __ord=(Array.isArray(state.drinkOrders)?state.drinkOrders:[]).find(function(x){return x&&x.id===id})||null;
         try{
           var r=await apiCall({action:'drink_order_action',drink_action:'prepare',order_id:id,request_id:pendingReq[id],employee_name:cloudActorName,pin:cloudActorPin});
           if(r.error) throw r.error;
           delete pendingReq[id];
+          /* لو ده آخر مشروب في الفاتورة، نقفلها تلقائي (من غير رسالة) */
+          if(__ord&&__ord.receiptId){
+            var __left=(Array.isArray(state.drinkOrders)?state.drinkOrders:[]).some(function(x){return x&&x.id!==id&&x.receiptId===__ord.receiptId&&x.status==='pending'});
+            if(!__left){ try{ await apiCall({action:'close_invoice',receipt_id:__ord.receiptId,employee_name:cloudActorName,pin:cloudActorPin}); }catch(e){} }
+          }
           await pmDrinkRefresh();
         }catch(e){ alert('لم يتم التحضير: '+((e&&e.message)||String(e))); b.disabled=false; }
       };

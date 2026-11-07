@@ -247,6 +247,8 @@
         if(!quiet && r && r.error){
           var st=r.error.context&&r.error.context.status;
           var permDenied=(action==='save_state' && st===403 && typeof cloudActorRole!=='undefined' && cloudActorRole!=='admin');
+          /* رفض متوقع من قواعد العمل (مش عطل): مشروبات لسه معلّقة */
+          if(action==='close_invoice' && /DRINKS_PENDING|قبل تحضير المشروبات/.test(errorText(r.error))) permDenied=true;
           if(!permDenied) report(op,r.error,st);
           if(action==='save_state' && /المنيو هيبقى فاضي/.test(errorText(r.error))) recoverFromCloud();
         }
