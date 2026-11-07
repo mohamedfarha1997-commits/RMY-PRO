@@ -199,7 +199,7 @@
       var rc=res.data.receipt; window.__pmCheckoutRequestId=null; try{sessionStorage.removeItem('pmCheckoutRequestId')}catch(e){}
       if(taxOn() && window.pmSetReceiptTax){ window.pmSetReceiptTax(rc,{rate:TAX_RATE, amount:Math.round((Number(rc.total)||0)*TAX_RATE)/100}); }
       rc.paymentMethod=rc.paymentMethod||payMethod;
-      rc.lines.forEach(function(l){ if(l&&typeof l==='object') l.paymentMethod=rc.paymentMethod; });
+      rc.lines.forEach(function(l){ if(l&&typeof l==='object'){ l.paymentMethod=rc.paymentMethod;/* تكلفة البيع بتتحفظ وقت البيع (بسعر الخامات اللحظة)، مش وقت التقفيل */if(l.costAtSale==null&&state.recipes&&state.recipes[l.name]&&typeof recipeCost==='function'){try{var __rc=recipeCost(l.name);if(__rc&&__rc.unitCost!=null){l.unitCostAtSale=__rc.unitCost;l.costAtSale=Math.round(Number(l.qty||0)*__rc.unitCost*100)/100;l.unpricedComponents=0;}}catch(e){}} } });
       state.readyStock=state.readyStock||{};rc.lines.forEach(function(l){if(!(l.onDemand===true))state.readyStock[l.name]=Math.max(0,(Number(state.readyStock[l.name])||0)-(Number(l.qty)||0))});
       state.salesLog=state.salesLog||[];
       rc.lines.forEach(function(l){ if(l&&typeof l==='object'){ if(!l.by)l.by=cloudActorName; if(l.receiptNo==null&&rc.no!=null)l.receiptNo=rc.no; if(!l.receiptId&&rc.id)l.receiptId=rc.id; } });
