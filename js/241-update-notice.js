@@ -3,7 +3,7 @@
    بيتسجّل على الجهاز إن الإشعار اتشاف، ومابيتكررش. */
 (function (root) {
   'use strict';
-  var SEEN_KEY = 'pm_seen_version';
+  var SEEN_PREFIX = 'pm_seen_version:';   // مفتاح لكل حساب موظف (مش لكل جهاز)
   var HISTORY_KEY = 'pm_update_history';
   var info = root.RMY_APP_INFO || {};
 
@@ -19,6 +19,10 @@
 
   function appReady() {
     return document.body && !document.body.classList.contains('auth-required');
+  }
+  // اسم الموظف اللي داخل دلوقتي (الإشعار بيتسجل لكل حساب)
+  function accountName() {
+    try { return (typeof cloudActorName !== 'undefined' && cloudActorName) ? String(cloudActorName).trim() : ''; } catch (e) { return ''; }
   }
 
   function showCard(version, changes, updated) {
@@ -57,33 +61,28 @@
   }
 
   // يسجّل النسخة في السجل (عشان نقدر نعرض التاريخ بعدين) وبيرجع true لو فيه إشعار جديد
+  // بيعرض آخر تحديث مرة واحدة لكل حساب، حتى لو الحساب ده أول دخول على الجهاز
   function checkAndNotify() {
     var current = info.version;
-    if (!current || !appReady()) return false;
+    var who = accountName();
+    if (!current || !who || !appReady()) return false;
+    var key = SEEN_PREFIX + who;
     var seen = null;
-    try { seen = localStorage.getItem(SEEN_KEY); } catch (e) {}
+    try { seen = localStorage.getItem(key); } catch (e) {}
     if (seen === current) return false;
-    var history = read(HISTORY_KEY, []);
-    history.unshift({ version: current, updated: info.updatedLabel || '', changes: info.changes || [], at: new Date().toISOString() });
-    write(HISTORY_KEY, history.slice(0, 20));
-    try { localStorage.setItem(SEEN_KEY, current); } catch (e) {}
-    // الجهاز اللي ما شافش أي نسخة قبل كده (موظف لسه ما دخلش، أو تحديث من نسخة أقدم) بيشوف الإشعار برضه
+    try { localStorage.setItem(key, current); } catch (e) {}
     showCard(current, info.changes || [], info.updatedLabel || '');
     return true;
   }
 
-  // بعد ما التطبيق يفتح (مش على شاشة الدخول)
-  // بنفضل نراقب لحد ما التطبيق يفتح (الموظف ممكن يدخل بالـ PIN بعد دقايق من فتح الصفحة)
+  // بنفضل نراقب طول ما التطبيق مفتوح: كل حساب بيدخل يتفحص لوحده
   function waitForApp() {
-    var t = setInterval(function () {
-      if (checkAndNotify()) clearInterval(t);
-    }, 1000);
-    setTimeout(function () { clearInterval(t); }, 24 * 60 * 60 * 1000);
+    setInterval(checkAndNotify, 2000);
   }
 
   root.pmUpdateNotice = { check: checkAndNotify, history: function () { return read(HISTORY_KEY, []); } };
   if (root.document && root.document.readyState !== 'loading') waitForApp();
   else if (root.document) root.document.addEventListener('DOMContentLoaded', waitForApp);
 
-  if (typeof module !== 'undefined' && module.exports) module.exports = { showCard: showCard };
+
 })(typeof window !== 'undefined' ? window : globalThis);
