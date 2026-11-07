@@ -164,6 +164,7 @@ try{
     document.body.appendChild(ov);
     function close(){ ov.remove() }
     ov.querySelector('#pmvClose').addEventListener('click',close);
+    if(window.pmThermalButton) window.pmThermalButton(ov, rc);
     ov.querySelector('#pmvPrint').addEventListener('click',function(){ if(window.pmPrintHTML){ window.pmPrintHTML(document.getElementById('pmInvPrint').innerHTML) } else { window.print() } });
     ov.addEventListener('click',function(e){ if(e.target===ov)close() });
     var qrOn=false;

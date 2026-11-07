@@ -228,6 +228,7 @@
         alert('تم تسجيل الطلب رقم '+rc.no+' · الإجمالي '+moneyFmt(window.pmRcGrand?window.pmRcGrand(rc):rc.total)+' ج.م. الفاتورة ما زالت مفتوحة لحين تجهيز كل المشروبات، وسيتم إغلاقها بعد اكتمال التحضير.');
       }else{
         alert('تم تسجيل الفاتورة رقم '+rc.no+' · البائع: '+cloudActorName+' · الإجمالي '+moneyFmt(window.pmRcGrand?window.pmRcGrand(rc):rc.total)+' ج.م · الدفع: '+({cash:'كاش',instapay:'انستا باي',visa:'فيزا'}[rc.paymentMethod]||'كاش'));
+        if(typeof window.pmThermalAuto==='function')window.pmThermalAuto(rc);
         if(typeof window.pmShowInvoice==='function')window.pmShowInvoice(rc);
       }
       if(typeof window.pmCloseCart==='function') window.pmCloseCart();
