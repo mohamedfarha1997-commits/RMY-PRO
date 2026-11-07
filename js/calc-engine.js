@@ -155,7 +155,40 @@
     return null;
   }
 
+  /* المجاميع الموحّدة لأي فترة (يوم أو شهر). التقرير اليومي والشهري والأرشيف
+     كلهم بيستخدموا نفس التعريف عشان الأرقام تتطابق:
+       ربح الفترة = إيراد المبيعات + إيراد الحفلات − تكلفة المبيعات − تكلفة الحفلات − تكلفة الهالك − المصروفات
+     المشتريات مش مصروف ربح (ده تدفق نقدي وتتحول لمخزون)، والحفلات مش بتدخل التقرير اليومي. */
+  function periodTotals(p) {
+    p = p || {};
+    var sales = (p.sales || []).filter(function (x) { return x && typeof x === 'object'; });
+    var parties = p.parties || [];
+    var waste = p.waste || [];
+    var salesRev = [], salesCost = [], unknownCost = 0;
+    sales.forEach(function (x) {
+      salesRev.push(x.revenue != null ? num(x.revenue) : num(x.qty) * num(x.unitPrice));
+      if (x.costAtSale == null) unknownCost++; else salesCost.push(num(x.costAtSale));
+    });
+    var r = {
+      salesRevenue: sumMoney(salesRev),
+      salesCost: sumMoney(salesCost),
+      unknownSalesCost: unknownCost,
+      partyRevenue: sumMoney(parties.map(function (x) { return num(x.total); })),
+      partyCost: sumMoney(parties.map(function (x) { return num(x.cost); })),
+      wasteCost: sumMoney(waste.map(function (x) { return num(x.costAtWaste); })),
+      expenses: sumExpenses(p.expenses || []),
+      purchases: sumMoney((p.purchases || []).map(function (x) { return num(x.totalCost); }))
+    };
+    r.grossProfit = fromMinor(toMinor(r.salesRevenue) - toMinor(r.salesCost));
+    r.profit = periodProfit({
+      revenue: fromMinor(toMinor(r.salesRevenue) + toMinor(r.partyRevenue)),
+      salesCost: r.salesCost, partyCost: r.partyCost, wasteCost: r.wasteCost, expenses: p.expenses || []
+    });
+    return r;
+  }
+
   var api = {
+    periodTotals: periodTotals,
     toMinor: toMinor, fromMinor: fromMinor, roundMoney: roundMoney, sumMoney: sumMoney,
     grossUnitCost: grossUnitCost,
     priceFromMargin: priceFromMargin, marginFromPrice: marginFromPrice,

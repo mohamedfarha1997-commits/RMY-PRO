@@ -43,8 +43,15 @@
 
     function build(dayKey){
       var s = S();
-      var sales = arr(s.salesLog).filter(function(x){ return x && typeof x === 'object' && dayKeyOf(x.date) === dayKey; });
-      var expenses = [];
+      /* نفس خطوات التقفيل الشهري: استبعاد السطور المكررة/المؤرشفة، وإعادة تسعير الناقص بسعر اليوم */
+      var __all = arr(s.salesLog);
+      if (typeof window.pmCleanSalesForClose === 'function') __all = window.pmCleanSalesForClose(__all);
+      if (typeof window.pmRecostMissing === 'function') __all = window.pmRecostMissing(__all);
+      var sales = __all.filter(function(x){ return x && typeof x === 'object' && dayKeyOf(x.date) === dayKey; });
+      var expenses = arr(s.expensesLog).filter(function(x){ return x && dayKeyOf(x.date) === dayKey; });
+      var __waste = arr(s.wasteLog);
+      if (typeof window.pmRecostWaste === 'function') __waste = window.pmRecostWaste(__waste);
+      var wasteDay = __waste.filter(function(x){ return x && dayKeyOf(x.date) === dayKey; });
       var purchases = arr(s.purchasesLog).filter(function(x){ return x && dayKeyOf(x.date) === dayKey; });
 
       var revenue = 0, cost = 0, costUnknown = 0, openLines = 0, qty = 0;
@@ -76,6 +83,7 @@
         byMethod[m].count++;
       });
 
+      var __T = (window.RMYCalc && RMYCalc.periodTotals) ? RMYCalc.periodTotals({ sales: sales, expenses: expenses, purchases: purchases, waste: wasteDay, parties: [] }) : null;
       var expTotal = 0; expenses.forEach(function(x){ expTotal += num(x.amount); });
       var purTotal = 0; purchases.forEach(function(x){ purTotal += num(x.totalCost); });
       var cashSales = byMethod.cash.rev;
@@ -86,7 +94,7 @@
 
       return {
         dayKey: dayKey, salesCount: sales.length, receiptCount: Object.keys(receipts).length,
-        revenue: revenue, qty: qty, cost: cost, costUnknown: costUnknown, grossProfit: revenue - cost,
+        revenue: revenue, qty: qty, cost: cost, costUnknown: costUnknown, grossProfit: revenue - cost, wasteCost: __T ? __T.wasteCost : 0, netProfit: __T ? __T.profit : (revenue - cost - expTotal),
         openLines: openLines, byMethod: byMethod,
         expenses: expenses.length, expTotal: expTotal,
         purchases: purchases.length, purTotal: purTotal,
@@ -121,7 +129,7 @@
         row('إجمالي المبيعات', money(R.revenue)) +
         row('الكمية المباعة', fmt(R.qty)) +
         row('تكلفة الخامات', money(R.cost)) +
-        row('مجمل الربح', money(R.grossProfit), R.grossProfit >= 0 ? 'pos' : 'neg') +
+        row('مجمل الربح', money(R.grossProfit), R.grossProfit >= 0 ? 'pos' : 'neg') + row('تكلفة الهالك', money(R.wasteCost)) + row('صافي الربح التقديري (بعد الهالك والمصروفات)', money(R.netProfit), R.netProfit >= 0 ? 'pos' : 'neg') +
         row('المصروفات', money(R.expTotal) + ' (' + R.expenses + ' بند)') +
         row('المشتريات', money(R.purTotal) + ' (' + R.purchases + ' بند)') +
         row('صافي النقدية التقريبي', money(R.netCash), R.netCash >= 0 ? 'pos' : 'neg') +
