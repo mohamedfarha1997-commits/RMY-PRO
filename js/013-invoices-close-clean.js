@@ -259,11 +259,29 @@ try{
       '<h3>الفواتير</h3>'+invoiceTable(groups,{ns:'m',readOnly:true,empty:'مفيش فواتير في الفترة الحالية.'});
   }
 
+  /* حساب المبيعات بيشوف الفواتير من غير التكلفة. الإخفاء بيحصل على نسخة مؤقتة
+     وبعد الرسم بنرجّع التكلفة، عشان الحفظ ما يمسحش بيانات التكلفة من السحابة. */
   window.renderSales=function(){
-    if(cloudActorRole==='sales'&&Array.isArray(state.salesLog))state.salesLog.forEach(stripCosts);
-    var r=origRender?origRender.apply(this,arguments):undefined;
-    renderArchive();
-    try{ renderMonthInvoices(); }catch(e){}
+    var hidden=null;
+    if(cloudActorRole==='sales'&&Array.isArray(state.salesLog)){
+      hidden=state.salesLog.map(function(x){
+        return (x&&typeof x==='object')?{u:x.unitCostAtSale,c:x.costAtSale,p:x.unpricedComponents,h:true}:null;
+      });
+      state.salesLog.forEach(stripCosts);
+    }
+    var r;
+    try{
+      r=origRender?origRender.apply(this,arguments):undefined;
+      renderArchive();
+      try{ renderMonthInvoices(); }catch(e){}
+    } finally {
+      if(hidden){
+        state.salesLog.forEach(function(x,i){
+          var h=hidden[i];
+          if(h&&h.h&&x&&typeof x==='object'){ x.unitCostAtSale=h.u; x.costAtSale=h.c; x.unpricedComponents=h.p; }
+        });
+      }
+    }
     return r;
   };
 
