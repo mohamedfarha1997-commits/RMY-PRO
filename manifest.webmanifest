@@ -1,28 +1,84 @@
 {
-  "name": "RMY PRO",
-  "short_name": "RMY",
+  "name": "RMY PRO — إدارة المخبز والمنيو",
+  "short_name": "RMY PRO",
   "description": "RMY PRO لإدارة المخبز: الوصفات وتكلفة الأصناف والمخزون والمشتريات والمبيعات وأوردرات الحفلات وتقفيل الشهر بتقارير مالية واضحة.",
-  "start_url": "./index.html",
   "id": "./index.html",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
   "orientation": "any",
+  "lang": "ar",
+  "dir": "rtl",
   "background_color": "#F2F2F2",
   "theme_color": "#0067B8",
+  "categories": [
+    "business",
+    "productivity",
+    "food"
+  ],
   "icons": [
     {
       "src": "ICONS/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "ICONS/rmy-logo.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "ICONS/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "ICONS/apple-touch-icon.png",
       "sizes": "180x180",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "البيع",
+      "short_name": "بيع",
+      "url": "./index.html?open=sales",
+      "icons": [
+        {
+          "src": "ICONS/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "تقفيل اليوم",
+      "short_name": "يوم",
+      "url": "./index.html?open=dailyClosing",
+      "icons": [
+        {
+          "src": "ICONS/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "التحليلات",
+      "short_name": "تحليلات",
+      "url": "./index.html?open=analytics",
+      "icons": [
+        {
+          "src": "ICONS/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }

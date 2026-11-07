@@ -1,6 +1,6 @@
 // Service worker: لازم يكون فيه fetch handler عشان المتصفح يعتبر الموقع قابل للتثبيت.
 // الشبكة أولًا، ولو مفيش نت يرجع النسخة المخزنة (البيانات الحية ما بتتخزنش قديمة).
-const CACHE = 'rmy-shell-v202';
+const CACHE = 'rmy-shell-v203';
 const SHELL = [
   './',
   './index.html',
@@ -114,12 +114,16 @@ const SHELL = [
   './js/197-party-dashboard.js',
   './js/198-auto-update.js',
   './js/199-offline-sales.js',
+  './js/194-accounts-review.js',
+  './js/220-pwa.js',
+  './ICONS/maskable-512.png',
+  './ICONS/rmy-logo-256.png',
 ];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE)
-      .then((c) => Promise.all(SHELL.map((u) => c.add(u).catch(() => null))))
+      .then((c) => Promise.all(SHELL.map((u) => c.add(u).catch((err) => { console.warn('[sw] precache failed:', u, err); return null; }))))
       .then(() => self.skipWaiting())
   );
 });
@@ -132,16 +136,47 @@ self.addEventListener('activate', (e) => {
   );
 });
 
+const NAV_TIMEOUT_MS = 4000;
+function withTimeout(p, ms) {
+  return new Promise((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error('timeout')), ms);
+    p.then((v) => { clearTimeout(t); resolve(v); }, (e) => { clearTimeout(t); reject(e); });
+  });
+}
+function putCopy(req, res) {
+  if (res && res.status === 200) {
+    const copy = res.clone();
+    caches.open(CACHE).then((c) => c.put(req, copy));
+  }
+  return res;
+}
+
 self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  if (url.origin !== self.location.origin) return; // API / Firebase / CDN: للشبكة مباشرة
-  // الصور (اللوجو والأيقونات): تظهر فورًا من الكاش، وفي الخلفية بتتحدّث لو اتغيرت
+  if (url.origin !== self.location.origin) return; // API / CDN: للشبكة مباشرة
+
+  // 1) الصفحة الرئيسية: الشبكة بمهلة قصيرة، وبعدين النسخة المخزّنة.
+  //    شبكة المحل الضعيفة ما تأخرش فتح التطبيق.
+  if (req.mode === 'navigate') {
+    e.respondWith(
+      withTimeout(fetch(req).then((res) => {
+        if (res && res.status === 200) {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put('./index.html', copy));
+        }
+        return res;
+      }), NAV_TIMEOUT_MS).catch(() => caches.match('./index.html').then((r) => r || caches.match('./')))
+    );
+    return;
+  }
+
+  // 2) الصور والأيقونات: من الكاش فورًا، وتتحدّث في الخلفية
   if (/\.(png|jpe?g|webp|svg|ico)$/i.test(url.pathname)) {
     e.respondWith(
       caches.open(CACHE).then((c) =>
-        c.match(req).then((cached) => {
+        c.match(req, { ignoreSearch: true }).then((cached) => {
           const network = fetch(req).then((res) => {
             if (res && res.status === 200) c.put(req, res.clone());
             return res;
@@ -152,16 +187,27 @@ self.addEventListener('fetch', (e) => {
     );
     return;
   }
+
+  // 3) الكود والستايل والمانيفست: من الكاش فورًا (التطبيق بيفتح بسرعة وأوفلاين)، وتحديث في الخلفية
+  if (/\.(js|css|webmanifest)$/i.test(url.pathname)) {
+    e.respondWith(
+      caches.open(CACHE).then((c) =>
+        c.match(req, { ignoreSearch: true }).then((cached) => {
+          const network = fetch(req).then((res) => {
+            if (res && res.status === 200) c.put(req, res.clone());
+            return res;
+          }).catch(() => cached);
+          return cached || network;
+        })
+      )
+    );
+    return;
+  }
+
+  // 4) أي حاجة تانية: الشبكة، وفي الفشل الكاش
   e.respondWith(
-    fetch(req)
-      .then((res) => {
-        if (res && res.status === 200) {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(req, copy));
-        }
-        return res;
-      })
-      .catch(() => caches.match(req).then((r) => r || caches.match('./index.html')))
+    fetch(req).then((res) => putCopy(req, res))
+      .catch(() => caches.match(req, { ignoreSearch: true }).then((r) => r || caches.match('./index.html')))
   );
 });
 
