@@ -28,7 +28,7 @@
   window.renderRecipeCostResult = refresh;
 
   // الحسابات الحالية بتتعمل على الإدخال نفسه (من غير زرار)
-  ['costYield','costMargin','costExtra','costActualPrice'].forEach(function(id){
+  ['costYield','costMargin','costExtra','costActualPrice','costWaste'].forEach(function(id){
     var el = document.getElementById(id); if(!el) return;
     el.removeEventListener('input', orig);
     el.addEventListener('input', refresh);

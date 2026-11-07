@@ -71,7 +71,7 @@ function save(){const stamp=Date.now(),snapshot=clone(state);let localOk=false;t
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function nfmt(n){return Number(n||0).toLocaleString('en-US',{maximumFractionDigits:3})}
 // عرض المبالغ بالجنيه دون قروش، مع الاحتفاظ بالدقة الكاملة داخل الحسابات
-function moneyFmt(n){return Math.round((Number(n)||0)).toLocaleString('en-US',{maximumFractionDigits:0})}
+function moneyFmt(n){return (Math.round((Number(n)||0)*100)/100).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:2})}
 function unitCostFmt(n){return Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:4})}
 function names(){return Object.keys(state.recipes).sort((a,b)=>a.localeCompare(b,'ar'))}
 /* ===== مجموعة المشروبات ===== */

@@ -21,12 +21,12 @@
   function periods(){
     var s=S(), out=[], archives=arr(s.monthlyArchives);
     out.push({key:'cur',label:'الشهر الحالي',live:true,src:{
-      salesLog:pmRecostMissing(arr(s.salesLog)), expensesLog:[], purchasesLog:arr(s.purchasesLog),
+      salesLog:pmRecostMissing(arr(s.salesLog)), expensesLog:arr(s.expensesLog), purchasesLog:arr(s.purchasesLog),
       wasteLog:pmRecostWaste(arr(s.wasteLog)), productionLog:arr(s.productionPieces), history:arr(s.history),
       partyOrders:arr(s.partyOrders).filter(function(o){return !(o&&o.closedArchiveId)}), drinkOrders:arr(s.drinkOrders), inventory:arr(s.inventory), partyInvoices:(window.pmOpenPartyInvoices?window.pmOpenPartyInvoices():[])}});
     archives.forEach(function(a,i){
       out.push({key:'arc:'+i, label:'أرشيف: '+(a.label||('#'+(i+1))), live:false, src:{
-        salesLog:arr(a.salesLog), expensesLog:[], purchasesLog:arr(a.purchasesLog),
+        salesLog:arr(a.salesLog), expensesLog:arr(a.expensesLog), purchasesLog:arr(a.purchasesLog),
         wasteLog:arr(a.wasteLog), productionLog:arr(a.productionPieces), history:arr(a.history),
         partyOrders:[], drinkOrders:[], inventory:arr(a.inventory), partyInvoices:arr(a.partyInvoices)}});
     });

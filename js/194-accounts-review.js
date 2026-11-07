@@ -96,7 +96,7 @@
     var m=monthMetrics({
       productionLog:state.productionLog||[],
       salesLog:pmRecostMissing(sales),
-      expensesLog:[],
+      expensesLog:state.expensesLog||[],
       purchasesLog:state.purchasesLog||[],
       wasteLog:pmRecostWaste(state.wasteLog||[]),
       partyInvoices:parties,
@@ -172,7 +172,7 @@
         var m=monthMetrics({
           productionLog:state.productionLog||[],
           salesLog:pmRecostMissing(sales),
-          expensesLog:[],
+          expensesLog:state.expensesLog||[],
           purchasesLog:state.purchasesLog||[],
           wasteLog:pmRecostWaste(state.wasteLog||[]),
           partyInvoices:parties,
