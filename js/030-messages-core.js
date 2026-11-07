@@ -103,11 +103,12 @@ try{
     b.style.display = n ? 'flex' : 'none';
   }
   function itemHtml(m){
-    var bg = m.read ? '#fff' : '#1B1B1B';
-    return '<div style="border:1px solid rgba(0,0,0,.14);background:'+bg+';border-radius:10px;padding:10px;margin-top:8px">' +
-      '<div style="font-size:12px;color:#1B1B1B">من: <b>'+esc3(m.from_employee||'الإدارة')+'</b> · '+esc3(fmtDate(m.created_at)) +
-      (m.read ? '' : ' · <b style="color:#1B1B1B">جديدة</b>') + '</div>' +
-      '<div style="margin-top:6px;white-space:pre-wrap">'+esc3(m.body)+'</div></div>';
+    /* الرسالة الجديدة بخلفية فاتحة ملونة (مش سودا)، والنص بلون غامق صريح عشان ما يختفيش في الوضع الداكن */
+    var bg = m.read ? '#FFFFFF' : '#E8F2FB';
+    return '<div style="border:1px solid rgba(0,0,0,.14);background:'+bg+';color:#1B1B1B;border-radius:10px;padding:10px;margin-top:8px">' +
+      '<div style="font-size:12px;color:#1B1B1B">من: <b style="color:#1B1B1B">'+esc3(m.from_employee||'الإدارة')+'</b> · '+esc3(fmtDate(m.created_at)) +
+      (m.read ? '' : ' · <b style="color:#0067B8">جديدة</b>') + '</div>' +
+      '<div style="margin-top:6px;white-space:pre-wrap;color:#1B1B1B">'+esc3(m.body)+'</div></div>';
   }
   function renderPanel(){
     var html = '';

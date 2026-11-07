@@ -59,7 +59,7 @@
   // يسجّل النسخة في السجل (عشان نقدر نعرض التاريخ بعدين) وبيرجع true لو فيه إشعار جديد
   function checkAndNotify() {
     var current = info.version;
-    if (!current) return false;
+    if (!current || !appReady()) return false;
     var seen = null;
     try { seen = localStorage.getItem(SEEN_KEY); } catch (e) {}
     if (seen === current) return false;
@@ -67,19 +67,18 @@
     history.unshift({ version: current, updated: info.updatedLabel || '', changes: info.changes || [], at: new Date().toISOString() });
     write(HISTORY_KEY, history.slice(0, 20));
     try { localStorage.setItem(SEEN_KEY, current); } catch (e) {}
-    // أول تشغيل على الجهاز (مفيش نسخة متسجلة قبل كده) مابيعرضش إشعار، بس يسجّل
-    if (seen === null) return false;
+    // الجهاز اللي ما شافش أي نسخة قبل كده (موظف لسه ما دخلش، أو تحديث من نسخة أقدم) بيشوف الإشعار برضه
     showCard(current, info.changes || [], info.updatedLabel || '');
     return true;
   }
 
   // بعد ما التطبيق يفتح (مش على شاشة الدخول)
+  // بنفضل نراقب لحد ما التطبيق يفتح (الموظف ممكن يدخل بالـ PIN بعد دقايق من فتح الصفحة)
   function waitForApp() {
-    var started = Date.now();
     var t = setInterval(function () {
-      if (appReady()) { clearInterval(t); setTimeout(checkAndNotify, 800); }
-      else if (Date.now() - started > 180000) clearInterval(t);
-    }, 700);
+      if (checkAndNotify()) clearInterval(t);
+    }, 1000);
+    setTimeout(function () { clearInterval(t); }, 24 * 60 * 60 * 1000);
   }
 
   root.pmUpdateNotice = { check: checkAndNotify, history: function () { return read(HISTORY_KEY, []); } };
