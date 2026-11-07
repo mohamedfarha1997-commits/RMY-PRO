@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#FFFFFF"><meta name="description" content="RMY: الوصفات والتكلفة والمشتريات والمبيعات والمخزون."><title>RMY PRO 3.4.3 | تطويرات التشغيل والتقارير</title>
-<link rel="stylesheet" href="css/app.bundle.css?v=168"><link rel="stylesheet" href="css/dark-mode.css?v=1"><script>try{if(localStorage.getItem("rmy-theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script><meta name="application-version" content="3.4.3"><meta name="application-updated" content="2026-10-21"><script src="js/001-core-boot.js?v=157"></script>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#FFFFFF"><meta name="description" content="RMY: الوصفات والتكلفة والمشتريات والمبيعات والمخزون."><title>RMY PRO 3.5.0 | المحرك الحسابي التشغيل والتقارير</title>
+<link rel="stylesheet" href="css/app.bundle.css?v=168"><link rel="stylesheet" href="css/dark-mode.css?v=1"><script>try{if(localStorage.getItem("rmy-theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script><meta name="application-version" content="3.5.0"><meta name="application-updated" content="2026-10-21"><script src="js/001-core-boot.js?v=157"></script>
 
 
 
@@ -170,7 +170,7 @@
 <section id="costing" class="panel">
 <div class="card"><h2>تكلفة الوصفة وسعر البيع المقترح</h2><p class="small">يعتمد الحساب على أسعار شراء الخامات المسجلة في «أسعار الخامات». أدخل الناتج من الوزنة والتكلفة المباشرة الإضافية التي تريد تحميلها على هذه الوصفة. لا تسجّل نفس التكلفة مرة أخرى في المصروفات حتى لا تُحسب مرتين.</p>
 <label>اختيار الصنف</label><select id="costRecipe"></select>
-<div class="grid2"><div><label>عدد الوحدات الناتجة من الوزنة</label><input id="costYield" type="number" min="0.001" step="any" value="1"><div class="field-hint">مثال: 24 قطعة أو 2 تورتة</div></div><div><label>هامش الربح المستهدف %</label><input id="costMargin" type="number" min="0" max="95" step="1" value="30"><div class="field-hint">من 0 إلى 95% من سعر البيع</div></div><div><label>تكاليف إضافية للوزنة (جنيه)</label><input id="costExtra" type="number" min="0" step="any" value="0"></div><div><label>سعر البيع الفعلي للوحدة (اختياري)</label><input id="costActualPrice" type="number" min="0" step="any" placeholder="للمقارنة فقط"></div></div>
+<div class="grid2"><div><label>عدد الوحدات الناتجة من الوزنة</label><input id="costYield" type="number" min="0.001" step="any" value="1"><div class="field-hint">مثال: 24 قطعة أو 2 تورتة</div></div><div><label>هامش الربح المستهدف %</label><input id="costMargin" type="number" min="0" max="95" step="1" value="30"><div class="field-hint">من 0 إلى 95% من سعر البيع</div></div><div><label>تكاليف إضافية للوزنة (جنيه)</label><input id="costExtra" type="number" min="0" step="any" value="0"></div><div><label>نسبة الهالك من الوزنة %</label><input id="costWaste" type="number" min="0" max="95" step="any" value="0"><div class="field-hint">مثال: 5 يعني 5% من الإنتاج بيتهدر (حروق/فاقد)</div></div><div><label>سعر البيع الفعلي للوحدة (اختياري)</label><input id="costActualPrice" type="number" min="0" step="any" placeholder="للمقارنة فقط"></div></div>
 <div class="actions"><button id="saveCostSettings" class="primary">حفظ إعدادات الصنف</button><button id="calcRecipeCost" class="secondary">حساب التكلفة</button><button id="printRecipeCost" class="secondary">طباعة التقرير</button></div><div id="recipeCostResult"></div></div>
 <div class="card"><div class="sectionhead"><h2>ملخص تكلفة الوصفات</h2><button id="exportCostReport" class="secondary mini">تصدير Excel</button></div><div id="allRecipeCosts" class="tablewrap"></div></div>
 </section>
@@ -229,7 +229,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script defer src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1"></script>
 <script src="./supabase-config.js"></script>
-<script src="js/006-core-main-app.js?v=162"></script><script src="js/006-core-main-app-2.js?v=163"></script><script src="js/006-core-main-app-3.js?v=162"></script><script src="js/006-core-main-app-4.js?v=162"></script><script src="js/006-core-main-app-5.js?v=162"></script><script src="js/006-core-main-app-6.js?v=162"></script><script src="js/006-core-main-app-7.js?v=162"></script><script src="js/093-ui-remember-tab.js?v=157"></script>
+<script src="js/calc-engine.js?v=1"></script><script src="js/006-core-main-app.js?v=162"></script><script src="js/006-core-main-app-2.js?v=163"></script><script src="js/006-core-main-app-3.js?v=162"></script><script src="js/006-core-main-app-4.js?v=162"></script><script src="js/006-core-main-app-5.js?v=162"></script><script src="js/006-core-main-app-6.js?v=162"></script><script src="js/006-core-main-app-7.js?v=162"></script><script src="js/093-ui-remember-tab.js?v=157"></script>
 <script src="js/007-ui-enhancements.js?v=158"></script>
 
 <script src="js/008-ui-smooth-nav.js?v=159"></script>
