@@ -7,7 +7,7 @@
     return role==='admin'||role==='sales';
   }
   function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-  function money(v){return (Number(v)||0).toLocaleString('ar-EG',{minimumFractionDigits:2,maximumFractionDigits:2})+' ج.م'}
+  function money(v){return (typeof window.moneyFmt==='function'?window.moneyFmt(v):(Math.round((Number(v)||0)*100)/100).toLocaleString('en-US',{maximumFractionDigits:2}))+' ج.م'}
   function receiptKey(x){return String(x.receiptId||('legacy-'+(x.receiptNo||'')+'-'+(x.date||x.at||'')+'-'+(x.by||'')))}
   function normTxt(v){ return String(v==null?'':v).trim().replace(/\s+/g,' ').toLowerCase(); }
   function pendingDrinksFor(g){

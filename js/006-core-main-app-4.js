@@ -76,6 +76,9 @@ async function closeMonth(){
  if(!cloudReady||!cloudActorName||!cloudActorPin){alert('لأمان البيانات، لا يمكن تقفيل الشهر قبل تسجيل الدخول والاتصال بالسحابة.');return}
  if(cloudActorRole==='kitchen'){alert('حساب المطبخ لا يملك صلاحية تقفيل الشهر.');return}
  const history=state.history||[],productionLog=state.productionLog||[],salesLog=pmRecostMissing(window.pmCleanSalesForClose?pmCleanSalesForClose(state.salesLog||[]):(state.salesLog||[])),expensesLog=state.expensesLog||[],purchasesLog=state.purchasesLog||[];
+/* مانقفلش الشهر وفيه فواتير لسه مفتوحة: الأرشيف هيحفظها مفتوحة ومش هتتقفل بعد كده */
+const __openLines=salesLog.filter(x=>x&&x.invoiceStatus==='open').length;
+if(__openLines>0){alert('فيه '+__openLines+' صنف في فواتير مفتوحة لسه ما اتقفلتش.\nاقفل الفواتير دي من تبويب «الفواتير المفتوحة» الأول، وبعدين اقفل الشهر.');return}
  if(!history.length&&!productionLog.length&&!salesLog.length&&!expensesLog.length&&!purchasesLog.length&&!(state.wasteLog||[]).length&&!((window.pmOpenPartyInvoices?window.pmOpenPartyInvoices():[])||[]).length){alert('لا توجد حركات أو وصفات أو مبيعات أو مصروفات أو مشتريات أو فواتير حفلات لتقفيلها.');return}
  const btn=$('closeMonth');let cloudCommitted=false;if(btn){btn.disabled=true;btn.textContent='جارٍ فحص البيانات…'}
  try{

@@ -3,7 +3,7 @@
    ده بيحدّث الملف ده، وعنوان الصفحة، والـ meta tags، واسم الكاش في sw.js. */
 window.RMY_APP_INFO = {
   name: 'RMY PRO',
-  version: '3.9.1',
+  version: '3.9.2',
   updated: '2026-11-07',
   updatedLabel: '7 نوفمبر 2026'
 };
