@@ -2624,3 +2624,11 @@ html body #pmDock button.cur .pmd-txt,html body #pmDock button.cur .pmd-lbl{colo
 body[data-role="sales"] nav.tabs #accountsGroup,body.role-sales nav.tabs #accountsGroup{display:block!important}
 body[data-role="sales"] nav.tabs #accountsGroup .tab:not([data-tab="partyInvoices"]):not([data-tab="openInvoices"]):not([data-tab="cartpage"]),
 body.role-sales nav.tabs #accountsGroup .tab:not([data-tab="partyInvoices"]):not([data-tab="openInvoices"]):not([data-tab="cartpage"]){display:none!important}
+
+/* ---- header-height: الهيدر كان بيعتمد على ارتفاع اللوجو، فبعد حذفه لازم ارتفاع ثابت ---- */
+html body > header .hrow{min-height:54px!important}
+html body.hdr-scrolled > header .hrow{min-height:40px!important}
+html body > header #drawerBtn,html body > header #themeToggle{width:44px!important;height:44px!important}
+html body > header #themeToggle{right:66px!important}
+html body > header #pmSyncIcon{height:38px!important}
+html body.hdr-scrolled > header #drawerBtn,html body.hdr-scrolled > header #themeToggle{width:38px!important;height:38px!important}
