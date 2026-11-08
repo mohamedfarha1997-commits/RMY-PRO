@@ -959,9 +959,7 @@ body.role-sales .pm-dock [data-act="cart"]{display:none!important}/* ---- 035-pr
 #stock .pm-stock-empty td{background:rgba(180,35,24,.055)}
 #stock .pill{white-space:nowrap}
 .pm-fin-export{background:#FFFFFF!important;color:#1B1B1B!important;border-color:#D6D6D6!important}
-
-#analytics .db-ctrl button{min-height:40px}
-@media(max-width:640px){#analytics .db-head{align-items:stretch;gap:12px}#analytics .db-ctrl{display:grid;grid-template-columns:1fr 1fr;width:100%}#analytics .db-ctrl select{grid-column:1/-1;width:100%}#analytics .db-ctrl button{width:100%;white-space:normal}#stock .tablewrap{overflow-x:auto}}/* ---- 040-theme-pastry.css ---- */
+@media(max-width:640px){#stock .tablewrap{overflow-x:auto}}/* ---- 040-theme-pastry.css ---- */
 .primary, .secondary, .danger, .tab{position:relative;overflow:hidden}
 .primary::after, .secondary::after, .danger::after, .tab::after{content:"";position:absolute;left:50%;top:50%;width:140%;padding-top:140%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.4) 0%,rgba(255,255,255,0) 70%);transform:translate(-50%,-50%) scale(0);opacity:0;pointer-events:none}
 .primary:active::after, .secondary:active::after, .danger:active::after, .tab:active::after{transform:translate(-50%,-50%) scale(1);opacity:1;transition:transform .05s linear,opacity 0s}
@@ -1330,64 +1328,12 @@ body.role-sales nav.tabs .tab[data-tab="partyInvoices"]{display:flex!important}
 body:not([data-role="admin"]) nav.tabs .tab[data-tab="analytics"]{display:none!important}
 body:not([data-role="admin"]) #analytics{display:none!important}
 body.auth-required #analytics{display:none!important}
-#analytics .db-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin:6px 0 12px}
-#analytics .db-head h2{margin:0;color:var(--navy);font-size:20px}
-#analytics .db-head p{margin:4px 0 0}
-#analytics .db-ctrl{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-#analytics .db-ctrl select{width:auto;min-width:220px}
-#analytics .db-btn{border:0;border-radius:10px;background:#F2F2F2;color:var(--navy);font-weight:700;min-height:44px;padding:8px 14px}
-#analytics .db-muted{font-size:12px;color:var(--muted);line-height:1.6}
-#analytics .db-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
-#analytics .db-kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:4px;min-width:0}
-#analytics .db-kpi>span{font-size:12px;color:var(--muted)}
-#analytics .db-kpi b{font-size:18px;color:var(--blue);overflow-wrap:anywhere}
-#analytics .db-kpi small{font-size:11px;color:var(--muted);line-height:1.5}
-#analytics .db-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px}
-#analytics .db-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow);min-width:0}
-#analytics .db-card h3{margin:0 0 10px;font-size:14px;color:var(--navy)}
-#analytics .db-w6,#analytics .db-w12{grid-column:span 12}
-#analytics .db-note{font-size:11px;color:var(--muted);margin:-4px 0 8px;line-height:1.6}
-#analytics .db-vb{display:flex;align-items:flex-end;gap:6px;height:170px;overflow-x:auto;padding-bottom:22px}
-#analytics .db-vc{flex:0 0 34px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;position:relative}
-#analytics .db-vc i{display:block;width:100%;background:linear-gradient(180deg,#FFFFFF,#FFFFFF);border-radius:6px 6px 0 0;min-height:3px}
-#analytics .db-vc span{position:absolute;bottom:-20px;font-size:10px;color:var(--muted);white-space:nowrap}
-#analytics .db-hr{display:grid;grid-template-columns:minmax(0,130px) minmax(0,1fr) auto;gap:8px;align-items:center;font-size:12px;margin:7px 0}
-#analytics .db-hr>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#analytics .db-track{height:10px;background:#F2F2F2;border-radius:99px;overflow:hidden}
-#analytics .db-track i{display:block;height:100%;background:linear-gradient(90deg,#FFFFFF,rgba(0,103,184,.12));border-radius:99px}
-#analytics .db-hr b{font-size:12px;color:var(--navy);white-space:nowrap}
-#analytics .db-split{display:flex;gap:8px}
-#analytics .db-split>div{flex:1;background:#FFFFFF;border:1px solid var(--line);border-radius:12px;padding:10px;font-size:12px;display:flex;flex-direction:column;gap:3px}
-#analytics .db-split b{font-size:16px;color:var(--blue)}
-#analytics .db-split small{color:var(--muted)}
-#analytics .db-list{margin:0;padding:0 18px 0 0;font-size:12px;line-height:1.9}
-#analytics .db-tablewrap{overflow:auto;width:100%}
 #analytics table{width:100%;border-collapse:collapse;font-size:12px;min-width:380px}
 #analytics th,#analytics td{text-align:right;border-bottom:1px solid var(--line);padding:8px 7px}
 #analytics th{background:#FFFFFF;color:var(--navy);white-space:nowrap}
-#analytics .db-pill{display:inline-block;border-radius:99px;padding:3px 8px;font-size:11px;background:#E8F7EF;color:var(--green);white-space:nowrap}
-#analytics .db-pill.low{background:#FFF0EE;color:var(--red)}
 #analytics .pos{color:var(--green);font-weight:700}
 #analytics .neg{color:var(--red);font-weight:700}
-#analytics .db-kpi b.pos{color:var(--green)}
-#analytics .db-kpi b.neg{color:var(--red)}
-/* ---- تصميم نظرة عامة: الكارت الرئيسي الأزرق + دايرة توزيع المبيعات ---- */
-#analytics .db-kpis .db-kpi:first-child{grid-column:1/-1;background:var(--blue)!important;border-color:var(--blue)!important;padding:18px}
-#analytics .db-kpis .db-kpi:first-child>span,
-#analytics .db-kpis .db-kpi:first-child small{color:rgba(255,255,255,.85)}
-#analytics .db-kpis .db-kpi:first-child b{color:#FFFFFF;font-size:30px}
-.db-donut-wrap{display:flex;align-items:center;gap:16px}
-.db-donut{width:116px;height:116px;border-radius:50%;display:grid;place-items:center;flex-shrink:0}
-.db-donut span{width:80px;height:80px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.db-donut b{font-size:14px;color:var(--ink,#1B1B1B)}
-.db-donut small{font-size:10px;color:var(--muted)}
-.db-donut-leg{flex:1;font-size:13px}
-.db-donut-leg div{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px}
-.db-donut-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-left:6px}
-.db-donut-leg b{font-weight:800}
 @media(min-width:650px){
-  #analytics .db-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
-  #analytics .db-w6{grid-column:span 6}
 }/* ---- 079-menu-qty.css ---- */
 html body #menu .mx-card{cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
 html body #menu .mx-card[data-sold="1"]{cursor:default}
@@ -1827,8 +1773,7 @@ body.auth-required .login-screen input{
 body.auth-required .login-screen input:focus{
   outline:none;border-color:#D6D6D6;box-shadow:0 0 0 4px rgba(0,0,0,.14);
 }/* ---- 122-logo-palette.css ---- */
-.ui-ico{--ic:var(--blue)!important}/* ---- 123-final-fixes.css ---- */
-html body #analytics .db-vc i{border-radius:6px 6px 0 0!important}
+.ui-ico{--ic:var(--blue)!important}
 
 html body #signOutButton,
 html body #localSaveStatus button#signOutButton{background:#B42318!important;color:#FFFFFF!important;border:1px solid #B42318!important;font-weight:800!important}
@@ -1902,7 +1847,7 @@ main{width:100%;max-width:1180px;margin-inline:auto;padding-inline:clamp(10px,3v
 .tablewrap table,.tbl-wrap table{min-width:560px}
 table th{white-space:nowrap;vertical-align:middle}
 table td{vertical-align:middle}
-.stats,.metrics,.kpis,.db-kpis,.pm-grid,.menu-grid {display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr))}
+.stats, .metrics, .kpis, .pm-grid, .menu-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr))}
 .grid2{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
 .grid2>*,.stats>*,.stat>*{min-width:0}
 .actions,.row,.btns {display:flex;flex-wrap:wrap;gap:8px;align-items:center;min-width:0}.actions>*,.row>button,.btns>* {flex:1 1 auto;min-width:0}.actions>*,.row>button {min-height:42px}
@@ -1921,12 +1866,12 @@ h3{font-size:clamp(15px,3.6vw,18px)}
   .actions>*,.row>button,.btns>*{flex:1 1 calc(50% - 8px)}
 }
 @media (min-width:481px) and (max-width:900px){
-  .stats,.metrics,.kpis,.db-kpis,.stat-grid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+  .stats, .metrics, .kpis, .stat-grid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
 }
 @media (min-width:901px){
   body{font-size:15px}
   main{padding-bottom:40px}
-  .stats,.metrics,.kpis,.db-kpis,.stat-grid,.menu-grid{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+  .stats, .metrics, .kpis, .stat-grid, .menu-grid{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
   .tablewrap table,.tbl-wrap table{min-width:0}
   .sync-pill{bottom:24px!important}
 }/* ---- 127-back-button-layout.css ---- */
@@ -1977,8 +1922,7 @@ body::before,body::after,html::before,html::after,
 #pmMaint::before,#pmMaint::after{content:none!important;display:none!important;animation:none!important}
 [class*="float"],[class*="sheen"],[class*="shine"],[class*="glow"],[class*="markGlow"],.login-logo,.login-card{animation:none!important}
 .a-float,.ui-live .a-float{animation:none!important}
-html body .card,html body .stat,html body .metric,html body .db-kpi,html body .db-card,
-html body .msg-box,html body .pm-sheet-box,html body .pm-pal-box,html body .login-card,html body .staff-card{
+html body .card, html body .stat, html body .metric, html body .msg-box, html body .pm-sheet-box, html body .pm-pal-box, html body .login-card, html body .staff-card{
   background:var(--card)!important;color:var(--ink)!important;border-color:var(--line)!important;
   -webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:0 2px 10px rgba(0,0,0,.06)!important;
 }
@@ -1999,8 +1943,6 @@ html body > header{background:var(--card)!important;background-image:none!import
 html body .toast{background:var(--card)!important;color:var(--ink)!important;border:1px solid var(--line)!important}
 html body .pm-dock,html body #pmDock{background:var(--card)!important;border:1px solid var(--line)!important}
 html body #pmDock .pm-center{background:var(--card)!important}
-html body #analytics .db-vc i{background:rgba(0,103,184,.2)!important}
-html body #analytics .db-vc span{color:var(--muted)!important}
 html body #signOutButton,html body #localSaveStatus button#signOutButton{background:#B42318!important;color:#FFFFFF!important;border-color:#B42318!important}
 
 html body #pmMaint .pmm-card{background:var(--card)!important;border-color:var(--line)!important}
@@ -2477,34 +2419,7 @@ html body nav.tabs .tab.active * {
   color:#1B1B1B!important;
   text-shadow:none!important;
 }
-html body #analytics .db-track {
-  background:#EDEDED!important;
-}
-html body #analytics .db-hr:nth-of-type(4n+1) .db-track i {
-  background:linear-gradient(90deg,#F25022,#F9A38A)!important;
-}
-html body #analytics .db-hr:nth-of-type(4n+2) .db-track i {
-  background:linear-gradient(90deg,#7FBA00,#C3E07A)!important;
-}
-html body #analytics .db-hr:nth-of-type(4n+3) .db-track i {
-  background:linear-gradient(90deg,#00A4EF,#7FD2F7)!important;
-}
-html body #analytics .db-hr:nth-of-type(4n+4) .db-track i {
-  background:linear-gradient(90deg,#FFB900,#FFDB80)!important;
-}
 .pm-party-inline{margin:6px 0 10px}
-html body #analytics .db-vc:nth-child(4n+1) i {
-  background:linear-gradient(180deg,#F25022,#F9A38A)!important;
-}
-html body #analytics .db-vc:nth-child(4n+2) i {
-  background:linear-gradient(180deg,#7FBA00,#C3E07A)!important;
-}
-html body #analytics .db-vc:nth-child(4n+3) i {
-  background:linear-gradient(180deg,#00A4EF,#7FD2F7)!important;
-}
-html body #analytics .db-vc:nth-child(4n+4) i {
-  background:linear-gradient(180deg,#FFB900,#FFDB80)!important;
-}
 html body .pm-logo-img {
   position:relative;
   overflow:hidden;

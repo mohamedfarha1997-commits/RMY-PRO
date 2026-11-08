@@ -333,21 +333,7 @@ html[data-theme="dark"] .pm-po-short{color:#E79A94}
 html[data-theme="dark"] .pm-po-empty{color:#D6D6D6}
 html[data-theme="dark"] .pm-po-section{border-top:1px dashed rgba(255,255,255,.12)}
 html[data-theme="dark"] .pm-po-section h4{color:#D6D6D6}
-html[data-theme="dark"] #analytics .db-head h2{color:#8CC4EE}
-html[data-theme="dark"] #analytics .db-btn{background:#262626;color:#8CC4EE}
-html[data-theme="dark"] #analytics .db-kpi{background:#303030}
-html[data-theme="dark"] #analytics .db-kpi b{color:#8CC4EE}
-html[data-theme="dark"] #analytics .db-card{background:#303030}
-html[data-theme="dark"] #analytics .db-card h3{color:#8CC4EE}
-html[data-theme="dark"] #analytics .db-vc i{background:linear-gradient(180deg,#303030,#303030)}
-html[data-theme="dark"] #analytics .db-track{background:#262626}
-html[data-theme="dark"] #analytics .db-track i{background:linear-gradient(90deg,#303030,rgba(0,103,184,.12))}
-html[data-theme="dark"] #analytics .db-hr b{color:#8CC4EE}
-html[data-theme="dark"] #analytics .db-split>div{background:#303030}
-html[data-theme="dark"] #analytics .db-split b{color:#8CC4EE}
 html[data-theme="dark"] #analytics th{background:#303030;color:#8CC4EE}
-html[data-theme="dark"] #analytics .db-pill{background:#294034}
-html[data-theme="dark"] #analytics .db-pill.low{background:rgba(255,138,128,.13)}
 html[data-theme="dark"] body #menu .mx-card:not([data-sold="1"]):active{border-color:#434343}
 html[data-theme="dark"] body #menu .mx-step .mx-minus{color:#D6D6D6}
 html[data-theme="dark"] body #menu .mx-qty{background:#303030;color:#D6D6D6}
@@ -558,7 +544,6 @@ html[data-theme="dark"] body .danger{border:1px solid #73433E !important}
 html[data-theme="dark"] body #menu #menuGrid .mx-body{background:linear-gradient(to top,rgba(38,38,38,.96) 0%,rgba(38,38,38,.82) 45%,rgba(38,38,38,0) 100%) !important}
 html[data-theme="dark"] body #menu #menuGrid .mx-name, html[data-theme="dark"] body #menu #menuGrid .mx-card .mx-name, html[data-theme="dark"] body #menu #menuGrid .mx-card.mx-feat .mx-name{color:#D6D6D6 !important}
 html[data-theme="dark"] body nav.tabs .tab.active, html[data-theme="dark"] body nav.tabs .tab.active *{color:#D6D6D6 !important}
-html[data-theme="dark"] body #analytics .db-track{background:#363636 !important}
 html[data-theme="dark"] body .pm-logo-img::before{background:linear-gradient(115deg,
       rgba(38,38,38,0) 35%,
       rgba(38,38,38,.75) 46%,
