@@ -1372,7 +1372,7 @@ body.auth-required #analytics{display:none!important}
 #analytics .db-kpi b.pos{color:var(--green)}
 #analytics .db-kpi b.neg{color:var(--red)}
 /* ---- تصميم نظرة عامة: الكارت الرئيسي الأزرق + دايرة توزيع المبيعات ---- */
-#analytics .db-kpis .db-kpi:first-child{grid-column:1/-1;background:var(--blue);border-color:var(--blue);padding:18px}
+#analytics .db-kpis .db-kpi:first-child{grid-column:1/-1;background:var(--blue)!important;border-color:var(--blue)!important;padding:18px}
 #analytics .db-kpis .db-kpi:first-child>span,
 #analytics .db-kpis .db-kpi:first-child small{color:rgba(255,255,255,.85)}
 #analytics .db-kpis .db-kpi:first-child b{color:#FFFFFF;font-size:30px}
