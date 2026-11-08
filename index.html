@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#FFFFFF"><meta name="description" content="RMY: الوصفات والتكلفة والمشتريات والمبيعات والمخزون."><title>RMY PRO 3.12.3 | تطبيق مثبّت أفضل التشغيل والتقارير</title>
-<link rel="stylesheet" href="css/app.bundle.css?v=170"><link rel="stylesheet" href="css/dark-mode.css?v=1"><script>try{if(localStorage.getItem("rmy-theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script><meta name="application-version" content="3.12.3"><meta name="application-updated" content="2026-11-08"><script src="js/000-app-info.js?v=1"></script><script src="js/001-core-boot.js?v=157"></script>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#FFFFFF"><meta name="description" content="RMY: الوصفات والتكلفة والمشتريات والمبيعات والمخزون."><title>RMY PRO 3.12.4 | تطبيق مثبّت أفضل التشغيل والتقارير</title>
+<link rel="stylesheet" href="css/app.bundle.css?v=171"><link rel="stylesheet" href="css/dark-mode.css?v=1"><script>try{if(localStorage.getItem("rmy-theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script><meta name="application-version" content="3.12.4"><meta name="application-updated" content="2026-11-08"><script src="js/000-app-info.js?v=2"></script><script src="js/001-core-boot.js?v=157"></script>
 
 
 
@@ -183,7 +183,7 @@
 </section>
 <section id="sales" class="panel">
 
-<div class="card"><h2>المبيعات</h2><p class="small">المبيعات هي الأموال الداخلة من بيع المنتجات. تسجيل البيع لا يُعد شراء خامات ولا مصروفًا تشغيليًا.</p><p class="small">سجّل الكمية المباعة وسعر البيع الفعلي للوحدة. تُحفظ تكلفة الوحدة التقديرية وقت التسجيل بحسب أسعار الخامات وإعدادات الوصفة الحالية، لحساب ربح تقريبي.</p>
+<div class="card"><h2>المبيعات</h2><p class="small">المبيعات هي الأموال الداخلة من بيع المنتجات. تسجيل البيع لا يُعد شراء خامات.</p><p class="small">سجّل الكمية المباعة وسعر البيع الفعلي للوحدة. تُحفظ تكلفة الوحدة التقديرية وقت التسجيل بحسب أسعار الخامات وإعدادات الوصفة الحالية، لحساب ربح تقريبي.</p>
 <div class="grid2"><div><label>الصنف المباع</label><select id="saleProduct"></select></div><div><label>عدد الوحدات المباعة</label><input id="saleQty" type="number" min="0.001" step="any" value="1"></div><div><label>سعر بيع الوحدة (جنيه)</label><input id="salePrice" type="number" min="0" step="any" placeholder="سعر البيع الفعلي"></div><div><label>ملاحظة (اختياري)</label><input id="saleNote" placeholder="فاتورة / عميل / ملاحظة"></div></div>
 <div id="salePreview" class="pro-note">اختر الصنف وأدخل الكمية والسعر لعرض تقدير الربح.</div><div class="actions"><button id="addSale" class="primary">حفظ عملية البيع</button><button id="printSales" class="secondary">طباعة التقرير</button></div></div>
 
@@ -229,10 +229,10 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script defer src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1"></script>
 <script src="./supabase-config.js"></script>
-<script src="js/calc-engine.js?v=1"></script><script src="js/006-core-main-app.js?v=162"></script><script src="js/006-core-main-app-2.js?v=164"></script><script src="js/006-core-main-app-3.js?v=164"></script><script src="js/006-core-main-app-4.js?v=162"></script><script src="js/006-core-main-app-5.js?v=162"></script><script src="js/006-core-main-app-6.js?v=162"></script><script src="js/006-core-main-app-7.js?v=162"></script><script src="js/093-ui-remember-tab.js?v=157"></script>
-<script src="js/007-ui-enhancements.js?v=158"></script>
+<script src="js/calc-engine.js?v=1"></script><script src="js/006-core-main-app.js?v=163"></script><script src="js/006-core-main-app-2.js?v=165"></script><script src="js/006-core-main-app-3.js?v=165"></script><script src="js/006-core-main-app-4.js?v=163"></script><script src="js/006-core-main-app-5.js?v=163"></script><script src="js/006-core-main-app-6.js?v=162"></script><script src="js/006-core-main-app-7.js?v=162"></script><script src="js/093-ui-remember-tab.js?v=157"></script>
+<script src="js/007-ui-enhancements.js?v=159"></script>
 
-<script src="js/008-ui-smooth-nav.js?v=159"></script>
+<script src="js/008-ui-smooth-nav.js?v=160"></script>
 
 
 
@@ -246,14 +246,14 @@
 
 <script src="js/010-menu-categories.js?v=157"></script>
 <script src="js/011-auth-login-errors.js?v=157"></script>
-<script src="js/012-sales-menu-cart-roles.js?v=159"></script>
+<script src="js/012-sales-menu-cart-roles.js?v=160"></script>
 
 <script src="js/013-invoices-close-clean.js?v=157"></script>
 
 
 <script src="js/015-reports-excel-export.js?v=157"></script>
 <script src="js/016-cloud-multiuser-merge.js?v=157"></script>
-<script src="js/018-ui-home-layout.js?v=157"></script>
+<script src="js/018-ui-home-layout.js?v=158"></script>
 <script src="js/019-ui-visibility-pause.js?v=157"></script>
 <script src="js/020-core-tour-cleanup.js?v=157"></script>
 <script src="js/022-ui-topbar.js?v=157"></script>
@@ -412,7 +412,7 @@
 
 
 
-<script src="js/059-reports-analytics.js?v=167"></script>
+<script src="js/059-reports-analytics.js?v=169"></script>
 
 <script src="js/060-menu-qty.js?v=157"></script>
 
@@ -445,7 +445,7 @@
 <script src="js/069-ui-dock-home.js?v=157"></script>
 
 
-<script src="js/070-ui-nav-filter-by-role.js?v=157"></script>
+<script src="js/070-ui-nav-filter-by-role.js?v=158"></script>
 
 
 
@@ -487,12 +487,12 @@
 
 <script src="js/075-admin-diagnostics.js?v=157"></script>
 
-<script src="js/076-reports-accountant.js?v=163"></script>
+<script src="js/076-reports-accountant.js?v=164"></script>
 
 
 
 
-<script src="js/078-admin-self-check.js?v=157"></script>
+<script src="js/078-admin-self-check.js?v=158"></script>
 
 
 
@@ -552,7 +552,7 @@
 <script src="js/135-ready-delivery.js?v=157"></script>
 <script src="js/145-recipe-smart-entry.js?v=160"></script><script src="js/146-payment-breakdown.js?v=157"></script>
 <script src="js/147-menu-admin-collapse.js?v=157"></script>
-<script src="js/148-cart-party-hide-pay.js?v=157"></script><script src="js/194-accounts-review.js?v=157"></script><script src="js/196-party-sheet.js?v=157"></script><script src="js/197-party-dashboard.js?v=160"></script><script src="js/198-auto-update.js?v=157"></script><script src="js/199-offline-sales.js?v=158"></script>
+<script src="js/148-cart-party-hide-pay.js?v=157"></script><script src="js/194-accounts-review.js?v=158"></script><script src="js/196-party-sheet.js?v=157"></script><script src="js/197-party-dashboard.js?v=160"></script><script src="js/198-auto-update.js?v=157"></script><script src="js/199-offline-sales.js?v=158"></script>
 
 
-<script src="js/211-ui-dark-guard.js?v=1"></script><script src="js/215-daily-closing-report.js?v=2"></script><script src="js/216-nav-groups-collapse.js?v=2"></script><script src="js/217-nav-closed-badges.js?v=2"></script><script src="js/218-recipe-keyboard.js?v=1"></script><script src="js/210-ui-theme-toggle.js?v=1"></script></body></html>
+<script src="js/211-ui-dark-guard.js?v=1"></script><script src="js/215-daily-closing-report.js?v=3"></script><script src="js/216-nav-groups-collapse.js?v=2"></script><script src="js/217-nav-closed-badges.js?v=2"></script><script src="js/218-recipe-keyboard.js?v=1"></script><script src="js/210-ui-theme-toggle.js?v=1"></script></body></html>
