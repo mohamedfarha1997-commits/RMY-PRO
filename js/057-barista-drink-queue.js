@@ -94,6 +94,8 @@
   }
   function queueHtml(){
     var pending=orders().filter(function(o){return o.status==='pending'});
+    var ready=orders().filter(function(o){return o.status==='prepared'});
+    var readyHtml=ready.length?'<h3 style="margin:14px 0 8px">جاهز للتسليم</h3>'+ready.map(function(o){return '<div class="dq-card"><h3>'+esc(o.name)+' × '+nfmt(o.qty)+'</h3><div class="small">تم التحضير'+(o.preparedBy?' · بواسطة: '+esc(o.preparedBy):'')+'</div></div>';}).join(''):'';
     var mins=0, perName={};
     var cards=pending.map(function(o){
       var t=drinkTime(o.name)*Number(o.qty||0); mins+=t;
@@ -105,9 +107,9 @@
         '<div class="actions"><button type="button" class="primary" data-dq-prepare="'+esc(o.id)+'"'+(sh.length?' disabled':'')+'>تأكيد التحضير</button></div></div>';
     }).join('');
     var summary=Object.keys(perName).map(function(n){return esc(n)+': '+nfmt(perName[n])}).join(' · ');
-    return '<div class="stats"><div class="stat"><b>'+pending.length+'</b><span>طلبات منتظرة</span></div><div class="stat"><b>'+mins+'</b><span>إجمالي دقايق التحضير</span></div></div>'+
+    return '<div class="stats"><div class="stat"><b>'+pending.length+'</b><span>تحضير</span></div><div class="stat"><b>'+ready.length+'</b><span>جاهز للتسليم</span></div><div class="stat"><b>'+mins+'</b><span>إجمالي دقايق التحضير</span></div></div>'+
       (summary?'<div class="dq-sum">عدد المشروبات المطلوبة: '+summary+'</div>':'')+
-      (cards||'<div class="empty">مفيش طلبات مشروبات دلوقتي.</div>');
+      (cards||'<div class="empty">مفيش طلبات مشروبات دلوقتي.</div>')+readyHtml;
   }
   function render(){
     var r=role();
