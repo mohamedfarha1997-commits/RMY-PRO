@@ -92,11 +92,36 @@
       });
     }
 
+    // الشبكة بتتطبق على العنصر الأب لكل المجموعات مباشرة (inline)، فمش بتعتمد على شكل الـ HTML
+    function layoutGrid(){
+      var n = nav(); if (!n) return;
+      var parents = [];
+      n.querySelectorAll('.nav-group').forEach(function(g){
+        var p = g.parentElement;
+        if (p && parents.indexOf(p) < 0) parents.push(p);
+        g.style.setProperty('min-width', '0', 'important');
+        g.style.setProperty('margin', '0', 'important');
+        var items = g.querySelector(':scope > .nav-items');
+        if (items) {
+          items.style.setProperty('display', 'grid', 'important');
+          items.style.setProperty('grid-template-columns', 'repeat(2,minmax(0,1fr))', 'important');
+          items.style.setProperty('gap', '10px', 'important');
+        }
+      });
+      parents.forEach(function(p){
+        p.style.setProperty('display', 'grid', 'important');
+        p.style.setProperty('grid-template-columns', 'repeat(2,minmax(0,1fr))', 'important');
+        p.style.setProperty('gap', '12px', 'important');
+        p.style.setProperty('align-items', 'start', 'important');
+      });
+    }
+
     function run(){
       var n = nav(); if (!n) return false;
       injectCss();
       n.querySelectorAll('.nav-group').forEach(wire);
       refreshCounts();
+      layoutGrid();
       return true;
     }
 
@@ -107,7 +132,7 @@
       if (tries > 80) clearInterval(timer);
     }, 500);
     // العدد بيتحدّث لو الصلاحية أو الأزرار اتغيروا
-    setInterval(function(){ try { refreshCounts(); } catch (e) {} }, 900);
+    setInterval(function(){ try { refreshCounts(); layoutGrid(); } catch (e) {} }, 900);
 
     window.pmNavGroups = { refresh: refreshCounts, state: function(){ return load(); } };
   } catch (e) {
