@@ -200,10 +200,10 @@
   // ===== العرض الجديد =====
   function toneOf(v){ return v>=0?'pos':'neg'; }
   function pctTxt(v){ return v==null?'—':fmt(v,0)+'%'; }
-  function empty(t){ return '<div class="db-muted">'+esc(t)+'</div>'; }
+  function empty(t){ return '<div class="an-empty">'+esc(t)+'</div>'; }
   function table(head,rows){
     if(!rows.length) return empty('لا توجد بيانات');
-    return '<div class="db-tablewrap"><table><tr>'+head.map(function(h){return '<th>'+esc(h)+'</th>';}).join('')+'</tr>'+
+    return '<div class="an-tablewrap"><table><tr>'+head.map(function(h){return '<th>'+esc(h)+'</th>';}).join('')+'</tr>'+
       rows.map(function(r){return '<tr>'+r.map(function(c){return '<td>'+c+'</td>';}).join('')+'</tr>';}).join('')+'</table></div>';
   }
 
@@ -216,11 +216,13 @@
   function sliceM(m,days){
     if(days>=30) return m;
     var cut=dkey(new Date(Date.now()-(days-1)*864e5)), o=Object.assign({},m);
-    ['salesLog','wasteLog','purchasesLog','productionLog','partyInvoices','drinkOrders','history'].forEach(function(k){
+    ['salesLog','wasteLog','purchasesLog','productionLog','drinkOrders','history'].forEach(function(k){
       if(Array.isArray(m[k])) o[k]=m[k].filter(function(x){ return dayOf(x)>=cut; });
     });
+    if(Array.isArray(m.partyInvoices)) o.partyInvoices=m.partyInvoices.filter(function(x){ return partyDay(x)>=cut; });
     return o;
   }
+  function partyDay(x){ return String((x&&x.deliveredAt)||'').slice(0,10)||'—'; }
   function pctOf(a,b){ return b>0?Math.round(a/b*100):0; }
   function kc(label,val,tone,sub){ return '<div class="an-k"><small>'+esc(label)+'</small><b class="'+(tone||'')+'">'+esc(val)+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'')+'</div>'; }
   function rowH(label,val,tone){ return '<div class="an-row"><span>'+esc(label)+'</span><b class="'+(tone||'')+'">'+esc(money(val))+'</b></div>'; }
@@ -282,7 +284,7 @@
     arr(m.purchasesLog).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'purchase',d:dayOf(x),n:String(x.name||'—'),v:num(x.totalCost!=null?x.totalCost:x.total),q:num(x.qty)}); });
     arr(m.wasteLog).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'waste',d:dayOf(x),n:String(x.name||'—'),v:num(x.costAtWaste),q:num(x.qty)}); });
     arr(m.productionLog).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'production',d:dayOf(x),n:String(x.name||'—'),v:0,q:num(x.pieces!=null?x.pieces:x.qty)}); });
-    arr(m.partyInvoices).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'party',d:dayOf(x),n:String(x.name||x.customerName||'—'),v:num(x.total),q:0}); });
+    arr(m.partyInvoices).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'party',d:partyDay(x),n:String(x.customer||'—'),v:num(x.total),q:0}); });
     out.sort(function(a,b){ return a.d<b.d?1:a.d>b.d?-1:0; });
     return out;
   }
@@ -323,6 +325,7 @@
       '.an-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.an-chips button{padding:6px 10px}'+
       '.an-search{width:100%;border:1px solid #D6D6D6;border-radius:12px;padding:10px 12px;font:inherit;margin-bottom:10px;background:#fff}'+
       '.an-empty{color:#5E5E5E;font-size:13px;padding:8px 0}'+
+      '.an-tablewrap{overflow:auto;width:100%}.an-tablewrap table{width:100%;border-collapse:collapse;font-size:12px}.an-tablewrap th,.an-tablewrap td{padding:7px 6px;border-bottom:1px solid #EEE;text-align:right}.an-tablewrap th{color:#5E5E5E;font-weight:700}'+
       '.an-tools{background:#fff;border:1px solid #D6D6D6;border-radius:16px;padding:12px 14px;margin-bottom:10px}.an-tools summary{cursor:pointer;font-weight:700;color:#0067B8}'+
       '.an-tools-in{display:flex;flex-direction:column;gap:8px;margin-top:10px}'+
       '.an-range{display:flex;gap:8px}.an-range input{flex:1;border:1px solid #D6D6D6;border-radius:10px;padding:9px;font:inherit;min-width:0}'+

@@ -133,22 +133,7 @@ function openFinReport(){
      '</tbody></table>';
 
   // 4) تفصيل المصروفات
-  h+='<h2>4. تفصيل المصروفات حسب الفئة</h2>';
-  var ex=(r.expList||[]);
-  if(ex.length){ h+='<p class="how" style="font-size:13.5px">أكبر بند مصروفات هو <b>'+fr_esc(ex[0].label)+'</b> بقيمة '+fr_money(ex[0].value)+'، وبيمثل '+fr_pct(ex[0].value,exp)+' من إجمالي المصروفات.</p>'; }
-  if(!ex.length){ h+='<p class="empty">لا توجد مصروفات مسجلة في هذه الفترة.</p>'; }
-  else {
-    h+='<table><thead><tr><th>الفئة</th><th class="num">القيمة</th><th class="num">النسبة</th></tr></thead><tbody>';
-    ex.forEach(function(x){
-      var pc=exp?(x.value/exp)*100:0;
-      h+='<tr><td>'+fr_esc(x.label)+'<div class="bar"><i style="width:'+pc.toFixed(1)+'%"></i></div></td>'+
-         '<td class="num">'+fr_money(x.value)+'</td><td class="num">'+fr_pct(x.value,exp)+'</td></tr>';
-    });
-    h+='</tbody></table>';
-  }
-
-  // 5) أعلى المنتجات ربحية
-  h+='<h2>5. أعلى 5 منتجات ربحية</h2>';
+  h+='<h2>4. أعلى 5 منتجات ربحية</h2>';
   var prods=(r.products||[]).map(function(p){ return {name:p.name,qty:Number(p.qty||0),rev:Number(p.rev||0),cost:Number(p.cost||0),profit:Number(p.rev||0)-Number(p.cost||0)}; })
     .sort(function(a,b){return b.profit-a.profit;}).slice(0,5);
   if(losers.length){ h+='<p class="note" style="background:#FFEEEC;border-color:#F4C2BC">المنتجات اللي بتخسر في الفترة دي: '+losers.map(function(p){return fr_esc(p.name)+' (خسارة '+fr_money(Math.abs(p.profit))+')';}).join('، ')+'. سعر بيعها أقل من تكلفة خاماتها، وده يحتاج مراجعة للتسعير أو الوصفة.</p>'; }
@@ -162,7 +147,17 @@ function openFinReport(){
   }
 
   // 6) أعلى العملاء
-  h+='<h2>6. أعلى العملاء في الفترة</h2>';
+  var fr_t=function(head,rows){ return '<table><thead><tr>'+head.map(function(x){return '<th>'+x+'</th>';}).join('')+'</tr></thead><tbody>'+(rows.length?rows.map(function(c){return '<tr>'+c.map(function(v){return '<td>'+v+'</td>';}).join('')+'</tr>';}).join(''):'<tr><td colspan="'+head.length+'">لا يوجد</td></tr>')+'</tbody></table>'; };
+  h+='<h2>5. الإنتاج والهالك</h2>';
+  h+=fr_t(['الصنف','القطع المنتجة'], (r.prodList||[]).map(function(x){return [fr_esc(x.label), fr_esc(String(x.value))];}));
+  h+=fr_t(['الهالك','الكمية','التكلفة'], (r.wasteList||[]).map(function(x){return [fr_esc(x.name), fr_esc(String(x.qty)), fr_money(x.cost)];}));
+  h+='<h2>6. المخزون والمشتريات</h2>';
+  h+=fr_t(['الخامة','الرصيد','حد الطلب'], (r.low||[]).map(function(x){return [fr_esc(x.name), fr_esc(String(x.qty)+' '+(x.unit||'')), fr_esc(String(x.reorder))];}));
+  h+=fr_t(['الخامة','قيمة المشتريات'], (r.purList||[]).map(function(x){return [fr_esc(x.label), fr_money(x.value)];}));
+  h+='<h2>7. الحفلات</h2>';
+  var pr=r.parties||{n:0,total:0,paid:0,remaining:0};
+  h+='<p class="how">عدد الحفلات: <b>'+fr_esc(String(pr.n))+'</b> · الإجمالي: <b>'+fr_money(pr.total)+'</b> · المدفوع: <b>'+fr_money(pr.paid)+'</b> · المتبقي: <b>'+fr_money(pr.remaining)+'</b></p>';
+  h+='<h2>8. أعلى العملاء في الفترة</h2>';
   var cs=(r.customers||[]).slice(0,5);
   if(cs.length){ h+='<p class="how" style="font-size:13.5px">أعلى عميل هو <b>'+fr_esc(cs[0].name||'—')+'</b> بإجمالي مشتريات '+fr_money(cs[0].total)+' في '+fr_esc(cs[0].invoices)+' فاتورة.</p>'; }
   if(!cs.length){ h+='<p class="empty">لا توجد بيانات عملاء مرتبطة بالفواتير في هذه الفترة.</p>'; }
@@ -175,7 +170,7 @@ function openFinReport(){
   }
 
   // 7) نقاط المراجعة
-  h+='<h2>7. نقاط تحتاج مراجعة قبل اعتماد الأرقام</h2>';
+  h+='<h2>9. نقاط تحتاج مراجعة قبل اعتماد الأرقام</h2>';
   var notes=[];
   if(net<0) notes.push('الصافي سالب في الفترة دي بمقدار <b>'+fr_money(Math.abs(net))+'</b>، ومراجعة التسعير والمصروفات أولوية.');
   if(gross<0) notes.push('الربح الإجمالي سالب: سعر البيع لا يغطي تكلفة الخامات في بعض الأصناف أو في المجمل.');
@@ -189,7 +184,7 @@ function openFinReport(){
   else h+=notes.map(function(n){return '<div class="note">'+n+'</div>';}).join('');
 
   // 8) شرح العملية المالية
-  h+='<h2>8. شرح العملية المالية</h2><ol class="steps">'+
+  h+='<h2>10. شرح العملية المالية</h2><ol class="steps">'+
      '<li><b>تسجيل المبيعات:</b> كل بيع يُسجل بسعره وكميته، ومعه تكلفة الخامات وقت البيع، فيتحدد هامش كل صنف.</li>'+
      '<li><b>الربح الإجمالي:</b> إجمالي الإيرادات ناقص تكلفة البضاعة المباعة. ده بيوضح هل التسعير يغطي الخامات ولا لأ.</li>'+
      '<li><b>المصروفات التشغيلية:</b> نفقات الإدارة والتشغيل اللي مش مرتبطة بصنف بعينه، وبتتخصم من الربح الإجمالي.</li>'+
