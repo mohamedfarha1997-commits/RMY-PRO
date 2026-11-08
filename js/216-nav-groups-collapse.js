@@ -34,14 +34,10 @@
         'html body nav.tabs .nav-group > .nav-title[data-pm-collapsible]::after{content:attr(data-count) " \\25BE";margin-inline-start:auto;font-size:12px;font-weight:700;color:#5b6b7d;white-space:nowrap}' +
         'html body nav.tabs .nav-group.pm-grp-closed > .nav-title[data-pm-collapsible]::after{content:attr(data-count) " \\25B8"}' +
         'html body nav.tabs .nav-group.pm-grp-closed > .nav-items{display:none!important}' +
-        'html body nav.tabs{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;align-items:stretch}' +
+        'html body nav.tabs{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;align-items:start}' +
         'html body nav.tabs > .nav-group{min-width:0;margin:0!important}' +
         'html body nav.tabs > .nav-group > .nav-items{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px}' +
         'html body nav.tabs > .nav-group > .nav-title{font-size:14px}' +
-        'html body nav.tabs .nav-group{display:flex!important;flex-direction:column!important;height:100%}' +
-        'html body nav.tabs .nav-group > .nav-items{flex:1;align-content:start}' +
-        'html body nav.tabs .nav-group .nav-items .tab{min-height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;line-height:1.25;padding:6px 4px;text-align:center}' +
-        'html body nav.tabs .nav-group .nav-items .tab > *{max-width:100%}' +
         'html body nav.tabs .nav-sub{grid-column:1/-1!important;margin-top:4px}' +
         'html body nav.tabs .nav-sub-title{font-size:13px;font-weight:800;color:#5b6b7d;margin:6px 2px 8px;display:flex;align-items:center;gap:6px}' +
         'html body nav.tabs .nav-sub-title::before{content:"";width:3px;height:13px;border-radius:3px;background:#0067B8}' +
@@ -115,8 +111,8 @@
       parents.forEach(function(p){
         p.style.setProperty('display', 'grid', 'important');
         p.style.setProperty('grid-template-columns', 'repeat(2,minmax(0,1fr))', 'important');
-        p.style.setProperty('gap', '10px', 'important');
-        p.style.setProperty('align-items', 'stretch', 'important');
+        p.style.setProperty('gap', '12px', 'important');
+        p.style.setProperty('align-items', 'start', 'important');
       });
     }
 
