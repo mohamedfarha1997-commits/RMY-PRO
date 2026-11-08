@@ -2,7 +2,6 @@
   'use strict';
   window.__goPost=window.__goPost||[];
   var sel='cur';
-  var tab='over';
 
   function S(){ return (typeof state!=='undefined'&&state)?state:(window.state||{}); }
   function arr(v){ return Array.isArray(v)?v:[]; }
@@ -242,15 +241,12 @@
       '<div class="db-donut-leg"><div><span><i style="background:#0067B8"></i>الأكل</span><b>'+esc(money(R.foodRev))+'</b></div>'+
       '<div><span><i style="background:#107C10"></i>المشروبات</span><b>'+esc(money(R.drinkRev))+'</b></div></div></div>';
   }
-  var TABS=[['over','نظرة عامة'],['sales','المبيعات'],['profit','الربحية'],['stock','المخزون والإنتاج']];
   function injectStyle(){
     if(document.getElementById('anStyle')) return;
     var st=document.createElement('style'); st.id='anStyle';
-    st.textContent='.db-tabs{display:flex;gap:6px;overflow-x:auto;margin:10px 0 12px;padding-bottom:4px}'+
-      '.db-tab{flex:0 0 auto;border:1px solid rgba(0,0,0,.14);background:#fff;color:#1B1B1B;border-radius:999px;padding:8px 14px;font:inherit;font-weight:700;cursor:pointer;min-height:40px}'+
-      '.db-tab.on{background:#0067B8;border-color:#0067B8;color:#fff}'+
-      '.db-tools{margin-top:8px;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:14px;padding:10px 12px}'+
-      '.db-tools summary{cursor:pointer;font-weight:800;color:#0067B8}';
+    st.textContent='.db-tools{margin-top:8px;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:14px;padding:10px 12px}'+
+      '.db-tools summary{cursor:pointer;font-weight:800;color:#0067B8}'+
+      '.an-hero{background:#0067B8;color:#fff;border-radius:16px;padding:18px;margin-bottom:12px}.an-hero small{opacity:.85}.an-hero b{display:block;font-size:30px;margin:4px 0}.an-hero span{font-size:12px;opacity:.9}';
     document.head.appendChild(st);
   }
   function build(){
@@ -267,9 +263,6 @@
     P.slice(1).forEach(function(p){ opts+='<option value="'+esc(p.key)+'"'+(sel===p.key?' selected':'')+'>'+esc(p.label)+'</option>'; });
 
     var liveNote = m.live ? '' : 'بيانات الأرشيف: الطلبات الحالية والمنيو والحفلات غير مخزنة فيه، وتظهر للشهر الحالي فقط.';
-
-    var KS={top:[kpi('إجمالي المبيعات', money(R.rev+R.partyRev), R.invoices+' فاتورة'+(R.openLines?' · '+R.openLines+' سطر مفتوح':'')+(R.partyRev?' · حفلات '+money(R.partyRev):'')),kpi('صافي الربح', money(R.gross-R.wasteCost-R.exp), 'بعد الخامات والحفلات والهالك والمصروفات'+((R.costUnknown+R.partyUncosted+R.wasteUnpriced)?' · الرقم ناقص '+(R.costUnknown+R.partyUncosted+R.wasteUnpriced)+' بند بلا تكلفة':''), toneOf(R.gross-R.wasteCost-R.exp)),kpi('المشتريات', money(R.pur), R.purList.length+' خامة · '+R.purCount+' عملية'+(R.purMax.v?' · أكبر عملية: '+money(R.purMax.v)+' ('+R.purMax.name+')':'')),kpi('الحفلات', fmt(R.parties.n)+' حفلة', 'متبقي '+money(R.parties.remaining)+' من '+money(R.parties.total)+' · محصّل جاري '+money(R.partyCollected||0))],sales:[kpi('متوسط الفاتورة', money(R.avgInvoice), qtyOf(R.qty)+' مباعة')],profit:[kpi('الربح الإجمالي', money(R.gross), (R.costUnknown+R.partyUncosted)?('تكلفة غير معروفة لـ '+(R.costUnknown+R.partyUncosted)+' سطر'):'بعد تكلفة الخامات والحفلات', toneOf(R.gross))],stock:[kpi('قيمة الهالك', money(R.wasteCost), qtyOf(R.wasteQty))]};
-
 
     var totalSplit=R.foodRev+R.drinkRev, pct=totalSplit?Math.round(R.drinkRev/totalSplit*100):0;
     var split='<div class="db-split"><div><span>الأكل</span><b>'+esc(money(R.foodRev))+'</b><small>'+esc(qtyOf(R.foodQty))+'</small></div>'+
@@ -309,25 +302,38 @@
       return [esc(p.label), esc(money(r.rev)), esc(money(r.pur)), esc(money(r.wasteCost)), '<span class="'+toneOf(n)+'">'+esc(money(n))+'</span>'];
     });
 
-    var SEC={over:[card('db-w12','المبيعات اليومية', vbars(R.days)),card('db-w6','توزيع المبيعات', donutHtml(R)),card('db-w6','أعلى المنتجات', table(['#','الصنف','الإيراد'], R.products.slice(0,5).map(function(p,i){return [esc(i+1),esc(p.name),esc(money(p.rev))];}))),
-card('db-w12','مقارنة الفترات', table(['الفترة','المبيعات','المشتريات','الهالك','الصافي'], cmpRows))],sales:[card('db-w6','الأكل والمشروبات', split),
-card('db-w12','أفضل الأصناف (أعلى 8)', table(['#','الصنف','الكمية','الإيراد','التكلفة','الربح','الهامش'], prodRows)),
-card('db-w6','أكثر العملاء', table(['#','العميل','التليفون','الفواتير','الإجمالي'], custRows), 'من الفواتير اللي فيها اسم أو تليفون العميل ('+fmt(R.customerCount)+' عميل).'),
-card('db-w6','المشروبات', drinkBody),
-card('db-w6','المنيو والتغطية', menuBody)],profit:[card('db-w6','الحفلات', partiesBody),
-card('db-w12','تكلفة الوصفات والهامش', table(['الوصفة','تكلفة الوحدة','السعر المقترح','سعر البيع','الهامش'], costRows), 'بالوصفات الحالية وأسعار المنيو الحالية.')],stock:[card('db-w6','المشتريات حسب الخامة', hbars(R.purList, money)),
-card('db-w6','استهلاك الخامات الفعلي', hbars(R.useList.map(function(x){return {label:x.name+(x.unit?' ('+x.unit+')':''),value:x.qty};}), function(v){return fmt(v);}), 'من حركة المخزون (الخصومات).'),
-card('db-w6','الهالك (بالكمية)', hbars(R.wasteList.map(function(x){return {label:x.name,value:x.qty};}), function(v){return fmt(v)+' قطعة';})),
-card('db-w6','الإنتاج (بالقطع)', hbars(R.prodList, function(v){return fmt(v)+' قطعة';})),
-card('db-w6','الخامات تحت حد الطلب', lowRows.length? table(['الخامة','الرصيد','حد الطلب'], lowRows) : empty('كل الخامات فوق حد الطلب'), 'حسب المخزون الحالي.')]};
-
+    var movs=[];
+    arr(m.salesLog).forEach(function(x){ if(!x||typeof x!=='object') return; var v=(x.revenue!=null)?num(x.revenue):num(x.qty)*num(x.unitPrice); movs.push({d:dayOf(x),t:'بيع',n:x.name||x.item||x.product||'—',v:v}); });
+    arr(m.wasteLog).forEach(function(x){ if(!x||typeof x!=='object') return; movs.push({d:dayOf(x),t:'هالك',n:x.name||x.item||'—',v:num(x.cost)||num(x.amount)||0}); });
+    arr(m.purchasesLog).forEach(function(x){ if(!x||typeof x!=='object') return; movs.push({d:dayOf(x),t:'شراء',n:x.name||x.item||'—',v:num(x.total)||num(x.amount)||num(x.cost)||0}); });
+    movs.sort(function(a,b){ return a.d<b.d?1:a.d>b.d?-1:0; });
+    var movRows=movs.slice(0,15).map(function(x){ return [esc(x.d),esc(x.t),esc(x.n),esc(money(x.v))]; });
     root.innerHTML =
       '<div class="db-head"><div><h2>التحليلات</h2><p class="db-muted">متابعة المبيعات والمخزون والوصفات في شاشة واحدة.</p>'+(liveNote?'<p class="db-muted">'+esc(liveNote)+'</p>':'')+'</div>'+
       '<div class="db-ctrl"><select id="anPeriod">'+opts+'</select><button type="button" class="db-btn" id="anRefresh">تحديث</button></div><details class="db-tools"><summary>تقرير مالي مفصّل للطباعة</summary><div style="display:flex;gap:10px;align-items:center;margin:10px 0;direction:rtl"><label style="flex:1;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:14px;padding:10px 12px;min-width:0"><span style="font-weight:800;color:#1B1B1B;white-space:nowrap">من</span><input type="text" id="finFrom" inputmode="numeric" placeholder="25" maxlength="2" dir="ltr" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:16px;text-align:right" value="'+((window.__finRange&&window.__finRange.from)||'')+'"></label><label style="flex:1;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:14px;padding:10px 12px;min-width:0"><span style="font-weight:800;color:#1B1B1B;white-space:nowrap">إلى</span><input type="text" id="finTo" inputmode="numeric" placeholder="26" maxlength="2" dir="ltr" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:16px;text-align:right" value="'+((window.__finRange&&window.__finRange.to)||'')+'"></label></div><button type="button" class="db-btn pm-fin-export" id="anExportFinance">طباعة التقرير المالي</button></details></div>'+
-      '<div class="db-tabs" role="tablist">'+TABS.map(function(t){ return '<button type="button" role="tab" class="db-tab'+(tab===t[0]?' on':'')+'" data-tab="'+t[0]+'">'+t[1]+'</button>'; }).join('')+'</div>'+
-      '<div class="db-kpis">'+KS.top.concat(KS[tab]).join('')+'</div>'+
-      '<div class="db-grid">'+SEC[tab].join('')+'</div>';
-    root.querySelectorAll('.db-tab').forEach(function(b){ b.onclick=function(){ tab=this.getAttribute('data-tab'); build(); }; });
+      '<div class="an-body">'+
+      '<div class="an-hero"><small>صافي الربح</small><b>'+esc(money(R.gross-R.wasteCost-R.exp))+'</b><span>'+esc(fmt(R.invoices))+' فاتورة'+(R.partyRev?' · حفلات '+esc(money(R.partyRev)):'')+'</span></div>'+
+      '<div class="db-kpis">'+
+        kpi('إجمالي المبيعات', money(R.rev+R.partyRev), fmt(R.invoices)+' فاتورة')+
+        kpi('المشتريات', money(R.pur), 'خامات متسجلة')+
+        kpi('الهالك', money(R.wasteCost), 'بالتكلفة')+
+        kpi('متبقي الحفلات', money(R.parties.remaining), fmt(R.parties.n)+' حفلة')+
+      '</div>'+
+      '<div class="db-grid">'+
+        card('db-w12','المبيعات اليومية', vbars(R.days))+
+        card('db-w6','توزيع المبيعات', donutHtml(R))+
+        card('db-w6','أعلى المنتجات', table(['#','الصنف','الإيراد'], R.products.slice(0,5).map(function(p,i){return [esc(i+1),esc(p.name),esc(money(p.rev))];})))+
+        card('db-w6','الإنتاج (بالقطع)', hbars(R.prodList, function(v){return fmt(v)+' قطعة';}))+
+        card('db-w6','الهالك (بالكمية)', hbars(R.wasteList.map(function(x){return {label:x.name,value:x.qty};}), function(v){return fmt(v)+' قطعة';}))+
+        card('db-w6','المشتريات حسب الخامة', hbars(R.purList, money))+
+        card('db-w6','الخامات تحت حد الطلب', lowRows.length? table(['الخامة','الرصيد','حد الطلب'], lowRows) : empty('كل الخامات فوق حد الطلب'), 'حسب المخزون الحالي.')+
+        card('db-w12','مقارنة الفترات', table(['الفترة','المبيعات','المشتريات','الهالك','الصافي'], cmpRows))+
+        card('db-w12','آخر الحركات', table(['التاريخ','النوع','البيان','القيمة'], movRows), 'آخر 15 حركة مبيعات وهالك ومشتريات.')+
+        card('db-w12','تكلفة الوصفات والهامش', table(['الوصفة','تكلفة الوحدة','السعر المقترح','سعر البيع','الهامش'], costRows), 'بالوصفات الحالية وأسعار المنيو الحالية.')+
+        card('db-w6','أكثر العملاء', table(['#','العميل','التليفون','الفواتير','الإجمالي'], custRows))+
+        card('db-w6','المشروبات المنتظرة', drinkBody)+
+        card('db-w6','المنيو والتغطية', menuBody)+
+      '</div></div>';
 
     var ps=document.getElementById('anPeriod');
     if(ps) ps.onchange=function(){ sel=this.value; build(); };

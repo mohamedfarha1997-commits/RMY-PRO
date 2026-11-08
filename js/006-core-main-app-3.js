@@ -211,6 +211,11 @@ function openFinReport(){
     '.pmfr h2,.pmfr tr,.pmfr .note,.pmfr-kpi,.pmfr .steps li{break-inside:avoid}'+
     'thead{display:table-header-group}'+
     '.pmfr-head{-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+    '.pmfr-head{background:#0067B8!important;color:#fff!important;border-radius:14px;padding:16px}'+
+    '.pmfr-head h1{color:#fff!important}'+
+    '.pmfr h2{color:#0067B8!important;border-bottom:2px solid #DCEBF8!important}'+
+    '.pmfr-kpi{border-radius:14px!important;border:1px solid #D6D6D6!important;background:#fff!important}'+
+    '.pmfr .bar i{background:#0067B8!important}'+
     '</style></head><body>'+h+'</body></html>';
 
   var w=null;
