@@ -262,14 +262,27 @@
       return x;
     }).filter(function(x){ return x.total>0; });
   }
+  function stageProgress(name){
+    var order=(typeof getStageOrder==='function')?getStageOrder(name):['prep','oven','stove','fin'];
+    var L=(typeof RECIPE_STAGES!=='undefined')?RECIPE_STAGES:[];
+    var pend=arr(S().drinkOrders).filter(function(o){return o&&o.status==='pending'&&o.name===name;});
+    return order.map(function(k){
+      var f=L.filter(function(x){return x[0]===k;})[0];
+      var n=pend.filter(function(o){return (Array.isArray(o.stagesDone)?o.stagesDone:[]).indexOf(k)>-1;}).length;
+      return {k:k,label:f?f[1]:k,done:n,total:pend.length};
+    });
+  }
   function prepHtml(){
     var list=prepData();
     var cur=list.filter(function(x){return x.pending>0;})[0];
+    var stagesHtml = cur ? '<div class="an-stages">'+stageProgress(cur.name).map(function(p){
+        return '<div class="an-st"><div class="an-rs"><span>'+esc(p.label)+'</span><b>'+p.done+' / '+p.total+'</b></div><div class="an-bar"><i style="width:'+(p.total?Math.round(p.done/p.total*100):0)+'%"></i></div></div>';
+      }).join('')+'</div>' : '';
     var head = cur
       ? '<div class="an-card an-cur"><div class="an-cur-top"><span class="an-pill">قيد التحضير الآن</span><small>'+fmt(cur.total)+' قطعة</small></div>'+
         '<h3 class="an-cur-name">'+esc(cur.name)+'</h3>'+
         '<div class="an-rs"><span>تحضير: <b>'+fmt(cur.pending)+'</b> · جاهز للتسليم: <b>'+fmt(cur.ready)+'</b></span><b>'+cur.percent+'%</b></div>'+
-        '<div class="an-bar an-bar-lg"><i style="width:'+cur.percent+'%"></i></div></div>'
+        '<div class="an-bar an-bar-lg"><i style="width:'+cur.percent+'%"></i></div>'+stagesHtml+'</div>'
       : '<div class="an-card"><div class="an-empty">لا يوجد تحضير جاري الآن</div></div>';
     var rows = list.length ? list.map(function(x){
         return '<div class="an-row an-block"><div class="an-rs"><span>'+esc(x.name)+' <small>'+fmt(x.total)+' قطعة</small></span><span class="an-pill '+(x.percent===100?'g':'')+'">'+x.percent+'%</span></div><div class="an-bar"><i style="width:'+x.percent+'%;'+(x.percent===100?'background:#107C10':'')+'"></i></div></div>';
@@ -334,6 +347,7 @@
       'html[data-theme="dark"] .an-root{color:#D6D6D6}html[data-theme="dark"] .an-k,html[data-theme="dark"] .an-card,html[data-theme="dark"] .an-tools{background:#303030;border-color:#434343;color:#D6D6D6}'+
       'html[data-theme="dark"] .an-ring span{background:#303030;color:#9E9E9E}html[data-theme="dark"] .an-ring b{color:#D6D6D6}html[data-theme="dark"] .an-search,html[data-theme="dark"] .an-range input,html[data-theme="dark"] .an-sel{background:#303030;color:#D6D6D6;border-color:#434343}'+
       'html[data-theme="dark"] .an-tabs button,html[data-theme="dark"] .an-chips button{background:#303030;color:#9E9E9E;border-color:#434343}'+
+      '.an-stages{display:grid;gap:10px;margin-top:12px}.an-st .an-rs{margin-bottom:4px}'+
       '.an-cur{border:2px solid #0067B8}.an-cur-top{display:flex;justify-content:space-between;align-items:center}.an-cur-name{font-size:19px;margin:12px 0 10px}.an-bar-lg{height:10px;margin-top:10px}'+
       '.an-party-slot .pmd-wrap{margin:0}.an-party-slot .pmd-card{background:#fff;border:1px solid #D6D6D6;border-radius:16px;padding:14px;margin-bottom:10px}.an-party-slot .pmd-title{font-size:14px;color:#1B1B1B;margin:0 0 10px}.an-party-slot .pmd-kpi{background:#F2F2F2;border-radius:14px}.an-party-slot .pmd-kpi b{color:#0067B8}'+
       'html[data-theme="dark"] .an-party-slot .pmd-card{background:#303030;border-color:#434343;color:#D6D6D6}';

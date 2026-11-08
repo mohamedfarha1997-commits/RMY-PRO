@@ -92,6 +92,22 @@
       '<div id="dpResult"></div>'+
       '<p class="small">لا يتم الخصم إذا كان أي مكون غير متوفر. راجع النواقص قبل التأكيد. كل كوب بيتخصم حسب وصفته المسجلة.</p></div>';
   }
+  function stagesOf(name){ return (typeof getStageOrder==='function')?getStageOrder(name):['prep','oven','stove','fin']; }
+  function stageLabel(k){ var L=(typeof RECIPE_STAGES!=='undefined')?RECIPE_STAGES:[]; var f=L.filter(function(x){return x[0]===k;})[0]; return f?f[1]:k; }
+  function allStagesDone(o){ var done=Array.isArray(o.stagesDone)?o.stagesDone:[]; return stagesOf(o.name).every(function(k){return done.indexOf(k)>-1;}); }
+  var DQ_STAGE_CSS='display:flex;gap:6px;flex-wrap:wrap;margin:8px 0';
+  var DQ_BTN_CSS='border:1px solid #D6D6D6;border-radius:999px;padding:6px 10px;background:#fff;color:#1B1B1B;font:inherit;font-size:12px;cursor:pointer';
+  var DQ_DONE_CSS='border:1px solid #107C10;border-radius:999px;padding:6px 10px;background:#107C10;color:#fff;font:inherit;font-size:12px';
+  function stageRowHtml(o){
+    var done=Array.isArray(o.stagesDone)?o.stagesDone:[];
+    var order=stagesOf(o.name);
+    var next=order.filter(function(k){return done.indexOf(k)<0;})[0];
+    return '<div style="'+DQ_STAGE_CSS+'">'+order.map(function(k){
+      var isDone=done.indexOf(k)>-1;
+      var style=isDone?DQ_DONE_CSS:DQ_BTN_CSS+(k===next?'':';opacity:.5');
+      return '<button type="button" style="'+style+'" data-dq-stage="'+esc(o.id)+'|'+esc(k)+'"'+((isDone||k!==next)?' disabled':'')+'>'+(isDone?'✓ ':'')+esc(stageLabel(k))+'</button>';
+    }).join('')+'</div>';
+  }
   function queueHtml(){
     var pending=orders().filter(function(o){return o.status==='pending'});
     var ready=orders().filter(function(o){return o.status==='prepared'});
@@ -104,7 +120,7 @@
       return '<div class="dq-card"><h3>'+esc(o.name)+' × '+nfmt(o.qty)+'</h3>'+
         '<div class="small">وقت التحضير: '+t+' دقيقة'+(o.by?' · بواسطة: '+esc(o.by):'')+(o.note?' · ملاحظة: '+esc(o.note):'')+'</div>'+
         (sh.length?'<div class="danger-note">خامات ناقصة: '+sh.map(esc).join('، ')+'</div>':'<div class="notice-ok">الخامات متوفرة</div>')+
-        '<div class="actions"><button type="button" class="primary" data-dq-prepare="'+esc(o.id)+'"'+(sh.length?' disabled':'')+'>تأكيد التحضير</button></div></div>';
+        stageRowHtml(o)+'<div class="actions"><button type="button" class="primary" data-dq-prepare="'+esc(o.id)+'"'+((sh.length||!allStagesDone(o))?' disabled':'')+'>تأكيد التحضير</button></div></div>';
     }).join('');
     var summary=Object.keys(perName).map(function(n){return esc(n)+': '+nfmt(perName[n])}).join(' · ');
     return '<div class="stats"><div class="stat"><b>'+pending.length+'</b><span>تحضير</span></div><div class="stat"><b>'+ready.length+'</b><span>جاهز للتسليم</span></div><div class="stat"><b>'+mins+'</b><span>إجمالي دقايق التحضير</span></div></div>'+
@@ -218,6 +234,19 @@
     bindRemove();
   }
   function bindQueue(box){
+    box.querySelectorAll('[data-dq-stage]').forEach(function(b){
+      b.onclick=async function(){
+        var v=b.getAttribute('data-dq-stage').split('|'), id=v[0], stage=v[1];
+        b.disabled=true;
+        try{
+          var r=await apiCall({action:'drink_order_action',drink_action:'stage',order_id:id,stage:stage,employee_name:cloudActorName,pin:cloudActorPin});
+          if(r&&r.error) throw r.error;
+          var o=(Array.isArray(state.drinkOrders)?state.drinkOrders:[]).find(function(x){return x&&x.id===id;});
+          if(o){ o.stagesDone=(Array.isArray(o.stagesDone)?o.stagesDone:[]).concat([stage]).filter(function(x,i,a){return a.indexOf(x)===i;}); }
+          render();
+        }catch(e){ alert('تعذر تسجيل المرحلة: '+((e&&e.message)||e)); b.disabled=false; }
+      };
+    });
     box.querySelectorAll('[data-dq-prepare]').forEach(function(b){
       b.onclick=async function(){
         var id=b.getAttribute('data-dq-prepare');
