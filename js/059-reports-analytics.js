@@ -354,6 +354,17 @@
       '.an-range{display:flex;gap:8px}.an-range input{flex:1;border:1px solid #D6D6D6;border-radius:10px;padding:9px;font:inherit;min-width:0}'+
       '.an-sel{border:1px solid #D6D6D6;border-radius:10px;padding:9px;font:inherit;background:#fff}'+
       '.an-btn{border:0;background:#0067B8;color:#fff;border-radius:12px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer}'+
+      /* إصلاح الألوان: القواعد العامة (h1/small بـ !important) كانت بتخفي النص على الخلفية الزرقاء */
+      'html body #anRoot .an-top,html body #anRoot .an-top h1,html body #anRoot .an-top p,html body #anRoot .an-top small{color:#fff!important}'+
+      'html body #anRoot .an-top p{opacity:.9}'+
+      'html body #anRoot .an-hero,html body #anRoot .an-hero small,html body #anRoot .an-hero b,html body #anRoot .an-hero span{color:#fff!important}'+
+      'html body #anRoot .an-hero small{opacity:.92}'+
+      'html body #anRoot .an-per button{background:transparent!important;color:#fff!important;border:1px solid rgba(255,255,255,.55)!important;box-shadow:none!important}'+
+      'html body #anRoot .an-per button.on{background:#fff!important;color:#0067B8!important;border-color:#fff!important}'+
+      'html body #anRoot .an-tabs button.on,html body #anRoot .an-chips button.on{background:#0067B8!important;color:#fff!important;border-color:#0067B8!important}'+
+      'html body #anRoot .an-btn{background:#0067B8!important;color:#fff!important}'+
+      'html body #anRoot .an-k small,html body #anRoot .an-k span,html body #anRoot .an-row small{color:#5E5E5E!important}'+
+      'html[data-theme="dark"] body #anRoot .an-k small,html[data-theme="dark"] body #anRoot .an-k span,html[data-theme="dark"] body #anRoot .an-row small{color:#B5B5B5!important}'+
       'html[data-theme="dark"] .an-root{color:#D6D6D6}html[data-theme="dark"] .an-k,html[data-theme="dark"] .an-card,html[data-theme="dark"] .an-tools{background:#303030;border-color:#434343;color:#D6D6D6}'+
       'html[data-theme="dark"] .an-ring span{background:#303030;color:#9E9E9E}html[data-theme="dark"] .an-ring b{color:#D6D6D6}html[data-theme="dark"] .an-search,html[data-theme="dark"] .an-range input,html[data-theme="dark"] .an-sel{background:#303030;color:#D6D6D6;border-color:#434343}'+
       'html[data-theme="dark"] .an-tabs button,html[data-theme="dark"] .an-chips button{background:#303030;color:#9E9E9E;border-color:#434343}'+
