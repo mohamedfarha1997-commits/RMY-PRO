@@ -1371,6 +1371,20 @@ body.auth-required #analytics{display:none!important}
 #analytics .neg{color:var(--red);font-weight:700}
 #analytics .db-kpi b.pos{color:var(--green)}
 #analytics .db-kpi b.neg{color:var(--red)}
+/* ---- تصميم نظرة عامة: الكارت الرئيسي الأزرق + دايرة توزيع المبيعات ---- */
+#analytics .db-kpis .db-kpi:first-child{grid-column:1/-1;background:var(--blue);border-color:var(--blue);padding:18px}
+#analytics .db-kpis .db-kpi:first-child>span,
+#analytics .db-kpis .db-kpi:first-child small{color:rgba(255,255,255,.85)}
+#analytics .db-kpis .db-kpi:first-child b{color:#FFFFFF;font-size:30px}
+.db-donut-wrap{display:flex;align-items:center;gap:16px}
+.db-donut{width:116px;height:116px;border-radius:50%;display:grid;place-items:center;flex-shrink:0}
+.db-donut span{width:80px;height:80px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.db-donut b{font-size:14px;color:var(--ink,#1B1B1B)}
+.db-donut small{font-size:10px;color:var(--muted)}
+.db-donut-leg{flex:1;font-size:13px}
+.db-donut-leg div{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px}
+.db-donut-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-left:6px}
+.db-donut-leg b{font-weight:800}
 @media(min-width:650px){
   #analytics .db-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
   #analytics .db-w6{grid-column:span 6}
