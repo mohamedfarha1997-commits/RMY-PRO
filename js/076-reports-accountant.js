@@ -317,7 +317,7 @@ try{
     var s=S(), out=[], A=arr(s.monthlyArchives);
     if(A.length<2||typeof window.monthMetrics!=='function') return out;
     var cur=window.monthMetrics(A[A.length-1]), prev=window.monthMetrics(A[A.length-2]);
-    var names={revenue:'المبيعات', expenseTotal:'المصروفات', profit:'صافي الربح'};
+    var names={revenue:'المبيعات', profit:'صافي الربح'};
     Object.keys(names).forEach(function(k){
       var a=Number(prev[k])||0, b=Number(cur[k])||0;
       if(a===0) return;

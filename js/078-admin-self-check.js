@@ -41,8 +41,6 @@
     if(noPrice.length) out.push({sev:1,msg:'خامات فيها رصيد من غير سعر: '+noPrice.join('، ')});
     var wNo=arr(s.wasteLog).filter(function(x){return x&&x.costAtWaste==null}).length;
     if(wNo) out.push({sev:2,msg:wNo+' عملية هالك بدون تكلفة'});
-    var badExp=0;
-    if(badExp) out.push({sev:0,msg:badExp+' مصروف قيمته غلط'});
     var badPur=arr(s.purchasesLog).filter(function(x){return !(Number(x.totalCost)>=0)||!(Number(x.qty)>0)}).length;
     if(badPur) out.push({sev:0,msg:badPur+' عملية شراء كميتها أو إجماليها غلط'});
     var labels=arr(s.monthlyArchives).map(function(a){return a.label||''});
@@ -80,14 +78,13 @@
     if(typeof mm!=='function'){ showModal('اختبار الحسابات','<p>دالة الحساب مش متاحة.</p>'); return; }
     function base(o){ return Object.assign({salesLog:[],expensesLog:[],purchasesLog:[],productionLog:[],history:[],wasteLog:[],partyInvoices:[],inventory:[]},o); }
     var GROUPS=[
-      {key:'profit', title:'أ) الربح', hint:'الربح = الإيراد − تكلفة البيع − الحفلات − المصروفات − الهالك', metric:'profit', tests:[
+      {key:'profit', title:'أ) الربح', hint:'الربح = الإيراد − تكلفة البيع − الحفلات − الهالك', metric:'profit', tests:[
         {n:'بيع واحد بسعر 90 وتكلفته 45', f:'90 − 45 = 45', a:base({salesLog:[{name:'كيك',qty:1,unitPrice:90,revenue:90,costAtSale:45}]}), e:45},
         {n:'3 قطع، كل قطعة بسعر 10، وتكلفتهم 12', f:'الإيراد 3 × 10 = 30، والربح 30 − 12 = 18', a:base({salesLog:[{name:'x',qty:3,unitPrice:10,costAtSale:12}]}), e:18},
-        {n:'بيع 100 تكلفته 20 ومصروف كهربا 10', f:'100 − 20 − 10 = 70', a:base({salesLog:[{name:'x',qty:2,unitPrice:50,revenue:100,costAtSale:20}],expensesLog:[{amount:10,category:'كهربا'}]}), e:70},
         {n:'بيع 100 تكلفته 20 وهالك بتكلفة 5', f:'100 − 20 − 5 = 75', a:base({salesLog:[{name:'x',qty:2,unitPrice:50,revenue:100,costAtSale:20}],wasteLog:[{qty:1,costAtWaste:5}]}), e:75},
         {n:'حفلة بسعر 100 وتكلفتها 40', f:'100 − 40 = 60', a:base({partyInvoices:[{total:100,cost:40,paid:30}]}), e:60}
       ]},
-      {key:'cash', title:'ب) الحركة النقدية (الفلوس الفعلية)', hint:'الكاش = الفلوس اللي دخلت فعلًا − المشتريات − المصروفات', metric:'cashNet', tests:[
+      {key:'cash', title:'ب) الحركة النقدية (الفلوس الفعلية)', hint:'الكاش = الفلوس اللي دخلت فعلًا − المشتريات', metric:'cashNet', tests:[
         {n:'بيع 90 واشتريت خامات بـ 300', f:'90 − 300 = −210 (الكاش خرج أكتر ما دخل)', a:base({salesLog:[{name:'كيك',qty:1,unitPrice:90,revenue:90,costAtSale:45}],purchasesLog:[{totalCost:300,qty:1}]}), e:-210},
         {n:'حفلة بسعر 100، والعميل دفع 30 منها', f:'الكاش = المدفوع فقط = 30 (الـ 70 الباقية مش فلوس دخلت لسه)', a:base({partyInvoices:[{total:100,cost:40,paid:30}]}), e:30}
       ]}

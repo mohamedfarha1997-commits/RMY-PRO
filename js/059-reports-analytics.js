@@ -87,11 +87,7 @@
       c.invoices++; c.total+=v.rev;
     });
 
-    var exp=0, expCat={};
-    arr(m.expensesLog).forEach(function(x){
-      var a=num(x.amount); exp+=a;
-      var c=String(x.category||'غير مصنف'); expCat[c]=(expCat[c]||0)+a;
-    });
+    var exp=0, expCat={}; /* المصروفات التشغيلية اتشالت من التطبيق */
 
     var pur=0, purBy={}, purCount=0, purMax={v:0,name:''};
     arr(m.purchasesLog).forEach(function(x){

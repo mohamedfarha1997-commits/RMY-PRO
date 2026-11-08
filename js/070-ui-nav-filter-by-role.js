@@ -3,7 +3,7 @@
 (function(){
   if(window.__pmNavFilter) return; window.__pmNavFilter=true;
 
-  var ALL=['analytics','customers','menu','cartpage','salesInvoices','order','recipes:food','recipes:drink','stock','history','purchases','prices','costing','expenses','monthly','accountant','dailyClosing','audit','backup','parties','readyDelivery','partyInvoices','partyTemplate','drinkQueue','drinkProduce'];
+  var ALL=['analytics','customers','menu','cartpage','salesInvoices','order','recipes:food','recipes:drink','stock','history','purchases','prices','costing','monthly','accountant','dailyClosing','audit','backup','parties','readyDelivery','partyInvoices','partyTemplate','drinkQueue','drinkProduce'];
 
 
   /* admin / employee: قائمة منع (deny) عشان أي تبويب ما نعرفوش يفضل ظاهر للمدير.

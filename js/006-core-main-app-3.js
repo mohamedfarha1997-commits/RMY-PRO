@@ -1,5 +1,4 @@
 function exportSalesCsv(){exportCsv('RMY_Sales.csv',[['رقم الفاتورة','البائع','التاريخ','الصنف','الكمية','سعر الوحدة','الإيراد','تكلفة الخامات التقديرية','ملاحظة'],...(state.salesLog||[]).map(x=>[x.receiptNo??'',x.by||'',x.date,x.name,x.qty,x.unitPrice,x.revenue,x.costAtSale,x.note||''])])}
-function exportExpensesCsv(){exportCsv('RMY_Expenses.csv',[['التاريخ','نوع المصروف','القيمة','التفاصيل'],...(state.expensesLog||[]).map(x=>[x.date,x.category,x.amount,x.note||''])])}
 function fr_esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function fr_parseDay(v){
   v=String(v||'').trim();
@@ -75,9 +74,9 @@ function openFinReport(){
   var revMenu=Number(r.rev||0), revParty=Number(r.partyRev||0), rev=revMenu+revParty;
   var cogs=Number(r.cost||0)+Number(r.partyCost||0);
   var gross=rev-cogs;
-  var exp=Number(r.exp||0), waste=Number(r.wasteCost||0), pur=Number(r.pur||0);
-  var net=gross-exp-waste;
-  var cash=rev-exp-pur;
+  var waste=Number(r.wasteCost||0), pur=Number(r.pur||0);
+  var net=gross-waste;
+  var cash=rev-pur;
   var unpricedSales=Number(r.costUnknown||0)+Number(r.partyUncosted||0);
   var unpricedWaste=Number(r.wasteUnpriced||0);
   var openLines=Number(r.openLines||0);
@@ -88,8 +87,8 @@ function openFinReport(){
   var losers=allProds.filter(function(p){return p.profit<0;}).sort(function(a,b){return a.profit-b.profit;});
   var cause;
   if(gross<0) cause='السبب الأساسي: تكلفة الخامات أكبر من سعر البيع، فالربح الإجمالي نفسه سالب ('+fr_money(gross)+').';
-  else if(net<0) cause='الربح الإجمالي موجب ('+fr_money(gross)+') لكن المصروفات التشغيلية أكبر منه، فالصافي بيطلع سالب.';
-  else cause='الربح الإجمالي بيغطي المصروفات والهالك، والباقي هو الربح الصافي.';
+  else if(net<0) cause='الربح الإجمالي موجب ('+fr_money(gross)+') لكن الهالك أكبر منه، فالصافي بيطلع سالب.';
+  else cause='الربح الإجمالي بيغطي الهالك، والباقي هو الربح الصافي.';
   if(net<0 && waste>0) cause+=' وكمان الهالك زوّد الخسارة بمقدار '+fr_money(waste)+'.';
   var now=new Date().toLocaleString('ar-EG',{timeZone:'Africa/Cairo',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
 
@@ -107,27 +106,24 @@ function openFinReport(){
   h+='<h2>1. الملخص</h2><div class="pmfr-kpis">'+
      '<div class="pmfr-kpi"><small>إجمالي الإيرادات</small><b>'+fr_money(rev)+'</b></div>'+
      '<div class="pmfr-kpi '+(gross>=0?'good':'bad')+'"><small>الربح الإجمالي</small><b>'+fr_money(gross)+'</b></div>'+
-     '<div class="pmfr-kpi"><small>المصروفات التشغيلية</small><b>'+fr_money(exp)+'</b></div>'+
-     '<div class="pmfr-kpi '+(net>=0?'good':'bad')+'"><small>صافي الربح بعد الهالك والمصروفات</small><b>'+fr_money(net)+'</b></div>'+
+     '<div class="pmfr-kpi '+(net>=0?'good':'bad')+'"><small>صافي الربح بعد الهالك</small><b>'+fr_money(net)+'</b></div>'+
      '</div>'+
      '<p class="how" style="margin-top:8px">هامش صافي الربح: <b>'+fr_pct(net,rev)+'</b> من إجمالي الإيرادات.</p>';
 
   // 2) قائمة الدخل
-  h+='<h2>2. قائمة الدخل (الربح والخسارة)</h2><p class="how" style="font-size:13.5px">الحساب: '+fr_money(rev)+' − '+fr_money(cogs)+' − '+fr_money(exp)+' − '+fr_money(waste)+' = <b>'+fr_money(net)+'</b></p><table><thead><tr><th>البند</th><th class="num">القيمة</th><th>طريقة الحساب</th></tr></thead><tbody>'+
+  h+='<h2>2. قائمة الدخل (الربح والخسارة)</h2><p class="how" style="font-size:13.5px">الحساب: '+fr_money(rev)+' − '+fr_money(cogs)+' − '+fr_money(waste)+' = <b>'+fr_money(net)+'</b></p><table><thead><tr><th>البند</th><th class="num">القيمة</th><th>طريقة الحساب</th></tr></thead><tbody>'+
      '<tr><td>مبيعات المنيو</td><td class="num">'+fr_money(revMenu)+'</td><td class="how">مجموع المبيعات المسجلة من الفواتير (الكمية × سعر البيع، أو الإيراد المسجل).</td></tr>'+
      '<tr><td>مبيعات الحفلات</td><td class="num">'+fr_money(revParty)+'</td><td class="how">إجمالي فواتير الحفلات المسجلة.</td></tr>'+
      '<tr class="sub"><td>إجمالي الإيرادات</td><td class="num">'+fr_money(rev)+'</td><td class="how">مبيعات المنيو + مبيعات الحفلات.</td></tr>'+
      '<tr><td>تكلفة البضاعة المباعة</td><td class="num">− '+fr_money(cogs)+'</td><td class="how">تكلفة الخامات وقت البيع، محسوبة لكل صنف مباع.</td></tr>'+
      '<tr class="sub"><td>الربح الإجمالي</td><td class="num">'+fr_money(gross)+'</td><td class="how">إجمالي الإيرادات − تكلفة البضاعة المباعة.</td></tr>'+
-     '<tr><td>المصروفات التشغيلية</td><td class="num">− '+fr_money(exp)+'</td><td class="how">إيجار وكهرباء ومرتبات ونفقات التشغيل المسجلة في سجل المصروفات.</td></tr>'+
      '<tr><td>تكلفة الهالك</td><td class="num">− '+fr_money(waste)+'</td><td class="how">قيمة الخامات التالفة أو المهدرة وقت تسجيل الهالك.</td></tr>'+
      '<tr class="total"><td>صافي الربح</td><td class="num">'+fr_money(net)+'</td><td class="how">الربح الإجمالي − تكلفة الهالك.</td></tr>'+
      '</tbody></table>';
 
   // 3) التدفق النقدي
-  h+='<h2>3. التدفق النقدي التقديري</h2><p class="how" style="font-size:13.5px">الحساب: '+fr_money(rev)+' − '+fr_money(exp)+' − '+fr_money(pur)+' = <b>'+fr_money(cash)+'</b>'+(cash>=0?'، يعني الفلوس الداخلة من المبيعات أكبر من اللي خرجت.':'، يعني الفلوس الخارجة أكبر من الداخلة.')+'</p><table><tbody>'+
+  h+='<h2>3. التدفق النقدي التقديري</h2><p class="how" style="font-size:13.5px">الحساب: '+fr_money(rev)+' − '+fr_money(pur)+' = <b>'+fr_money(cash)+'</b>'+(cash>=0?'، يعني الفلوس الداخلة من المبيعات أكبر من اللي خرجت.':'، يعني الفلوس الخارجة أكبر من الداخلة.')+'</p><table><tbody>'+
      '<tr><td>المبيعات المحصلة (منيو + حفلات)</td><td class="num">'+fr_money(rev)+'</td><td class="how">إجمالي ما تم بيعه في الفترة.</td></tr>'+
-     '<tr><td>المصروفات التشغيلية</td><td class="num">− '+fr_money(exp)+'</td><td class="how">مصروفات خرجت من الفترة.</td></tr>'+
      '<tr><td>المشتريات</td><td class="num">− '+fr_money(pur)+'</td><td class="how">خامات تم شراؤها في الفترة (تُخرج نقدًا حتى لو لم تُستهلك بعد).</td></tr>'+
      '<tr class="total"><td>صافي الحركة النقدية التقديرية</td><td class="num">'+fr_money(cash)+'</td><td class="how">ليس رصيد البنك أو الصندوق، بل مؤشر لحركة النقد خلال الفترة.</td></tr>'+
      '</tbody></table>';
@@ -172,7 +168,7 @@ function openFinReport(){
   // 7) نقاط المراجعة
   h+='<h2>9. نقاط تحتاج مراجعة قبل اعتماد الأرقام</h2>';
   var notes=[];
-  if(net<0) notes.push('الصافي سالب في الفترة دي بمقدار <b>'+fr_money(Math.abs(net))+'</b>، ومراجعة التسعير والمصروفات أولوية.');
+  if(net<0) notes.push('الصافي سالب في الفترة دي بمقدار <b>'+fr_money(Math.abs(net))+'</b>، ومراجعة التسعير والهالك أولوية.');
   if(gross<0) notes.push('الربح الإجمالي سالب: سعر البيع لا يغطي تكلفة الخامات في بعض الأصناف أو في المجمل.');
   if(losers.length) notes.push('عدد <b>'+losers.length+'</b> منتج بيخسر في البيع، وأهمهم '+fr_esc(losers[0].name)+'.');
   if(unpricedSales>0) notes.push('يوجد <b>'+unpricedSales+'</b> بند بيع بدون تكلفة مسجلة، فالربح الإجمالي قد يكون أعلى من الحقيقي.');
@@ -187,9 +183,8 @@ function openFinReport(){
   h+='<h2>10. شرح العملية المالية</h2><ol class="steps">'+
      '<li><b>تسجيل المبيعات:</b> كل بيع يُسجل بسعره وكميته، ومعه تكلفة الخامات وقت البيع، فيتحدد هامش كل صنف.</li>'+
      '<li><b>الربح الإجمالي:</b> إجمالي الإيرادات ناقص تكلفة البضاعة المباعة. ده بيوضح هل التسعير يغطي الخامات ولا لأ.</li>'+
-     '<li><b>المصروفات التشغيلية:</b> نفقات الإدارة والتشغيل اللي مش مرتبطة بصنف بعينه، وبتتخصم من الربح الإجمالي.</li>'+
      '<li><b>الهالك:</b> الخامات التالفة تُحسب تكلفتها كخسارة منفصلة عشان تفضل ظاهرة ومتتخفاش داخل التكلفة.</li>'+
-     '<li><b>صافي الربح:</b> الربح الإجمالي − المصروفات − الهالك. ده الرقم اللي بيقولك الشغل بيكسب فعلًا ولا لأ.</li>'+
+     '<li><b>صافي الربح:</b> الربح الإجمالي − الهالك. ده الرقم اللي بيقولك الشغل بيكسب فعلًا ولا لأ.</li>'+
      '<li><b>الفرق بين الربح والنقد:</b> الربح محاسبي، والنقد حركة فعلية. المشتريات بتخرج نقد فورًا لكنها بتتحول لتكلفة وقت الاستهلاك، لذلك قد يختلف صافي الحركة النقدية عن صافي الربح.</li>'+
      '</ol>';
 

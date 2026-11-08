@@ -1,15 +1,7 @@
 (function(){
-  /* ---- ترتيب الصفحات: السلة في المنيو، والمصروفات في تبويب المصروفات التشغيلية ---- */
+  /* ---- ترتيب الصفحات: السلة في المنيو ---- */
   function moveLayout(){
-    var menu=document.getElementById('menu'), expSec=document.getElementById('expenses');
-    var ec=document.getElementById('expenseCategory'), et=document.getElementById('expensesTable');
-    if(expSec&&ec&&et){
-      var formCard=ec.closest('.card'), logCard=et.closest('.card');
-      if(formCard&&logCard){
-        expSec.insertBefore(formCard, expSec.firstChild);
-        expSec.insertBefore(logCard, formCard.nextSibling);
-      }
-    }
+    var menu=document.getElementById('menu');
   }
   moveLayout();
 
@@ -72,7 +64,7 @@
     var kpis=document.getElementById('pmKpis');
     kpis.innerHTML=
       '<div class="pm-kpi"><b>'+money(totRev)+'</b><span>إجمالي المبيعات</span></div>'+
-      '<div class="pm-kpi"><b>'+(complete?money(totRev-totCost):'غير مكتمل')+'</b><span>ربح المبيعات (بدون الحفلات والهالك والمصروفات)</span></div>'+
+      '<div class="pm-kpi"><b>'+(complete?money(totRev-totCost):'غير مكتمل')+'</b><span>ربح المبيعات (بدون الحفلات والهالك)</span></div>'+
       '<div class="pm-kpi"><b>'+totN+'</b><span>أصناف مباعة</span></div>';
 
     var box=document.getElementById('pmChartBox');

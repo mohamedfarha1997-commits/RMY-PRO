@@ -1,6 +1,6 @@
 /* ---- 194-accounts-review.js ----
    مراجعة الحسابات في ملخص الشهر:
-   1) صافي الحركة النقدية = المحصّل فعلاً (الحفلات بالمدفوع بس، والمصروفات والمشتريات مخصومة).
+   1) صافي الحركة النقدية = المحصّل فعلاً (الحفلات بالمدفوع بس، والمشتريات مخصومة).
    2) تنبيهات: صنف تكلفته أعلى من سعره، مبيعات بدون وسيلة دفع، حفلات لسه ليها باقي،
       مطابقة الخامات المخصومة مع المبيعات المتوقعة.
    3) جدول أسعار الشراء بالوحدة الأساسية عشان المراجعة اليدوية.
@@ -96,7 +96,6 @@
     var m=monthMetrics({
       productionLog:state.productionLog||[],
       salesLog:pmRecostMissing(sales),
-      expensesLog:state.expensesLog||[],
       purchasesLog:state.purchasesLog||[],
       wasteLog:pmRecostWaste(state.wasteLog||[]),
       partyInvoices:parties,
@@ -106,9 +105,6 @@
     });
     var warn=[], ok=[];
 
-    if(false){
-      warn.push('لا توجد مصروفات تشغيلية مسجلة في الفترة (إيجار، مرتبات، كهربا، غاز…). صافي الربح ده قبل كل المصروفات دي.');
-    }
 
     var neg=negativeMargin();
     if(neg.length){
@@ -172,7 +168,6 @@
         var m=monthMetrics({
           productionLog:state.productionLog||[],
           salesLog:pmRecostMissing(sales),
-          expensesLog:state.expensesLog||[],
           purchasesLog:state.purchasesLog||[],
           wasteLog:pmRecostWaste(state.wasteLog||[]),
           partyInvoices:parties,

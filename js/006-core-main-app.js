@@ -47,11 +47,9 @@ function reviewMonthClose(a){
  const checkNamed=(arr,title,field)=>{(arr||[]).forEach((x,i)=>{if(!String(x[field]||'').trim())errors.push(`${title} رقم ${i+1}: الاسم أو البيان الأساسي ناقص.`)})};
  checkNamed(a.history,'حركة مخزون','name');
  checkNamed(a.salesLog,'عملية بيع','name');
- checkNamed([],'مصروف','category');
  checkNamed(a.purchasesLog,'عملية شراء','name');
  (a.history||[]).forEach((x,i)=>{if(!Number.isFinite(Number(x.add??0))||!Number.isFinite(Number(x.deduct??0))||Number(x.add??0)<0||Number(x.deduct??0)<0)errors.push(`حركة المخزون رقم ${i+1}: كمية إضافة/خصم غير صحيحة.`)});
  (a.salesLog||[]).forEach((x,i)=>{if(!(Number(x.qty)>0)||!Number.isFinite(Number(x.unitPrice))||Number(x.unitPrice)<0)errors.push(`البيع رقم ${i+1}: الكمية أو سعر الوحدة غير صحيح.`);if(x.costAtSale==null||Number(x.unpricedComponents||0)>0)warnings.push(`البيع رقم ${i+1} (${x.name||'بدون اسم'}): تكلفة البيع أو أسعار بعض المكونات غير مكتملة.`)});
- [].forEach((x,i)=>{if(!Number.isFinite(Number(x.amount))||Number(x.amount)<0)errors.push(`المصروف رقم ${i+1}: القيمة غير صحيحة.`)});
  (a.purchasesLog||[]).forEach((x,i)=>{if(!(Number(x.qty)>0)||!Number.isFinite(Number(x.totalCost))||Number(x.totalCost)<0)errors.push(`الشراء رقم ${i+1}: الكمية أو إجمالي الشراء غير صحيح.`)});
  (a.productionLog||[]).forEach((x,i)=>{if(Number(x.unpricedComponents||0)>0)warnings.push(`سجل الإنتاج رقم ${i+1}: توجد مكونات بدون سعر.`)});
  try{const iv=window.pmInvoiceAudit?pmInvoiceAudit(a.salesLog||[]):null;if(iv){if(iv.noNumber)warnings.push(`${iv.noNumber} عملية بيع بدون رقم فاتورة (سجلات قديمة)؛ ستُؤرشف كما هي.`);if(iv.noSeller)warnings.push(`${iv.noSeller} فاتورة بدون اسم حساب البائع؛ ستظهر «غير مسجّل» في التقرير.`);if(iv.dupes.length)warnings.push('أرقام فواتير مكررة: '+iv.dupes.join('، ')+' — راجعها قبل اعتماد التقفيل.')}}catch(_){}
@@ -63,7 +61,6 @@ function reviewMonthClose(a){
   {const __st=(typeof state!=='undefined'&&state)?state:{};const __c=(Array.isArray(__st.stockCounts)?__st.stockCounts:[])[0];
    if(!__c)warnings.push('لم يتم جرد المخزون الفعلي؛ فروق المخزون غير معروفة. افتح تبويب التقفيل وسجّل الجرد.');
    else{const __d=(__c.items||[]).filter(x=>Number(x.diff)!==0);if(__d.length)warnings.push('الجرد فيه فروق: '+__d.map(x=>x.name+' ('+(x.diff>0?'+':'')+x.diff+' '+(x.unit||'')+')').join('، ')+'.');}}
-  if(false)warnings.push('لا توجد مصروفات مسجلة في الفترة؛ اتأكد إن الكهربا والإيجار وباقي المصروفات اتسجلت.');
   if(!(a.history||[]).length)warnings.push('لا توجد حركات مخزون في الفترة.');
  return {errors:[...new Set(errors)],warnings:[...new Set(warnings)],metrics:m};
 }

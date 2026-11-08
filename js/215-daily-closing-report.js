@@ -1,10 +1,10 @@
 /* ---- 215-daily-closing-report.js ----
    تقرير تقفيل اليوم: بيجمع حركة يوم واحد (افتراضيًا النهارده بتوقيت القاهرة)
-   من البيانات الموجودة أصلاً: سطور المبيعات (salesLog)، المصروفات (expensesLog)،
+   من البيانات الموجودة أصلاً: سطور المبيعات (salesLog)،
    المشتريات (purchasesLog). مش بيعدّل أي بيانات، ومش بيدخل حسابات الحفلات.
    التقرير بيتعرض بنفس طريقة تقرير الشهر (pmShowDoc) وبيتطبع من هناك.
    افتراضات واضحة في التقرير نفسه:
-   - المصروفات والمشتريات معندهاش وسيلة دفع، فصافي النقدية تقريبي (كاش المبيعات - المصروفات - المشتريات).
+   - المشتريات معندهاش وسيلة دفع، فصافي النقدية تقريبي (كاش المبيعات - المشتريات).
    - سطر المبيعات بياخد وسيلة الدفع من paymentMethod، ولو مش موجودة بيتحسب "غير محدد". */
 (function(){
   'use strict';
@@ -48,7 +48,7 @@
       if (typeof window.pmCleanSalesForClose === 'function') __all = window.pmCleanSalesForClose(__all);
       if (typeof window.pmRecostMissing === 'function') __all = window.pmRecostMissing(__all);
       var sales = __all.filter(function(x){ return x && typeof x === 'object' && dayKeyOf(x.date) === dayKey; });
-      var expenses = arr(s.expensesLog).filter(function(x){ return x && dayKeyOf(x.date) === dayKey; });
+      var expenses = [];
       var __waste = arr(s.wasteLog);
       if (typeof window.pmRecostWaste === 'function') __waste = window.pmRecostWaste(__waste);
       var wasteDay = __waste.filter(function(x){ return x && dayKeyOf(x.date) === dayKey; });
@@ -84,19 +84,17 @@
       });
 
       var __T = (window.RMYCalc && RMYCalc.periodTotals) ? RMYCalc.periodTotals({ sales: sales, expenses: expenses, purchases: purchases, waste: wasteDay, parties: [] }) : null;
-      var expTotal = 0; expenses.forEach(function(x){ expTotal += num(x.amount); });
-      var purTotal = 0; purchases.forEach(function(x){ purTotal += num(x.totalCost); });
+            var purTotal = 0; purchases.forEach(function(x){ purTotal += num(x.totalCost); });
       var cashSales = byMethod.cash.rev;
-      var netCash = cashSales - expTotal - purTotal;
+      var netCash = cashSales - purTotal;
 
       var topItems = Object.keys(items).map(function(k){ return { name: k, qty: items[k].qty, rev: items[k].rev }; })
         .sort(function(a, b){ return b.rev - a.rev; }).slice(0, 10);
 
       return {
         dayKey: dayKey, salesCount: sales.length, receiptCount: Object.keys(receipts).length,
-        revenue: revenue, qty: qty, cost: cost, costUnknown: costUnknown, grossProfit: revenue - cost, wasteCost: __T ? __T.wasteCost : 0, netProfit: __T ? __T.profit : (revenue - cost - expTotal),
+        revenue: revenue, qty: qty, cost: cost, costUnknown: costUnknown, grossProfit: revenue - cost, wasteCost: __T ? __T.wasteCost : 0, netProfit: __T ? __T.profit : (revenue - cost),
         openLines: openLines, byMethod: byMethod,
-        expenses: expenses.length, expTotal: expTotal,
         purchases: purchases.length, purTotal: purTotal,
         cashSales: cashSales, netCash: netCash, topItems: topItems
       };
@@ -117,7 +115,7 @@
       if (R.costUnknown) notes.push('فيه ' + R.costUnknown + ' سطر مبيعات من غير تكلفة مسجلة، فمجمل الربح ممكن يكون أعلى من الحقيقي.');
       if (R.openLines) notes.push('فيه ' + R.openLines + ' سطر فاتورة لسه مفتوحة ومتحسبة في الإيراد.');
       notes.push('مدفوعات الحفلات مش داخلة في التقرير ده.');
-      notes.push('صافي النقدية تقريبي: بيفترض إن المصروفات والمشتريات اتدفعت من الكاش.');
+      notes.push('صافي النقدية تقريبي: بيفترض إن المشتريات اتدفعت من الكاش.');
       return '<!doctype html><html dir="rtl" lang="ar"><head><meta charset="utf-8"><title>تقرير تقفيل اليوم</title>' +
         '<style>body{font-family:Tahoma,Arial,sans-serif;color:#1B1B1B;padding:18px;max-width:720px;margin:auto}' +
         'h1{font-size:20px;margin:0 0 6px}h2{font-size:15px;margin:18px 0 6px;border-bottom:1px solid #ddd;padding-bottom:4px}' +
@@ -129,8 +127,7 @@
         row('إجمالي المبيعات', money(R.revenue)) +
         row('الكمية المباعة', fmt(R.qty)) +
         row('تكلفة الخامات', money(R.cost)) +
-        row('مجمل الربح', money(R.grossProfit), R.grossProfit >= 0 ? 'pos' : 'neg') + row('تكلفة الهالك', money(R.wasteCost)) + row('صافي الربح التقديري (بعد الهالك والمصروفات)', money(R.netProfit), R.netProfit >= 0 ? 'pos' : 'neg') +
-        row('المصروفات', money(R.expTotal) + ' (' + R.expenses + ' بند)') +
+        row('مجمل الربح', money(R.grossProfit), R.grossProfit >= 0 ? 'pos' : 'neg') + row('تكلفة الهالك', money(R.wasteCost)) + row('صافي الربح التقديري (بعد الهالك)', money(R.netProfit), R.netProfit >= 0 ? 'pos' : 'neg') +
         row('المشتريات', money(R.purTotal) + ' (' + R.purchases + ' بند)') +
         row('صافي النقدية التقريبي', money(R.netCash), R.netCash >= 0 ? 'pos' : 'neg') +
         '</table>' +

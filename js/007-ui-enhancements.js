@@ -64,7 +64,6 @@ folder:svg('<path d="M3.4 6.4a2 2 0 0 1 2-2h4l2 2.6h7.2a2 2 0 0 1 2 2v8.4a2 2 0 
 excel:svg('<path d="M4.4 3.6h10.2l4.8 4.8v11.8a1.2 1.2 0 0 1-1.2 1.2H4.4a1.2 1.2 0 0 1-1.2-1.2V4.8a1.2 1.2 0 0 1 1.2-1.2z"/><path d="M14.2 3.8v5h5"/><path class="a-draw" style="--len:16" d="M8.2 13.4l4 4.4M12.2 13.4l-4 4.4"/>'),
 support:svg('<path d="M4 13v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="12" width="4" height="7" rx="2"/><rect x="17" y="12" width="4" height="7" rx="2"/><path d="M17 19a5 5 0 0 1-5 3h-1"/>'),
 customers:svg('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>'),
-expenses:svg('<rect x="3" y="6" width="18" height="14" rx="2.5"/><path d="M3 10h18M16 15h2"/><path d="M7 6V5a2 2 0 0 1 2-2h8"/>'),
 parties:svg('<path d="M3 21V11l9-7 9 7v10"/><path d="M9 21v-6h6v6"/>'),
 partyInvoices:svg('<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>'),
 partyTemplate:svg('<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5"/>'),
@@ -94,12 +93,12 @@ function iconHTML(key,extra){
 }
 
 /* ============================ 2) تحديد الأيقونة المناسبة ============================ */
-var TAB_ICONS={home:'home',drinkProduce:'drinkProduction',drinkQueue:'clock',order:'clipboard',recipes:'hat',stock:'boxes',prices:'tag',costing:'calc',purchases:'cart',sales:'wallet',menu:'list',cartpage:'bag',history:'history',monthly:'archive',audit:'shield',backup:'database',invoice:'invoice',analytics:'analytics',customers:'customers',expenses:'expenses',msgsPanel:'chat',openInvoices:'openInvoices',parties:'parties',partyInvoices:'partyInvoices',partyTemplate:'partyTemplate',salesInvoices:'salesInvoices'};
+var TAB_ICONS={home:'home',drinkProduce:'drinkProduction',drinkQueue:'clock',order:'clipboard',recipes:'hat',stock:'boxes',prices:'tag',costing:'calc',purchases:'cart',sales:'wallet',menu:'list',cartpage:'bag',history:'history',monthly:'archive',audit:'shield',backup:'database',invoice:'invoice',analytics:'analytics',customers:'customers',msgsPanel:'chat',openInvoices:'openInvoices',parties:'parties',partyInvoices:'partyInvoices',partyTemplate:'partyTemplate',salesInvoices:'salesInvoices'};
 var BUTTON_ICONS={
   addOrder:'plus',clearOrder:'trash',calcOrder:'calc',showPurchases:'cart',deductOrder:'check',
   addStock:'plus',savePrice:'save',newRecipe:'plus',saveRecipe:'save',deleteRecipe:'trash',
   saveCostSettings:'save',calcRecipeCost:'calc',exportCostReport:'excel',refreshPurchases:'refresh',exportPurchases:'excel',
-  addPurchase:'bag',exportPurchaseLog:'excel',addSale:'money',exportSales:'excel',addExpense:'receipt',exportExpenses:'excel',
+  addPurchase:'bag',exportPurchaseLog:'excel',addSale:'money',exportSales:'excel',
   closeMonth:'archive',refreshAudit:'refresh',exportBackup:'excel',exportJsonBackup:'database',
   signInButton:'login',unlockButton:'unlock',backToLoginButton:'back',reloadCloudButton:'cloud',signOutButton:'logout'
 };
@@ -120,7 +119,6 @@ var TEXT_RULES=[
   [/العملاء/, 'customers'],
   [/الرئيسية/, 'home'],
   [/الفواتير المفتوحة/, 'openInvoices'],
-  [/المصروفات/, 'receipt'],
   [/هيكل الفاتورة/, 'invoice'],
   [/خروج/, 'logout']
 ];
@@ -137,9 +135,8 @@ var HEAD_RULES=[
   [/تكلفة/, 'calc'],
   [/النواقص/, 'cart'],
   [/تسجيل شراء/, 'bag'],
-  [/سجل المشتريات|سجل المبيعات|سجل المصروفات|حركة المخزون/, 'list'],
+  [/سجل المشتريات|سجل المبيعات|حركة المخزون/, 'list'],
   [/المبيعات|مالي/, 'money'],
-  [/المصروفات/, 'receipt'],
   [/تقفيل/, 'archive'],
   [/الأرشيف|أرشيف/, 'folder'],
   [/سجل التعديلات/, 'shield'],
@@ -329,8 +326,6 @@ var CATALOG=[
   [/^تم حفظ إعدادات تكلفة/,'success','حفظ إعدادات التكلفة'],
   [/^اختر صنفًا وأدخل كمية موجبة وسعر بيع/,'warn','بيانات بيع ناقصة'],
   [/^تم حفظ عملية البيع/,'success','تسجيل عملية بيع'],
-  [/^أدخل قيمة مصروف أكبر من صفر/,'warn','قيمة مصروف غير صالحة'],
-  [/^تم تسجيل المصروف التشغيلي/,'success','تسجيل مصروف'],
   [/^اكتب اسم الصنف/,'warn','اسم الصنف مطلوب'],
   [/^أضف مكونًا واحدًا على الأقل/,'warn','الوصفة بلا مكونات'],
   [/^تم حفظ الوصفة/,'success','حفظ الوصفة'],
@@ -470,7 +465,7 @@ function deltaText(a,b){
     if(addI.length)parts.push('أُضيفت للمخزون: '+addI.slice(0,2).map(q).join('، ')+(addI.length>2?' +'+(addI.length-2):''));
     if(chgI.length)parts.push('تغيّر رصيد '+(chgI.length>1?chgI.length+' خامات':q(chgI[0].k))+(chgI.length===1?(' من '+num(chgI[0].f)+' إلى '+num(chgI[0].t)):''));
     if(delI.length)parts.push('حُذفت من المخزون: '+delI.slice(0,2).map(q).join('، ')+(delI.length>2?' +'+(delI.length-2):''));
-    [['orders','صنف في الطلب'],['salesLog','عملية بيع'],['expensesLog','مصروف'],
+    [['orders','صنف في الطلب'],['salesLog','عملية بيع'],
      ['purchasesLog','سجل شراء'],['history','حركة مخزون'],['monthlyArchives','أرشيف شهر']].forEach(function(L){
       var d=(B[L[0]]||[]).length-(A[L[0]]||[]).length;
       if(d>0)parts.push('+'+d+' '+L[1]); else if(d<0)parts.push('−'+(-d)+' '+L[1]);
@@ -553,7 +548,6 @@ function wrapFn(name,title,text,opt){
  ['exportPurchases','تصدير النواقص','تم تنزيل قائمة النواقص بصيغة Excel.',{check:0,kind:'success'}],
  ['exportPurchaseLog','تصدير سجل المشتريات','تم تنزيل سجل المشتريات بصيغة Excel.',{check:0,kind:'success'}],
  ['exportSales','تصدير سجل المبيعات','تم تنزيل سجل المبيعات بصيغة Excel.',{check:0,kind:'success'}],
- ['exportExpenses','تصدير سجل المصروفات','تم تنزيل سجل المصروفات بصيغة Excel.',{check:0,kind:'success'}],
  ['exportBackup','تصدير نسخة Excel','تم تنزيل نسخة Excel الاحتياطية الكاملة.',{check:0,kind:'success'}],
  ['exportJsonBackup','تصدير نسخة JSON','تم تنزيل نسخة الاسترداد JSON الكاملة.',{check:0,kind:'success'}],
  ['reloadCloudButton','آخر نسخة سحابية','تم تحميل آخر نسخة محفوظة على السحابة.',{check:0}],
@@ -563,7 +557,6 @@ function wrapFn(name,title,text,opt){
 [
  ['removeOrder','حذف صنف من الطلب','تم حذف الصنف من الطلب الحالي.'],
  ['deleteSale','حذف عملية بيع','تم حذف عملية البيع من السجل.'],
- ['deleteExpense','حذف مصروف','تم حذف المصروف من السجل.'],
  ['deletePurchase','حذف سجل شراء','تم حذف سجل الشراء. رصيد المخزون لم يتغير.',{kind:'warn'}],
  ['adjustStock','تعديل رصيد خامة','تم تحديث رصيد الخامة وتسجيل الحركة في السجل.'],
  ['viewArchive','فتح أرشيف الفترة','تم فتح تفاصيل أرشيف الفترة في نافذة جديدة.',{check:0,kind:'info'}],

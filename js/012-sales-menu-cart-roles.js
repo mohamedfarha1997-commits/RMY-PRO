@@ -41,9 +41,6 @@
       // المبيعات: البيع من السلة بس، فالفورم اليدوي وجدول المبيعات بيتخفوا
       setCardHidden('saleProduct', sales);
       
-      // المبيعات مش محتاجين المصروفات التشغيلية
-      setCardHidden('expenseCategory', sales);
-      setCardHidden('expensesTable', sales);
 
       var kit=cloudActorRole==='kitchen';
        document.body.classList.toggle('role-kitchen',kit);

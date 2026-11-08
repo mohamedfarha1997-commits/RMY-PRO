@@ -143,13 +143,13 @@ function withUndoEvt(id,label,evt){
     return r;
   };
 }
-[['deleteSale','حذف عملية بيع'],['deleteExpense','حذف مصروف'],['deletePurchase','حذف سجل شراء'],
+[['deleteSale','حذف عملية بيع'],['deletePurchase','حذف سجل شراء'],
  ['deleteStock','حذف خامة'],['removeOrder','حذف صنف من الطلب'],
  ['adjustStock','تعديل رصيد خامة']].forEach(function(p){ withUndoFn(p[0],p[1]) });
 [['clearOrder','مسح الطلب'],['deleteRecipe','حذف الصنف']].forEach(function(p){ withUndoEvt(p[0],p[1],'onclick') });
 [['importJsonBackup','استيراد نسخة JSON'],['importBackup','استيراد نسخة Excel']].forEach(function(p){ withUndoEvt(p[0],p[1],'onchange') });
 /* إضافة طبقة تراجع على عمليات الإضافة أيضًا: زر «تراجع» يعيد الرقم/الصنف لو أُضيف بالخطأ */
-[['addOrder','إضافة صنف'],['addSale','تسجيل بيع'],['addExpense','تسجيل مصروف'],
+[['addOrder','إضافة صنف'],['addSale','تسجيل بيع'],
  ['addPurchase','تسجيل شراء'],['addStock','إضافة رصيد'],
  ['newRecipe','إنشاء صنف جديد'],['savePrice','تسجيل سعر خامة']].forEach(function(p){ withUndoEvt(p[0],p[1],'onclick') });
 
@@ -199,7 +199,6 @@ document.addEventListener('click',function(e){
 var V={
  addOrder:[['orderProduct',function(v){return !!v},'اختر الصنف أولًا'],['orderQty',function(v){return Number(v)>0},'عدد الوزنات يجب أن يكون أكبر من صفر']],
  addSale:[['saleProduct',function(v){return !!v},'اختر الصنف المباع'],['saleQty',function(v){return Number(v)>0},'عدد الوحدات يجب أن يكون أكبر من صفر'],['salePrice',function(v){return isNum(v)&&Number(v)>=0},'اكتب سعر بيع صحيحًا (صفر أو أكثر)']],
- addExpense:[['expenseAmount',function(v){return isNum(v)&&Number(v)>0},'قيمة المصروف يجب أن تكون أكبر من صفر'],['expenseCategory',function(v){return !!v},'اختر نوع المصروف']],
  addPurchase:[['purchaseIngredient',function(v){return !!v},'اختر الخامة'],['purchaseQty',function(v){return Number(v)>0},'أدخل كمية أكبر من صفر'],['purchaseTotal',function(v){return isNum(v)&&Number(v)>0},'أدخل إجمالي الشراء أكبر من صفر']],
  addStock:[['stockIngredient',function(v){return !!v},'اختر الخامة'],['stockAddQty',function(v){return Number(v)>0},'الكمية المضافة يجب أن تكون أكبر من صفر']],
  savePrice:[['priceIngredient',function(v){return !!v},'اختر الخامة'],['pricePurchase',function(v){return String(v).trim()===''||(isNum(v)&&Number(v)>=0)},'سعر العبوة يجب أن يكون رقمًا'],['pricePackSize',function(v){return String(v).trim()===''||(isNum(v)&&Number(v)>0)},'حجم العبوة يجب أن يكون رقمًا أكبر من صفر']],
@@ -498,7 +497,7 @@ window.__PM_HEALTH__=openHealth;
 
 /* ==================== 10) أدوات الإدخال ==================== */
 (function(){
-  ['orderQty','saleQty','purchaseQty','stockAddQty','expenseAmount','salePrice'].forEach(function(id){
+  ['orderQty','saleQty','purchaseQty','stockAddQty','salePrice'].forEach(function(id){
     var inp=$(id); if(!inp||inp.dataset.pmStep)return;
     inp.dataset.pmStep='1'; inp.classList.add('pm-num-fix');
     var w=document.createElement('div'); w.className='pm-numwrap';
@@ -525,7 +524,7 @@ window.__PM_HEALTH__=openHealth;
   });
 })();
 (function(){
-  [['saleProduct','addSale'],['expenseAmount','addExpense'],['purchaseIngredient','addPurchase'],
+  [['saleProduct','addSale'],['purchaseIngredient','addPurchase'],
    ['orderQty','addOrder'],['stockAddQty','addStock'],
    ['pricePurchase','savePrice'],['costYield','saveCostSettings']].forEach(function(p){
     var el=$(p[0]); if(!el||!el.closest)return;
@@ -548,7 +547,7 @@ document.addEventListener('keydown',function(e){
 /* ==================== 11) بحث داخل الجداول ==================== */
 (function(){
   var SEARCH_SVG=ico('search');
-  ['salesTable','expensesTable','purchasesTable','historyTable','archivesTable','pricesTable','stockTable'].forEach(function(id){
+  ['salesTable','purchasesTable','historyTable','archivesTable','pricesTable','stockTable'].forEach(function(id){
     var box=$(id); if(!box||box.dataset.pmSearch||!box.parentNode)return;
     box.dataset.pmSearch='1';
     var wrap=document.createElement('div'); wrap.className='pm-tsearch';
