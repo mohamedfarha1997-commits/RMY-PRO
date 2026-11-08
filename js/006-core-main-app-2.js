@@ -1,13 +1,38 @@
 function renderStock(){let q=($('stockSearch').value||'').trim().toLowerCase();let arr=state.inventory.filter(x=>String(x.name||'').toLowerCase().includes(q));const kitchen=cloudActorRole==='kitchen';$('stockTable').innerHTML=arr.length?`<table><tr><th>الخامة</th><th>الوحدة</th><th>الرصيد</th><th>حالة المخزون</th>${kitchen?'':'<th>تعديل</th><th>حذف</th>'}</tr>${arr.map(x=>{const p=(state.prices||{})[x.name]||{},reorder=Number(p.reorder)||0,low=reorder>0&&norm(x.qty,x.unit)<=norm(reorder,x.unit);const status=Number(x.qty)<=0?'<span class="pill low">نفد</span>':low?'<span class="pill warn">إعادة طلب</span>':'<span class="pill">متوفر</span>';return `<tr class="${Number(x.qty)<=0?'pm-stock-empty':low?'pm-stock-low':''}"><td>${esc(x.name)}</td><td>${esc(x.unit)}</td><td>${nfmt(x.qty)}</td><td>${status}${reorder>0?`<div class="small">حد الطلب: ${nfmt(reorder)} ${esc(x.unit)}</div>`:''}</td>${kitchen?'':`<td><button class="secondary mini" onclick="adjustStock('${encodeURIComponent(x.name)}')">تعديل</button></td><td><button class="danger mini" onclick="deleteStock('${encodeURIComponent(x.name)}')">حذف</button></td>`}</tr>`}).join('')}</table>`:'<div class="empty">لا توجد نتائج.</div>';if(kitchen){const a=$('addStock');if(a)a.closest('.card').style.display='none';}}
 window.deleteStock=encoded=>{const name=decodeURIComponent(encoded),x=state.inventory.find(y=>y.name===name);if(!x)return;const recipeUses=Object.entries(state.recipes||{}).filter(([rn,cs])=>(cs||[]).some(c=>c.name===name)).map(([rn])=>rn);const msg=`حذف شامل للخامة «${name}»؟\n\nسيتم حذفها من المخزون والأسعار وسجل الحركات والمشتريات والأرشيفات الشهرية، وإزالتها من الطلبات/القوائم النشطة المرتبطة بها إن وجدت.\n\nلن تُحذف من الوصفات (${recipeUses.length} وصفة تستخدمها)، لذلك قد تظهر ضمن مكونات الوصفات وتحتاج إلى خامة مخزون جديدة عند الرغبة في استخدامها.\n\nهذا الإجراء لا يمكن التراجع عنه إلا باستعادة نسخة احتياطية.`;if(!confirm(msg))return;const before=clone(state);try{state.inventory=(state.inventory||[]).filter(y=>y.name!==name);if(state.prices)delete state.prices[name];state.history=(state.history||[]).filter(y=>y.name!==name);state.purchasesLog=(state.purchasesLog||[]).filter(y=>y.name!==name);state.monthlyArchives=(state.monthlyArchives||[]).map(a=>({...a,inventory:(a.inventory||[]).filter(y=>y.name!==name),history:(a.history||[]).filter(y=>y.name!==name),purchasesLog:(a.purchasesLog||[]).filter(y=>y.name!==name)}));save();renderAll();if(typeof toast==='function')toast({k:'success',t:'حذف الخامة',x:`تم حذف «${name}» من المخزون والأسعار والحركات والمشتريات والأرشيفات. بقيت مكونات الوصفات كما طلبت.`});else alert(`تم حذف «${name}» من جميع الأقسام عدا الوصفات.`)}catch(e){state=before;renderAll();alert('تعذر إكمال الحذف؛ تمت استعادة البيانات السابقة. '+(e.message||''))}};
 window.adjustStock=encoded=>{let name=decodeURIComponent(encoded),x=state.inventory.find(y=>y.name===name);if(!x)return;let v=prompt(`تعديل الرصيد الحالي لـ ${name} (${x.unit})`,String(x.qty));if(v===null)return;let q=Number(v);if(!Number.isFinite(q)||q<0){alert('أدخل رصيدًا صحيحًا لا يقل عن صفر.');return}let diff=q-x.qty;x.qty=q;if(diff!==0)state.history.unshift({date:formatDate(),name,add:diff>0?diff:0,deduct:diff<0?-diff:0,balance:q,unit:x.unit,note:'تعديل يدوي للرصيد'});save()};
+function prepRowHtml(x,i,st,btn){
+  var stagesHtml='', allDone=true;
+  if(st==='doing'){
+    var order=(typeof getStageOrder==='function')?getStageOrder(x.name):['prep','oven','stove','fin'];
+    var done=Array.isArray(x.stagesDone)?x.stagesDone:[];
+    var next=order.filter(function(k){return done.indexOf(k)<0;})[0];
+    allDone=!next;
+    var L=(typeof RECIPE_STAGES!=='undefined')?RECIPE_STAGES:[];
+    stagesHtml='<div style="display:flex;gap:6px;flex-wrap:wrap;width:100%">'+order.map(function(k){
+      var f=L.filter(function(q){return q[0]===k;})[0], isD=done.indexOf(k)>-1;
+      return '<button class="mini" style="'+(isD?'background:#107C10;color:#fff;':'')+'"'+((isD||k!==next)?' disabled':'')+' onclick="pmStageMark('+i+',\''+k+'\')">'+(isD?'✓ ':'')+esc(f?f[1]:k)+'</button>';
+    }).join('')+'</div>';
+  }
+  var delBtn = st==='doing' ? '' : '<button class="danger mini" onclick="removeOrder('+i+')">حذف</button>';
+  var nextDisabled = (st==='doing' && !allDone) ? ' disabled' : '';
+  return '<div class="prep-card"><div class="prep-info"><b>'+esc(x.name)+'</b><span>'+nfmt(x.qty)+' وزنة</span></div>'+stagesHtml+
+    '<div class="prep-acts"><button class="primary mini" onclick="pmPrepNext('+i+')"'+nextDisabled+'>'+btn+'</button>'+delBtn+'</div></div>';
+}
+window.pmStageMark=function(i,stage){
+  var o=state.orders[i]; if(!o) return;
+  var d=Array.isArray(o.stagesDone)?o.stagesDone.slice():[];
+  if(d.indexOf(stage)<0) d.push(stage);
+  o.stagesDone=d;
+  save(); window.pmFlushOrders(); renderAll();
+};
 function renderOrder(){
   /* مراحل التحضير: ثلاث مربعات تحت بعض، والصنف بيتنقل للمربع اللي تحته مع كل ضغطة */
   const STAGES=[['new','جديد','بدء التحضير'],['doing','جاري التحضير','جاهز'],['ready','جاهز للتسليم','تسليم']];
   const list=state.orders||[];
   const boxes=STAGES.map(([st,title,btn])=>{
     const rows=list.map((x,i)=>({x,i})).filter(({x})=>(x.status||'new')===st);
-    const body=rows.length?rows.map(({x,i})=>`<div class="prep-card"><div class="prep-info"><b>${esc(x.name)}</b><span>${nfmt(x.qty)} وزنة</span></div><div class="prep-acts"><button class="primary mini" onclick="pmPrepNext(${i})">${btn}</button>${st==="doing"?"":`<button class="danger mini" onclick="removeOrder(${i})">حذف</button>`}</div></div>`).join(''):'<div class="empty">لا يوجد أصناف في هذه المرحلة</div>';
+    const body=rows.length?rows.map(({x,i})=>prepRowHtml(x,i,st,btn)).join(''):'<div class="empty">لا يوجد أصناف في هذه المرحلة</div>';
     return `<section class="prep-box prep-${st}"><div class="prep-head"><h3>${title}</h3><span class="prep-count">${rows.length}</span></div>${body}</section>`;
   }).join('');
   $('orderItems').innerHTML=`<div class="prep-board">${boxes}</div>`;
@@ -75,7 +100,12 @@ window.pmPrepNext=function(i){
     }, function(e){ window.__pmPrepBusy=false; cloudLoading=false; alert('تعذر خصم الخامات: '+(e&&e.message||'')); });
     return;
   }
-  if(st==='doing'){ o.status='ready'; save(); window.pmFlushOrders(); return; }
+  if(st==='doing'){
+    var __ord=(typeof getStageOrder==='function')?getStageOrder(o.name):['prep','oven','stove','fin'];
+    var __done=Array.isArray(o.stagesDone)?o.stagesDone:[];
+    if(__ord.some(function(k){return __done.indexOf(k)<0;})){ alert('لازم تكمل كل مراحل التحضير الأول'); return; }
+    o.status='ready'; save(); window.pmFlushOrders(); return;
+  }
   /* تسليم: العدد اللي طلع بيتضاف للمنيو (readyStock) والصنف يتشال من الطلب */
   const map=(typeof window.__pmAskReady==='function')?window.__pmAskReady([o]):null;
   if(!map) return;

@@ -252,8 +252,10 @@
     }
     arr(S().orders).forEach(function(o){
       if(!o||o.status==='cancelled') return;
+      var ord=(typeof getStageOrder==='function')?getStageOrder(o.name):['prep','oven','stove','fin'];
       var ready=o.status==='ready'||o.status==='delivered';
-      add(o.name, Math.max(1,num(o.qty)), ready, ready?1:0, 1);
+      var done=ready?ord.length:(Array.isArray(o.stagesDone)?o.stagesDone:[]).filter(function(k){return ord.indexOf(k)>-1;}).length;
+      add(o.name, Math.max(1,num(o.qty)), ready, done, ord.length||1);
     });
     arr(S().drinkOrders).forEach(function(o){
       if(!o||o.status==='cancelled') return;
@@ -271,7 +273,8 @@
   function stageProgress(name){
     var order=(typeof getStageOrder==='function')?getStageOrder(name):['prep','oven','stove','fin'];
     var L=(typeof RECIPE_STAGES!=='undefined')?RECIPE_STAGES:[];
-    var pend=arr(S().drinkOrders).filter(function(o){return o&&o.status==='pending'&&o.name===name;});
+    var pend=arr(S().drinkOrders).filter(function(o){return o&&o.status==='pending'&&o.name===name;})
+      .concat(arr(S().orders).filter(function(o){return o&&o.status==='doing'&&o.name===name;}));
     return order.map(function(k){
       var f=L.filter(function(x){return x[0]===k;})[0];
       var n=pend.filter(function(o){return (Array.isArray(o.stagesDone)?o.stagesDone:[]).indexOf(k)>-1;}).length;
