@@ -5,7 +5,7 @@
   function esc(x){ return String(x==null?'':x).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]}) }
   function isAdmin(){ return typeof cloudActorRole!=='undefined' && cloudActorRole==='admin' && typeof cloudReady!=='undefined' && !!cloudReady && !!cloudActorName && !!cloudActorPin }
   function mount(){
-    var sec=document.getElementById('analytics');
+    var sec=document.querySelector('#analytics .an-prep-slot');
     if(!sec) return null;
     if(!card){ card=document.createElement('div'); card.id='pmPrepLive'; card.className='pm-prep-live'; }
     if(card.parentNode!==sec || sec.firstElementChild!==card) sec.insertBefore(card, sec.firstElementChild);

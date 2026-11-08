@@ -153,7 +153,7 @@
 
   var lastSig = '';
   function render() {
-    var root = document.getElementById('anRoot');
+    var root = document.querySelector('#anRoot .an-party-slot');
     if (!root) return;
     var isAdmin = typeof cloudActorRole !== 'undefined' && cloudActorRole === 'admin';
     var wrap = root.querySelector(':scope > .pmd-wrap');

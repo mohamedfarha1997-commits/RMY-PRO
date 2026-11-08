@@ -241,109 +241,178 @@
       '<div class="db-donut-leg"><div><span><i style="background:#0067B8"></i>الأكل</span><b>'+esc(money(R.foodRev))+'</b></div>'+
       '<div><span><i style="background:#107C10"></i>المشروبات</span><b>'+esc(money(R.drinkRev))+'</b></div></div></div>';
   }
+  var anTab='over', anPer=1, anType='all', anQ='';
+  var TABS=[['over','نظرة عامة'],['fin','المالية'],['prod','الإنتاج'],['stock','المخزون'],['party','الحفلات'],['ledger','كل الحركات']];
+  var PERS=[[1,'اليوم'],[7,'7 أيام'],[30,'الشهر']];
+  var TYPES=[['all','الكل'],['sale','مبيعات'],['purchase','مشتريات'],['waste','هالك'],['production','إنتاج'],['party','حفلات']];
+  var TYPE_NAME={sale:'مبيعات',purchase:'مشتريات',waste:'هالك',production:'إنتاج',party:'حفلات'};
+  function dkey(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function sliceM(m,days){
+    if(days>=30) return m;
+    var cut=dkey(new Date(Date.now()-(days-1)*864e5)), o=Object.assign({},m);
+    ['salesLog','wasteLog','purchasesLog','productionLog','partyOrders','drinkOrders','history'].forEach(function(k){
+      if(Array.isArray(m[k])) o[k]=m[k].filter(function(x){ return dayOf(x)>=cut; });
+    });
+    return o;
+  }
+  function pctOf(a,b){ return b>0?Math.round(a/b*100):0; }
+  function kc(label,val,tone,sub){ return '<div class="an-k"><small>'+esc(label)+'</small><b class="'+(tone||'')+'">'+esc(val)+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'')+'</div>'; }
+  function rowH(label,val,tone){ return '<div class="an-row"><span>'+esc(label)+'</span><b class="'+(tone||'')+'">'+esc(money(val))+'</b></div>'; }
+  function miniBars(items,f){
+    var mx=Math.max.apply(null,items.map(function(i){return num(i.value);}).concat([1]));
+    return items.length? items.map(function(x){ return '<div class="an-row an-block"><div class="an-rs"><span>'+esc(x.label)+'</span><b>'+esc(f(x.value))+'</b></div><div class="an-bar"><i style="width:'+pctOf(num(x.value),mx)+'%"></i></div></div>'; }).join('') : '<div class="an-empty">لا توجد بيانات في الفترة</div>';
+  }
+  function colBars(items){
+    var mx=Math.max.apply(null,items.map(function(i){return num(i.value);}).concat([1]));
+    return items.map(function(x,i){ return '<div class="'+(i===items.length-1?'today':'')+'" style="height:'+Math.max(3,num(x.value)/mx*100)+'%" title="'+esc(money(x.value))+'"></div>'; }).join('');
+  }
+  function donutG(parts){
+    var t=parts.reduce(function(s,p){return s+Math.max(0,p[1]);},0)||1, acc=0, st=[];
+    parts.forEach(function(p){ var v=Math.max(0,p[1]), a=acc, b=acc+v/t*100; st.push(p[2]+' '+a+'% '+b+'%'); acc=b; });
+    return '<div class="an-donut"><div class="an-ring" style="background:conic-gradient('+st.join(',')+')"><span><b>'+esc(money(t))+'</b>إجمالي</span></div><div class="an-leg">'+parts.map(function(p){ return '<div><span><i style="background:'+p[2]+'"></i>'+esc(p[0])+'</span><b>'+esc(money(p[1]))+'</b></div>'; }).join('')+'</div></div>';
+  }
+  function pillFor(q,min){ return q<=0?'<span class="an-pill r">نافد</span>':q<=min?'<span class="an-pill a">تحت الحد</span>':'<span class="an-pill g">متوفر</span>'; }
+
+  function ledgerRows(m){
+    var out=[];
+    arr(m.salesLog).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'sale',d:dayOf(x),n:x.name||x.item||x.product||'—',v:(x.revenue!=null)?num(x.revenue):num(x.qty)*num(x.unitPrice),q:num(x.qty)}); });
+    arr(m.purchasesLog).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'purchase',d:dayOf(x),n:x.name||x.item||'—',v:num(x.total)||num(x.amount)||num(x.cost),q:0}); });
+    arr(m.wasteLog).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'waste',d:dayOf(x),n:x.name||x.item||'—',v:num(x.cost)||num(x.amount),q:num(x.qty)}); });
+    arr(m.productionLog).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'production',d:dayOf(x),n:x.name||x.item||'—',v:0,q:num(x.qty)}); });
+    arr(m.partyOrders).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'party',d:dayOf(x),n:x.name||x.customerName||'—',v:num(x.total)||num(x.amount),q:0}); });
+    out.sort(function(a,b){ return a.d<b.d?1:a.d>b.d?-1:0; });
+    return out;
+  }
+
   function injectStyle(){
     if(document.getElementById('anStyle')) return;
     var st=document.createElement('style'); st.id='anStyle';
-    st.textContent='.db-tools{margin-top:8px;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:14px;padding:10px 12px}'+
-      '.db-tools summary{cursor:pointer;font-weight:800;color:#0067B8}'+
-      '.an-hero{background:#0067B8;color:#fff;border-radius:16px;padding:18px;margin-bottom:12px}.an-hero small{opacity:.85}.an-hero b{display:block;font-size:30px;margin:4px 0}.an-hero span{font-size:12px;opacity:.9}';
+    st.textContent=
+      '.an-root{direction:rtl;color:#1B1B1B}'+
+      '.an-top{background:#0067B8;color:#fff;padding:16px;border-radius:0 0 18px 18px;margin:-4px -4px 0}'+
+      '.an-top h1{font-size:18px;margin:0}.an-top p{font-size:12px;opacity:.85;margin:2px 0 0}'+
+      '.an-per{display:flex;gap:6px;margin-top:12px}'+
+      '.an-per button,.an-tabs button,.an-chips button{border:1px solid #D6D6D6;background:#fff;color:#5E5E5E;border-radius:999px;padding:7px 12px;font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}'+
+      '.an-per button{background:transparent;color:#fff;border-color:rgba(255,255,255,.4)}'+
+      '.an-per .on{background:#fff;color:#0067B8;border-color:#fff;font-weight:700}'+
+      '.an-tabs{display:flex;gap:6px;overflow-x:auto;padding:12px 4px 4px;scrollbar-width:none}'+
+      '.an-tabs .on,.an-chips .on{background:#0067B8;color:#fff;border-color:#0067B8;font-weight:700}'+
+      '.an-main{padding:10px 2px}'+
+      '.an-hero{background:#0067B8;color:#fff;border-radius:16px;padding:18px;margin-bottom:10px}.an-hero small{opacity:.85;font-size:12px}.an-hero b{display:block;font-size:30px;margin:4px 0}'+
+      '.an-kp{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}'+
+      '.an-k{background:#fff;border:1px solid #D6D6D6;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(0,0,0,.05);display:flex;flex-direction:column;gap:3px;min-width:0}'+
+      '.an-k small{color:#5E5E5E;font-size:12px}.an-k b{font-size:17px}.an-k span{color:#5E5E5E;font-size:11px}'+
+      '.an-card{background:#fff;border:1px solid #D6D6D6;border-radius:16px;padding:14px;margin-bottom:10px;overflow:auto}'+
+      '.an-card h3{font-size:14px;margin:0 0 10px}'+
+      '.an-bars{display:flex;align-items:flex-end;gap:4px;height:100px}.an-bars div{flex:1;background:#0067B8;border-radius:4px 4px 0 0;min-height:3px;opacity:.85}.an-bars .today{background:#107C10}'+
+      '.an-lbl{display:flex;justify-content:space-between;font-size:10px;color:#5E5E5E;margin-top:4px}'+
+      '.an-donut{display:flex;gap:14px;align-items:center}'+
+      '.an-ring{width:110px;height:110px;border-radius:50%;flex-shrink:0;display:grid;place-items:center}'+
+      '.an-ring span{width:74px;height:74px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#5E5E5E}.an-ring b{font-size:13px;color:#1B1B1B}'+
+      '.an-leg{flex:1;font-size:13px}.an-leg div{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.an-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-left:6px}'+
+      '.an-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #EEE;font-size:13px;gap:8px}'+
+      '.an-row:last-child{border:0}.an-row small{display:block;color:#5E5E5E;font-size:11px}'+
+      '.an-block{display:block}.an-rs{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:5px;gap:6px}'+
+      '.an-tot{font-size:15px;border-top:2px solid #1B1B1B;border-bottom:0;margin-top:4px}'+
+      '.an-bar{height:7px;background:#E5E5E5;border-radius:6px;overflow:hidden}.an-bar i{display:block;height:100%;background:#0067B8}'+
+      '.an-pill{font-size:11px;padding:3px 8px;border-radius:8px;background:#DCEBF8;color:#0067B8;white-space:nowrap}.an-pill.r{background:#FDE7E9;color:#C50F1F}.an-pill.g{background:#DFF6DD;color:#107C10}.an-pill.a{background:#FFF4CE;color:#9D5D00}'+
+      '.an-root .pos{color:#107C10}.an-root .neg{color:#C50F1F}'+
+      '.an-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.an-chips button{padding:6px 10px}'+
+      '.an-search{width:100%;border:1px solid #D6D6D6;border-radius:12px;padding:10px 12px;font:inherit;margin-bottom:10px;background:#fff}'+
+      '.an-empty{color:#5E5E5E;font-size:13px;padding:8px 0}'+
+      '.an-tools{background:#fff;border:1px solid #D6D6D6;border-radius:16px;padding:12px 14px;margin-bottom:10px}.an-tools summary{cursor:pointer;font-weight:700;color:#0067B8}'+
+      '.an-tools-in{display:flex;flex-direction:column;gap:8px;margin-top:10px}'+
+      '.an-range{display:flex;gap:8px}.an-range input{flex:1;border:1px solid #D6D6D6;border-radius:10px;padding:9px;font:inherit;min-width:0}'+
+      '.an-sel{border:1px solid #D6D6D6;border-radius:10px;padding:9px;font:inherit;background:#fff}'+
+      '.an-btn{border:0;background:#0067B8;color:#fff;border-radius:12px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer}'+
+      'html[data-theme="dark"] .an-root{color:#D6D6D6}html[data-theme="dark"] .an-k,html[data-theme="dark"] .an-card,html[data-theme="dark"] .an-tools{background:#303030;border-color:#434343;color:#D6D6D6}'+
+      'html[data-theme="dark"] .an-ring span{background:#303030;color:#9E9E9E}html[data-theme="dark"] .an-ring b{color:#D6D6D6}html[data-theme="dark"] .an-search,html[data-theme="dark"] .an-range input,html[data-theme="dark"] .an-sel{background:#303030;color:#D6D6D6;border-color:#434343}'+
+      'html[data-theme="dark"] .an-tabs button,html[data-theme="dark"] .an-chips button{background:#303030;color:#9E9E9E;border-color:#434343}';
     document.head.appendChild(st);
   }
+
   function build(){
     injectStyle();
     var root=document.getElementById('anRoot'); if(!root) return;
     var P=periods();
     if(sel!=='all' && !P.some(function(p){return p.key===sel;})) sel='cur';
-    var m=collect(sel), R=compute(m);
-    var net=R.gross-R.wasteCost;
-    var NA=empty('غير متاح للأرشيف.');
-
-    var opts='<option value="cur"'+(sel==='cur'?' selected':'')+'>الشهر الحالي</option>'+
-             '<option value="all"'+(sel==='all'?' selected':'')+'>كل الفترات (الحالي + الأرشيف)</option>';
+    var mFull=collect(sel), m=sliceM(mFull,anPer);
+    var R=compute(m), RF=(anPer===30)?R:compute(mFull);
+    var rev=R.rev+R.partyRev, net=R.gross-R.wasteCost-R.exp;
+    var pName=PERS.filter(function(p){return p[0]===anPer;})[0][1];
+    var ready=0; var rs=obj(S().readyStock); Object.keys(rs).forEach(function(n){ ready+=Math.max(0,num(rs[n])); });
+    var inv=arr(mFull.inventory);
+    var liveNote=mFull.live?'':'بيانات الأرشيف: الطلبات الحالية والمنيو والحفلات غير مخزنة فيه، وتظهر للشهر الحالي فقط.';
+    var opts='<option value="cur"'+(sel==='cur'?' selected':'')+'>الشهر الحالي</option><option value="all"'+(sel==='all'?' selected':'')+'>كل الفترات (الحالي + الأرشيف)</option>';
     P.slice(1).forEach(function(p){ opts+='<option value="'+esc(p.key)+'"'+(sel===p.key?' selected':'')+'>'+esc(p.label)+'</option>'; });
+    var cmpRows=P.map(function(p){ var r=compute(collect(p.key)), n=r.gross-r.wasteCost-r.exp; return [esc(p.label),esc(money(r.rev)),esc(money(r.pur)),esc(money(r.wasteCost)),'<span class="'+toneOf(n)+'">'+esc(money(n))+'</span>']; });
+    var costRows=costingRows().map(function(c){ var mg=c.margin; var badge=mg==null?'—':'<span class="'+(mg>=50?'pos':'neg')+'">'+esc(pctTxt(mg))+'</span>'; return [esc(c.name),esc(c.unit==null?'ناقص سعر خامة':money(c.unit)),esc(c.suggested==null?'—':money(c.suggested)),esc(c.price?money(c.price):'غير في المنيو'),badge]; });
 
-    var liveNote = m.live ? '' : 'بيانات الأرشيف: الطلبات الحالية والمنيو والحفلات غير مخزنة فيه، وتظهر للشهر الحالي فقط.';
+    var body='';
+    if(anTab==='over'){
+      var days=arr(RF.days);
+      body='<div class="an-hero"><small>صافي الربح · '+esc(pName)+'</small><b>'+esc(money(net))+'</b><small>هامش '+pctOf(net,rev)+'%</small></div>'+
+        '<div class="an-kp">'+
+          kc('إجمالي الإيرادات',money(rev),'',fmt(R.invoices)+' فاتورة')+
+          kc('إجمالي التكاليف',money(R.pur+R.wasteCost),'neg')+
+          kc('المشتريات',money(R.pur))+
+          kc('الهالك',money(R.wasteCost))+
+          kc('الحفلات',money(R.partyRev))+
+          kc('تنبيهات المخزون',R.low.length+' صنف',R.low.length?'neg':'pos')+
+        '</div>'+
+        '<div class="an-card"><h3>المبيعات اليومية (7 أيام)</h3><div class="an-bars">'+colBars(days)+'</div>'+
+          '<div class="an-lbl"><span>'+esc(days.length?days[0].label:'')+'</span><span>اليوم</span></div></div>'+
+        '<div class="an-card"><h3>توزيع الحركات المالية</h3>'+donutG([['الإيرادات',rev,'#0067B8'],['المشتريات',R.pur,'#9D5D00'],['الهالك',R.wasteCost,'#C50F1F']])+'</div>';
+    } else if(anTab==='fin'){
+      body='<div class="an-card"><h3>قائمة الدخل</h3>'+rowH('إيراد المبيعات',R.rev)+rowH('إيراد الحفلات',R.partyRev)+rowH('المشتريات',-R.pur,'neg')+rowH('الهالك',-R.wasteCost,'neg')+
+          '<div class="an-row an-tot"><span><b>صافي الربح</b></span><b class="'+(net>=0?'pos':'neg')+'">'+esc(money(net))+'</b></div></div>'+
+        '<div class="an-card"><h3>المبيعات حسب الصنف</h3>'+miniBars(R.products.slice(0,6).map(function(p){return {label:p.name,value:p.rev};}),money)+'</div>'+
+        '<div class="an-card"><h3>مقارنة الفترات</h3>'+table(['الفترة','المبيعات','المشتريات','الهالك','الصافي'],cmpRows)+'</div>'+
+        '<details class="an-tools"><summary>تقرير مالي مفصّل للطباعة</summary><div class="an-tools-in">'+
+          '<select id="anPeriod" class="an-sel">'+opts+'</select>'+
+          '<div class="an-range"><input id="finFrom" inputmode="numeric" placeholder="من يوم"><input id="finTo" inputmode="numeric" placeholder="إلى يوم"></div>'+
+          '<button type="button" class="an-btn" id="anExportFinance">طباعة التقرير</button>'+
+          '<button type="button" class="an-btn" id="anRefresh">تحديث</button>'+
+        '</div></details>';
+    } else if(anTab==='prod'){
+      var made=R.prodList.reduce(function(s,x){return s+num(x.value);},0);
+      body='<div class="an-kp">'+kc('قطع منتجة',fmt(made))+kc('حالات هالك',fmt(R.wasteList.length),R.wasteList.length?'neg':'')+kc('قيمة الهالك',money(R.wasteCost))+kc('جاهز للتسليم',fmt(ready)+' قطعة')+'</div>'+
+        '<div class="an-prep-slot"></div>'+
+        '<div class="an-card"><h3>الإنتاج حسب الصنف</h3>'+miniBars(R.prodList,function(v){return fmt(v)+' قطعة';})+'</div>'+
+        '<div class="an-card"><h3>الهالك (بالكمية)</h3>'+miniBars(R.wasteList.map(function(x){return {label:x.name,value:x.qty};}),function(v){return fmt(v)+' قطعة';})+'</div>';
+    } else if(anTab==='stock'){
+      body='<div class="an-card"><h3>المخزون والخامات</h3>'+(inv.length?inv.map(function(x){
+          var q=num(x.qty), mn=num(x.reorder), p=mn>0?Math.min(100,q/(mn*2)*100):(q>0?100:0);
+          return '<div class="an-row an-block"><div class="an-rs"><span>'+esc(x.name)+' <small>'+esc(qtyOf(q,x.unit))+'</small></span>'+pillFor(q,mn)+'</div><div class="an-bar"><i style="width:'+p+'%;background:'+(q<=mn?'#C50F1F':'#0067B8')+'"></i></div></div>';
+        }).join(''):'<div class="an-empty">لا توجد خامات</div>')+'</div>'+
+        '<div class="an-card"><h3>المشتريات حسب الخامة</h3>'+miniBars(R.purList,money)+'</div>'+
+        '<div class="an-card"><h3>تكلفة الوصفات والهامش</h3>'+table(['الوصفة','تكلفة الوحدة','السعر المقترح','سعر البيع','الهامش'],costRows)+'</div>';
+    } else if(anTab==='party'){
+      var pr=R.parties;
+      body='<div class="an-party-slot"></div>'+
+        '<div class="an-kp">'+kc('عدد الحفلات',fmt(pr.n))+kc('إجمالي الحفلات',money(pr.total))+kc('المدفوع',money(pr.paid))+kc('المتبقي',money(pr.remaining),'neg')+'</div>'+
+        '<div class="an-card"><h3>المشروبات المنتظرة</h3>'+miniBars(R.drinksPending,function(v){return fmt(v)+' قطعة';})+'</div>';
+    } else {
+      var rows=ledgerRows(m).filter(function(x){ return (anType==='all'||x.t===anType) && (!anQ||String(x.n).indexOf(anQ)>-1); }).slice(0,60);
+      body='<input id="anQ" class="an-search" placeholder="بحث باسم الصنف أو الحركة" value="'+esc(anQ)+'">'+
+        '<div class="an-chips">'+TYPES.map(function(t){return '<button type="button" data-t="'+t[0]+'" class="'+(anType===t[0]?'on':'')+'">'+t[1]+'</button>';}).join('')+'</div>'+
+        '<div class="an-card">'+(rows.length?rows.map(function(x){ var neg=(x.t==='purchase'||x.t==='waste'); return '<div class="an-row"><span>'+esc(x.n)+'<small>'+esc(x.d)+' · '+esc(TYPE_NAME[x.t])+'</small></span><b class="'+(neg?'neg':'pos')+'">'+(x.v?esc(money(x.v)):esc(fmt(x.q)+' قطعة'))+'</b></div>';}).join(''):'<div class="an-empty">لا توجد حركات مطابقة</div>')+'</div>';
+    }
 
-    var totalSplit=R.foodRev+R.drinkRev, pct=totalSplit?Math.round(R.drinkRev/totalSplit*100):0;
-    var split='<div class="db-split"><div><span>الأكل</span><b>'+esc(money(R.foodRev))+'</b><small>'+esc(qtyOf(R.foodQty))+'</small></div>'+
-              '<div><span>المشروبات</span><b>'+esc(money(R.drinkRev))+'</b><small>'+esc(qtyOf(R.drinkQty))+'</small></div></div>'+
-              '<div class="db-note" style="margin:8px 0 0">نسبة المشروبات من المبيعات: '+pct+'%</div>';
+    root.innerHTML='<div class="an-root">'+
+      '<div class="an-top"><h1>التحليلات والتشغيل</h1><p>كل الحركات المالية والإنتاجية في شاشة واحدة</p>'+(liveNote?'<p>'+esc(liveNote)+'</p>':'')+
+        '<div class="an-per">'+PERS.map(function(p){return '<button type="button" data-per="'+p[0]+'" class="'+(anPer===p[0]?'on':'')+'">'+p[1]+'</button>';}).join('')+'</div></div>'+
+      '<div class="an-tabs">'+TABS.map(function(t){return '<button type="button" data-tab="'+t[0]+'" class="'+(anTab===t[0]?'on':'')+'">'+t[1]+'</button>';}).join('')+'</div>'+
+      '<main class="an-main">'+body+'</main></div>';
 
-    var prodRows=R.products.slice(0,8).map(function(p,i){
-      var mg=(p.unknown||p.rev<=0)?null:(p.rev-p.cost)/p.rev*100;
-      return [esc(i+1), esc(p.name), esc(fmt(p.qty)), esc(money(p.rev)), p.unknown?'—':esc(money(p.cost)), p.unknown?'—':'<span class="'+toneOf(p.rev-p.cost)+'">'+esc(money(p.rev-p.cost))+'</span>', esc(pctTxt(mg))];
-    });
-
-    var custRows=R.customers.map(function(c,i){
-      return [esc(i+1), esc(c.name||'—'), esc(c.phone||'—'), esc(fmt(c.invoices)), esc(money(c.total))];
-    });
-
-    var ms=R.menu;
-    var menuBody=!m.live?NA:'<div class="db-muted">أصناف المنيو: '+fmt(ms.total)+' · فعّال: '+fmt(ms.active)+' · نافد: '+fmt(ms.soldOut)+' · قطع: '+fmt(ms.piece)+' · حفلات: '+fmt(ms.party)+' · مشروبات: '+fmt(ms.drink)+'</div>'+
-      '<div class="db-muted" style="margin-top:8px">أصناف فعّالة بدون مبيعات في الفترة:</div>'+list(R.noSales.slice(0,12));
-    var drinkBody=!m.live?NA:'<div class="db-muted">طلبات مشروبات منتظرة الآن: <b>'+fmt(R.drinksPendingN)+'</b></div>'+
-      (R.drinksPending.length? table(['المشروب','الكمية'], R.drinksPending.slice(0,10).map(function(x){return [esc(x.label),esc(fmt(x.value))];})) : '');
-    var partiesBody=!m.live?NA:'<div class="db-muted">عدد الحفلات: <b>'+fmt(R.parties.n)+'</b></div>'+
-      '<div class="db-muted">الإجمالي: <b>'+esc(money(R.parties.total))+'</b></div>'+
-      '<div class="db-muted">المدفوع: <b>'+esc(money(R.parties.paid))+'</b></div>'+
-      '<div class="db-muted">المتبقي: <b>'+esc(money(R.parties.remaining))+'</b></div>';
-
-    var cost=costingRows();
-    var costRows=cost.map(function(c){
-      var mg=c.margin;
-      var badge = mg==null ? '—' : '<span class="db-pill '+(mg>=50?'':'low')+'">'+esc(pctTxt(mg))+'</span>';
-      return [esc(c.name), esc(c.unit==null?'ناقص سعر خامة':money(c.unit)), esc(c.suggested==null?'—':money(c.suggested)), esc(c.price?money(c.price):'غير في المنيو'), badge];
-    });
-
-    var lowRows=R.low.map(function(x){return [esc(x.name), esc(qtyOf(x.qty,x.unit)), esc(qtyOf(x.reorder,x.unit))];});
-
-    var cmpRows=P.map(function(p){
-      var r=compute(collect(p.key)), n=r.gross-r.wasteCost;
-      return [esc(p.label), esc(money(r.rev)), esc(money(r.pur)), esc(money(r.wasteCost)), '<span class="'+toneOf(n)+'">'+esc(money(n))+'</span>'];
-    });
-
-    var movs=[];
-    arr(m.salesLog).forEach(function(x){ if(!x||typeof x!=='object') return; var v=(x.revenue!=null)?num(x.revenue):num(x.qty)*num(x.unitPrice); movs.push({d:dayOf(x),t:'بيع',n:x.name||x.item||x.product||'—',v:v}); });
-    arr(m.wasteLog).forEach(function(x){ if(!x||typeof x!=='object') return; movs.push({d:dayOf(x),t:'هالك',n:x.name||x.item||'—',v:num(x.cost)||num(x.amount)||0}); });
-    arr(m.purchasesLog).forEach(function(x){ if(!x||typeof x!=='object') return; movs.push({d:dayOf(x),t:'شراء',n:x.name||x.item||'—',v:num(x.total)||num(x.amount)||num(x.cost)||0}); });
-    movs.sort(function(a,b){ return a.d<b.d?1:a.d>b.d?-1:0; });
-    var movRows=movs.slice(0,15).map(function(x){ return [esc(x.d),esc(x.t),esc(x.n),esc(money(x.v))]; });
-    root.innerHTML =
-      '<div class="db-head"><div><h2>التحليلات</h2><p class="db-muted">متابعة المبيعات والمخزون والوصفات في شاشة واحدة.</p>'+(liveNote?'<p class="db-muted">'+esc(liveNote)+'</p>':'')+'</div>'+
-      '<div class="db-ctrl"><select id="anPeriod">'+opts+'</select><button type="button" class="db-btn" id="anRefresh">تحديث</button></div><details class="db-tools"><summary>تقرير مالي مفصّل للطباعة</summary><div style="display:flex;gap:10px;align-items:center;margin:10px 0;direction:rtl"><label style="flex:1;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:14px;padding:10px 12px;min-width:0"><span style="font-weight:800;color:#1B1B1B;white-space:nowrap">من</span><input type="text" id="finFrom" inputmode="numeric" placeholder="25" maxlength="2" dir="ltr" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:16px;text-align:right" value="'+((window.__finRange&&window.__finRange.from)||'')+'"></label><label style="flex:1;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:14px;padding:10px 12px;min-width:0"><span style="font-weight:800;color:#1B1B1B;white-space:nowrap">إلى</span><input type="text" id="finTo" inputmode="numeric" placeholder="26" maxlength="2" dir="ltr" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:16px;text-align:right" value="'+((window.__finRange&&window.__finRange.to)||'')+'"></label></div><button type="button" class="db-btn pm-fin-export" id="anExportFinance">طباعة التقرير المالي</button></details></div>'+
-      '<div class="an-body">'+
-      '<div class="an-hero"><small>صافي الربح</small><b>'+esc(money(R.gross-R.wasteCost-R.exp))+'</b><span>'+esc(fmt(R.invoices))+' فاتورة'+(R.partyRev?' · حفلات '+esc(money(R.partyRev)):'')+'</span></div>'+
-      '<div class="db-kpis">'+
-        kpi('إجمالي المبيعات', money(R.rev+R.partyRev), fmt(R.invoices)+' فاتورة')+
-        kpi('المشتريات', money(R.pur), 'خامات متسجلة')+
-        kpi('الهالك', money(R.wasteCost), 'بالتكلفة')+
-        kpi('متبقي الحفلات', money(R.parties.remaining), fmt(R.parties.n)+' حفلة')+
-      '</div>'+
-      '<div class="db-grid">'+
-        card('db-w12','المبيعات اليومية', vbars(R.days))+
-        card('db-w6','توزيع المبيعات', donutHtml(R))+
-        card('db-w6','أعلى المنتجات', table(['#','الصنف','الإيراد'], R.products.slice(0,5).map(function(p,i){return [esc(i+1),esc(p.name),esc(money(p.rev))];})))+
-        card('db-w6','الإنتاج (بالقطع)', hbars(R.prodList, function(v){return fmt(v)+' قطعة';}))+
-        card('db-w6','الهالك (بالكمية)', hbars(R.wasteList.map(function(x){return {label:x.name,value:x.qty};}), function(v){return fmt(v)+' قطعة';}))+
-        card('db-w6','المشتريات حسب الخامة', hbars(R.purList, money))+
-        card('db-w6','الخامات تحت حد الطلب', lowRows.length? table(['الخامة','الرصيد','حد الطلب'], lowRows) : empty('كل الخامات فوق حد الطلب'), 'حسب المخزون الحالي.')+
-        card('db-w12','مقارنة الفترات', table(['الفترة','المبيعات','المشتريات','الهالك','الصافي'], cmpRows))+
-        card('db-w12','آخر الحركات', table(['التاريخ','النوع','البيان','القيمة'], movRows), 'آخر 15 حركة مبيعات وهالك ومشتريات.')+
-        card('db-w12','تكلفة الوصفات والهامش', table(['الوصفة','تكلفة الوحدة','السعر المقترح','سعر البيع','الهامش'], costRows), 'بالوصفات الحالية وأسعار المنيو الحالية.')+
-        card('db-w6','أكثر العملاء', table(['#','العميل','التليفون','الفواتير','الإجمالي'], custRows))+
-        card('db-w6','المشروبات المنتظرة', drinkBody)+
-        card('db-w6','المنيو والتغطية', menuBody)+
-      '</div></div>';
-
-    var ps=document.getElementById('anPeriod');
-    if(ps) ps.onchange=function(){ sel=this.value; build(); };
-    var rf=document.getElementById('anRefresh');
-    if(rf) rf.onclick=function(){ build(); };
-    var ex=document.getElementById('anExportFinance');
-    var ff=document.getElementById('finFrom'), ft=document.getElementById('finTo');
-    window.__finRange=window.__finRange||{from:'',to:''};
-    if(ff) ff.onchange=function(){ window.__finRange.from=this.value; };
-    if(ft) ft.onchange=function(){ window.__finRange.to=this.value; };
+    root.querySelectorAll('[data-tab]').forEach(function(b){ b.onclick=function(){ anTab=b.getAttribute('data-tab'); build(); }; });
+    root.querySelectorAll('[data-per]').forEach(function(b){ b.onclick=function(){ anPer=Number(b.getAttribute('data-per')); build(); }; });
+    root.querySelectorAll('[data-t]').forEach(function(b){ b.onclick=function(){ anType=b.getAttribute('data-t'); build(); }; });
+    var q=root.querySelector('#anQ');
+    if(q) q.oninput=function(){ anQ=this.value; build(); var n=document.getElementById('anQ'); if(n){ n.focus(); n.setSelectionRange(anQ.length,anQ.length); } };
+    var ps=root.querySelector('#anPeriod'); if(ps) ps.onchange=function(){ sel=this.value; build(); };
+    var rf=root.querySelector('#anRefresh'); if(rf) rf.onclick=function(){ build(); };
+    var ex=root.querySelector('#anExportFinance');
     if(ex) ex.onclick=function(){ try{ openFinReport(); }catch(e){ alert('تعذر عرض التقرير: '+(e.message||'خطأ غير معروف')); } };
   }
 
