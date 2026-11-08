@@ -145,19 +145,19 @@ function withUndoEvt(id,label,evt){
 }
 [['deleteSale','حذف عملية بيع'],['deletePurchase','حذف سجل شراء'],
  ['deleteStock','حذف خامة'],['removeOrder','حذف صنف من الطلب'],
- ['adjustStock','تعديل رصيد خامة']].forEach(function(p){ withUndoFn(p[0],p[1]) });
+ ['zeroStock','تصفير رصيد خامة']].forEach(function(p){ withUndoFn(p[0],p[1]) });
 [['clearOrder','مسح الطلب'],['deleteRecipe','حذف الصنف']].forEach(function(p){ withUndoEvt(p[0],p[1],'onclick') });
 [['importJsonBackup','استيراد نسخة JSON'],['importBackup','استيراد نسخة Excel']].forEach(function(p){ withUndoEvt(p[0],p[1],'onchange') });
 /* إضافة طبقة تراجع على عمليات الإضافة أيضًا: زر «تراجع» يعيد الرقم/الصنف لو أُضيف بالخطأ */
 [['addOrder','إضافة صنف'],['addSale','تسجيل بيع'],
- ['addPurchase','تسجيل شراء'],['addStock','إضافة رصيد'],
- ['newRecipe','إنشاء صنف جديد'],['savePrice','تسجيل سعر خامة']].forEach(function(p){ withUndoEvt(p[0],p[1],'onclick') });
+ ['addPurchase','تسجيل شراء'],
+ ['newRecipe','إنشاء صنف جديد']].forEach(function(p){ withUndoEvt(p[0],p[1],'onclick') });
 
 
 /* ==================== 3) حماية العرض والحفظ ==================== */
 var _renderAll=G('renderAll');
 if(typeof _renderAll==='function'){
-  var PARTS=['renderSelectors','renderHome','renderStock','renderOrder','renderHistory','renderPrices','renderMonthly','renderPurchases'];
+  var PARTS=['renderSelectors','renderHome','renderStock','renderOrder','renderHistory','renderMonthly','renderPurchases'];
   window.renderAll=function(){
     try{ return _renderAll.apply(this,arguments) }
     catch(e){
@@ -200,8 +200,6 @@ var V={
  addOrder:[['orderProduct',function(v){return !!v},'اختر الصنف أولًا'],['orderQty',function(v){return Number(v)>0},'عدد الوزنات يجب أن يكون أكبر من صفر']],
  addSale:[['saleProduct',function(v){return !!v},'اختر الصنف المباع'],['saleQty',function(v){return Number(v)>0},'عدد الوحدات يجب أن يكون أكبر من صفر'],['salePrice',function(v){return isNum(v)&&Number(v)>=0},'اكتب سعر بيع صحيحًا (صفر أو أكثر)']],
  addPurchase:[['purchaseIngredient',function(v){return !!v},'اختر الخامة'],['purchaseQty',function(v){return Number(v)>0},'أدخل كمية أكبر من صفر'],['purchaseTotal',function(v){return isNum(v)&&Number(v)>0},'أدخل إجمالي الشراء أكبر من صفر']],
- addStock:[['stockIngredient',function(v){return !!v},'اختر الخامة'],['stockAddQty',function(v){return Number(v)>0},'الكمية المضافة يجب أن تكون أكبر من صفر']],
- savePrice:[['priceIngredient',function(v){return !!v},'اختر الخامة'],['pricePurchase',function(v){return String(v).trim()===''||(isNum(v)&&Number(v)>=0)},'سعر العبوة يجب أن يكون رقمًا'],['pricePackSize',function(v){return String(v).trim()===''||(isNum(v)&&Number(v)>0)},'حجم العبوة يجب أن يكون رقمًا أكبر من صفر']],
  saveRecipe:[['recipeName',function(v){return !!String(v).trim()},'اكتب اسم الصنف']],
  saveCostSettings:[['costYield',function(v){return isNum(v)&&Number(v)>0},'عدد الوحدات الناتجة يجب أن يكون أكبر من صفر']],
  unlockButton:[['employeeName',function(v){return !!v},'اختر اسم الموظف'],['employeePin',function(v){return !!String(v).trim()},'أدخل PIN الشخصي']],
@@ -304,10 +302,8 @@ function paletteItems(){
   out.push({ic:'plus',t:'إضافة صنف للطلب',h:'قسم التحضير',run:function(){ go('order'); focusEl('orderProduct') }});
   out.push({ic:'calc',t:'حساب مكونات الطلب',run:function(){ go('order'); clickBtn('calcOrder') }});
   out.push({ic:'check',t:'تأكيد الإنتاج وخصم الخامات',run:function(){ go('order'); clickBtn('deductOrder') }});
-  out.push({ic:'plus',t:'إضافة رصيد مخزون',run:function(){ go('stock'); focusEl('stockIngredient') }});
   out.push({ic:'list',t:'فتح المنيو',run:function(){ go('menu') }});
   out.push({ic:'bag',t:'تسجيل شراء خامة',run:function(){ go('purchases'); focusEl('purchaseIngredient') }});
-  out.push({ic:'tag',t:'تسجيل سعر خامة',run:function(){ go('prices'); focusEl('priceIngredient') }});
   out.push({ic:'excel',t:'تصدير نسخة احتياطية Excel',run:function(){ clickBtn('exportBackup') }});
   out.push({ic:'database',t:'تنزيل نسخة استرداد JSON',run:function(){ clickBtn('exportJsonBackup') }});
   out.push({ic:'archive',t:'تقفيل الشهر',run:function(){ go('monthly'); clickBtn('closeMonth') }});
@@ -497,7 +493,7 @@ window.__PM_HEALTH__=openHealth;
 
 /* ==================== 10) أدوات الإدخال ==================== */
 (function(){
-  ['orderQty','saleQty','purchaseQty','stockAddQty','salePrice'].forEach(function(id){
+  ['orderQty','saleQty','purchaseQty','salePrice'].forEach(function(id){
     var inp=$(id); if(!inp||inp.dataset.pmStep)return;
     inp.dataset.pmStep='1'; inp.classList.add('pm-num-fix');
     var w=document.createElement('div'); w.className='pm-numwrap';
@@ -525,8 +521,8 @@ window.__PM_HEALTH__=openHealth;
 })();
 (function(){
   [['saleProduct','addSale'],['purchaseIngredient','addPurchase'],
-   ['orderQty','addOrder'],['stockAddQty','addStock'],
-   ['pricePurchase','savePrice'],['costYield','saveCostSettings']].forEach(function(p){
+   ['orderQty','addOrder'],
+   ['costYield','saveCostSettings']].forEach(function(p){
     var el=$(p[0]); if(!el||!el.closest)return;
     var card=el.closest('.card'); if(card&&!card.dataset.pmSubmit)card.dataset.pmSubmit=p[1];
   });
@@ -547,7 +543,7 @@ document.addEventListener('keydown',function(e){
 /* ==================== 11) بحث داخل الجداول ==================== */
 (function(){
   var SEARCH_SVG=ico('search');
-  ['salesTable','purchasesTable','historyTable','archivesTable','pricesTable','stockTable'].forEach(function(id){
+  ['salesTable','purchasesTable','historyTable','archivesTable','stockTable'].forEach(function(id){
     var box=$(id); if(!box||box.dataset.pmSearch||!box.parentNode)return;
     box.dataset.pmSearch='1';
     var wrap=document.createElement('div'); wrap.className='pm-tsearch';

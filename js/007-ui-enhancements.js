@@ -96,7 +96,7 @@ function iconHTML(key,extra){
 var TAB_ICONS={home:'home',drinkProduce:'drinkProduction',drinkQueue:'clock',order:'clipboard',recipes:'hat',stock:'boxes',prices:'tag',costing:'calc',purchases:'cart',sales:'wallet',menu:'list',cartpage:'bag',history:'history',monthly:'archive',audit:'shield',backup:'database',invoice:'invoice',analytics:'analytics',customers:'customers',msgsPanel:'chat',openInvoices:'openInvoices',parties:'parties',partyInvoices:'partyInvoices',partyTemplate:'partyTemplate',salesInvoices:'salesInvoices'};
 var BUTTON_ICONS={
   addOrder:'plus',clearOrder:'trash',calcOrder:'calc',showPurchases:'cart',deductOrder:'check',
-  addStock:'plus',savePrice:'save',newRecipe:'plus',saveRecipe:'save',deleteRecipe:'trash',
+  newRecipe:'plus',saveRecipe:'save',deleteRecipe:'trash',
   saveCostSettings:'save',calcRecipeCost:'calc',exportCostReport:'excel',refreshPurchases:'refresh',exportPurchases:'excel',
   addPurchase:'bag',exportPurchaseLog:'excel',addSale:'money',exportSales:'excel',
   closeMonth:'archive',refreshAudit:'refresh',exportBackup:'excel',exportJsonBackup:'database',
@@ -558,7 +558,7 @@ function wrapFn(name,title,text,opt){
  ['removeOrder','حذف صنف من الطلب','تم حذف الصنف من الطلب الحالي.'],
  ['deleteSale','حذف عملية بيع','تم حذف عملية البيع من السجل.'],
  ['deletePurchase','حذف سجل شراء','تم حذف سجل الشراء. رصيد المخزون لم يتغير.',{kind:'warn'}],
- ['adjustStock','تعديل رصيد خامة','تم تحديث رصيد الخامة وتسجيل الحركة في السجل.'],
+ ['zeroStock','تصفير رصيد خامة','تم تصفير رصيد الخامة وتسجيل الحركة في السجل.'],
  ['viewArchive','فتح أرشيف الفترة','تم فتح تفاصيل أرشيف الفترة في نافذة جديدة.',{check:0,kind:'info'}],
  ['exportExcelTable','تصدير الجدول','تم تنزيل الجدول بصيغة Excel.',{check:0,kind:'success'}]
 ].forEach(function(r){ wrapFn(r[0],r[1],r[2],r[3]) });
