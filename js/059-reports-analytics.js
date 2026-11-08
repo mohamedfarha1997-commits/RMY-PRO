@@ -198,12 +198,6 @@
   }
 
   // ===== العرض الجديد =====
-  function kpi(label,val,sub,tone){
-    return '<div class="db-kpi"><span>'+esc(label)+'</span><b class="'+(tone||'')+'">'+esc(val)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</div>';
-  }
-  function card(cls,title,body,note){
-    return '<section class="db-card '+cls+'"><h3>'+esc(title)+'</h3>'+(note?'<div class="db-note">'+esc(note)+'</div>':'')+body+'</section>';
-  }
   function toneOf(v){ return v>=0?'pos':'neg'; }
   function pctTxt(v){ return v==null?'—':fmt(v,0)+'%'; }
   function empty(t){ return '<div class="db-muted">'+esc(t)+'</div>'; }
@@ -212,35 +206,7 @@
     return '<div class="db-tablewrap"><table><tr>'+head.map(function(h){return '<th>'+esc(h)+'</th>';}).join('')+'</tr>'+
       rows.map(function(r){return '<tr>'+r.map(function(c){return '<td>'+c+'</td>';}).join('')+'</tr>';}).join('')+'</table></div>';
   }
-  function hbars(items,unit){
-    if(!items.length) return empty('لا توجد بيانات في هذه الفترة');
-    var max=items.reduce(function(a,b){return Math.max(a,b.value);},0)||1;
-    return items.slice(0,8).map(function(i){
-      var w=Math.max(2,Math.round(i.value/max*100));
-      return '<div class="db-hr"><span title="'+esc(i.label)+'">'+esc(i.label)+'</span><div class="db-track"><i style="width:'+w+'%"></i></div><b>'+esc(unit?unit(i.value):fmt(i.value))+'</b></div>';
-    }).join('');
-  }
-  function vbars(items){
-    if(!items.length) return empty('لا توجد مبيعات في هذه الفترة');
-    var max=items.reduce(function(a,b){return Math.max(a,b.value);},0)||1;
-    return '<div class="db-vb">'+items.map(function(i){
-      var hh=Math.max(3,Math.round(i.value/max*100));
-      var lbl=i.label.length>5?i.label.slice(5):i.label;
-      return '<div class="db-vc" title="'+esc(i.label)+': '+esc(money(i.value))+'"><i style="height:'+hh+'%"></i><span>'+esc(lbl)+'</span></div>';
-    }).join('')+'</div>';
-  }
-  function list(items){
-    if(!items.length) return empty('لا يوجد');
-    return '<ul class="db-list">'+items.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>';
-  }
 
-  function donutHtml(R){
-    var tot=R.foodRev+R.drinkRev, dp=tot?Math.round(R.drinkRev/tot*100):0;
-    var bg=tot?'conic-gradient(#0067B8 0 '+(100-dp)+'%,#107C10 '+(100-dp)+'% 100%)':'#E5E5E5';
-    return '<div class="db-donut-wrap"><div class="db-donut" style="background:'+bg+'"><span><b>'+esc(money(tot))+'</b><small>إجمالي</small></span></div>'+
-      '<div class="db-donut-leg"><div><span><i style="background:#0067B8"></i>الأكل</span><b>'+esc(money(R.foodRev))+'</b></div>'+
-      '<div><span><i style="background:#107C10"></i>المشروبات</span><b>'+esc(money(R.drinkRev))+'</b></div></div></div>';
-  }
   var anTab='over', anPer=1, anType='all', anQ='';
   var TABS=[['over','نظرة عامة'],['fin','المالية'],['prod','الإنتاج'],['stock','المخزون'],['party','الحفلات'],['ledger','كل الحركات']];
   var PERS=[[1,'اليوم'],[7,'7 أيام'],[30,'الشهر']];
@@ -250,7 +216,7 @@
   function sliceM(m,days){
     if(days>=30) return m;
     var cut=dkey(new Date(Date.now()-(days-1)*864e5)), o=Object.assign({},m);
-    ['salesLog','wasteLog','purchasesLog','productionLog','partyOrders','drinkOrders','history'].forEach(function(k){
+    ['salesLog','wasteLog','purchasesLog','productionLog','partyInvoices','drinkOrders','history'].forEach(function(k){
       if(Array.isArray(m[k])) o[k]=m[k].filter(function(x){ return dayOf(x)>=cut; });
     });
     return o;
@@ -276,10 +242,10 @@
   function ledgerRows(m){
     var out=[];
     arr(m.salesLog).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'sale',d:dayOf(x),n:x.name||x.item||x.product||'—',v:(x.revenue!=null)?num(x.revenue):num(x.qty)*num(x.unitPrice),q:num(x.qty)}); });
-    arr(m.purchasesLog).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'purchase',d:dayOf(x),n:x.name||x.item||'—',v:num(x.total)||num(x.amount)||num(x.cost),q:0}); });
-    arr(m.wasteLog).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'waste',d:dayOf(x),n:x.name||x.item||'—',v:num(x.cost)||num(x.amount),q:num(x.qty)}); });
-    arr(m.productionLog).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'production',d:dayOf(x),n:x.name||x.item||'—',v:0,q:num(x.qty)}); });
-    arr(m.partyOrders).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'party',d:dayOf(x),n:x.name||x.customerName||'—',v:num(x.total)||num(x.amount),q:0}); });
+    arr(m.purchasesLog).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'purchase',d:dayOf(x),n:String(x.name||'—'),v:num(x.totalCost!=null?x.totalCost:x.total),q:num(x.qty)}); });
+    arr(m.wasteLog).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'waste',d:dayOf(x),n:String(x.name||'—'),v:num(x.costAtWaste),q:num(x.qty)}); });
+    arr(m.productionLog).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'production',d:dayOf(x),n:String(x.name||'—'),v:0,q:num(x.pieces!=null?x.pieces:x.qty)}); });
+    arr(m.partyInvoices).forEach(function(x){ if(!x||typeof x!=='object') return; out.push({t:'party',d:dayOf(x),n:String(x.name||x.customerName||'—'),v:num(x.total),q:0}); });
     out.sort(function(a,b){ return a.d<b.d?1:a.d>b.d?-1:0; });
     return out;
   }
@@ -382,7 +348,7 @@
         '<div class="an-card"><h3>الهالك (بالكمية)</h3>'+miniBars(R.wasteList.map(function(x){return {label:x.name,value:x.qty};}),function(v){return fmt(v)+' قطعة';})+'</div>';
     } else if(anTab==='stock'){
       body='<div class="an-card"><h3>المخزون والخامات</h3>'+(inv.length?inv.map(function(x){
-          var q=num(x.qty), mn=num(x.reorder), p=mn>0?Math.min(100,q/(mn*2)*100):(q>0?100:0);
+          var q=num(x.qty), mn=num((obj(mFull.prices)[x.name]||{}).reorder), p=mn>0?Math.min(100,q/(mn*2)*100):(q>0?100:0);
           return '<div class="an-row an-block"><div class="an-rs"><span>'+esc(x.name)+' <small>'+esc(qtyOf(q,x.unit))+'</small></span>'+pillFor(q,mn)+'</div><div class="an-bar"><i style="width:'+p+'%;background:'+(q<=mn?'#C50F1F':'#0067B8')+'"></i></div></div>';
         }).join(''):'<div class="an-empty">لا توجد خامات</div>')+'</div>'+
         '<div class="an-card"><h3>المشتريات حسب الخامة</h3>'+miniBars(R.purList,money)+'</div>'+
