@@ -92,7 +92,8 @@
       '<div id="dpResult"></div>'+
       '<p class="small">لا يتم الخصم إذا كان أي مكون غير متوفر. راجع النواقص قبل التأكيد. كل كوب بيتخصم حسب وصفته المسجلة.</p></div>';
   }
-  function stagesOf(name){ return (typeof getStageOrder==='function')?getStageOrder(name):['prep','oven','stove','fin']; }
+  var DRINK_STAGES=['prep','fin'];
+  function stagesOf(name){ return DRINK_STAGES; }
   function stageLabel(k){ var L=(typeof RECIPE_STAGES!=='undefined')?RECIPE_STAGES:[]; var f=L.filter(function(x){return x[0]===k;})[0]; return f?f[1]:k; }
   function allStagesDone(o){ var done=Array.isArray(o.stagesDone)?o.stagesDone:[]; return stagesOf(o.name).every(function(k){return done.indexOf(k)>-1;}); }
   var DQ_STAGE_CSS='display:flex;gap:6px;flex-wrap:wrap;margin:8px 0';
