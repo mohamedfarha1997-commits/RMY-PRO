@@ -1236,8 +1236,6 @@ html body #archivesTable{overflow-x:auto!important;overflow-y:hidden!important;w
 html body #archivesTable table{table-layout:auto!important;width:max-content!important;min-width:100%!important;max-width:none!important;border-collapse:separate!important;border-spacing:0!important}
 html body #archivesTable th,html body #archivesTable td{white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;vertical-align:middle!important;padding:9px 12px!important;font-size:12.5px!important;line-height:1.5!important}
 html body #archivesTable td .mini,html body #archivesTable td .secondary,html body #archivesTable td .danger{white-space:nowrap!important;margin:2px 0!important}/* ---- 069-reports-expenses.css ---- */
-html body #expenses.active{display:block}
-html body #expenses.active>.card{margin:0 0 16px!important;grid-column:auto}
 html body #monthly.active>.card:first-child{grid-column:span 12!important}/* ---- 070-dock-match.css ---- */html body #pmDock #pmMsgWrap>button{background:none!important;color:#1B1B1B!important;box-shadow:none!important;border:0!important;}html body #pmDock #pmMsgWrap>button svg{height:22px!important;}html body #pmDock #pmMsgWrap>button{flex:1 1 0!important;width:auto!important;min-width:0!important;height:auto!important;display:flex!important;align-items:center!important;gap:4px!important;padding:7px 0!important;margin:0!important;border-radius:18px!important;}/* ---- 072-menu-5col.css ---- */
 html body #menu #menuGrid.menu-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;grid-auto-rows:auto!important;align-items:stretch!important;margin-top:10px!important;max-height:none!important;height:auto!important;overflow:visible!important}
 html body #menu #menuGrid .mx-card,
