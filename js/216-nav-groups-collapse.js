@@ -34,6 +34,10 @@
         'html body nav.tabs .nav-group > .nav-title[data-pm-collapsible]::after{content:attr(data-count) " \\25BE";margin-inline-start:auto;font-size:12px;font-weight:700;color:#5b6b7d;white-space:nowrap}' +
         'html body nav.tabs .nav-group.pm-grp-closed > .nav-title[data-pm-collapsible]::after{content:attr(data-count) " \\25B8"}' +
         'html body nav.tabs .nav-group.pm-grp-closed > .nav-items{display:none!important}' +
+        'html body nav.tabs{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;align-items:start}' +
+        'html body nav.tabs > .nav-group{min-width:0;margin:0!important}' +
+        'html body nav.tabs > .nav-group > .nav-items{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px}' +
+        'html body nav.tabs > .nav-group > .nav-title{font-size:14px}' +
         'html body nav.tabs .nav-sub{grid-column:1/-1!important;margin-top:4px}' +
         'html body nav.tabs .nav-sub-title{font-size:13px;font-weight:800;color:#5b6b7d;margin:6px 2px 8px;display:flex;align-items:center;gap:6px}' +
         'html body nav.tabs .nav-sub-title::before{content:"";width:3px;height:13px;border-radius:3px;background:#0067B8}' +
