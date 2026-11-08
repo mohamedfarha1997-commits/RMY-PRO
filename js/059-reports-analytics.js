@@ -243,22 +243,28 @@
   // ===== التحضير: الشيف والباريستا بنفس المرحلتين: تحضير / جاهز للتسليم =====
   function prepData(){
     var by={}, order=[];
-    function add(name,qty,isReady,src){
+    // كل طلب ليه وحدات = عدد مراحله (الشيف طلبه مرحلة واحدة). النسبة = الوحدات المنجزة / الإجمالي.
+    function add(name,qty,isReady,doneUnits,units){
       var k=String(name||'—');
-      if(!by[k]){ by[k]={name:k,pending:0,ready:0}; order.push(k); }
+      if(!by[k]){ by[k]={name:k,pending:0,ready:0,doneU:0,totalU:0}; order.push(k); }
       if(isReady) by[k].ready+=qty; else by[k].pending+=qty;
+      by[k].doneU+=qty*doneUnits; by[k].totalU+=qty*units;
     }
     arr(S().orders).forEach(function(o){
       if(!o||o.status==='cancelled') return;
-      add(o.name, Math.max(1,num(o.qty)), o.status==='ready'||o.status==='delivered', 'chef');
+      var ready=o.status==='ready'||o.status==='delivered';
+      add(o.name, Math.max(1,num(o.qty)), ready, ready?1:0, 1);
     });
     arr(S().drinkOrders).forEach(function(o){
       if(!o||o.status==='cancelled') return;
-      add(o.name, Math.max(1,num(o.qty)), o.status==='prepared'||o.status==='delivered', 'barista');
+      var ord=(typeof getStageOrder==='function')?getStageOrder(o.name):['prep','oven','stove','fin'];
+      var prepared=o.status==='prepared'||o.status==='delivered';
+      var done=prepared?ord.length:(Array.isArray(o.stagesDone)?o.stagesDone:[]).filter(function(k){return ord.indexOf(k)>-1;}).length;
+      add(o.name, Math.max(1,num(o.qty)), prepared, done, ord.length||1);
     });
     return order.map(function(k){
       var x=by[k], total=x.pending+x.ready;
-      x.total=total; x.percent=total?Math.round(x.ready/total*100):0;
+      x.total=total; x.percent=x.totalU?Math.round(x.doneU/x.totalU*100):0;
       return x;
     }).filter(function(x){ return x.total>0; });
   }
