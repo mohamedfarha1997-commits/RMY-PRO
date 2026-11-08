@@ -235,6 +235,13 @@
     return '<ul class="db-list">'+items.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>';
   }
 
+  function donutHtml(R){
+    var tot=R.foodRev+R.drinkRev, dp=tot?Math.round(R.drinkRev/tot*100):0;
+    var bg=tot?'conic-gradient(#0067B8 0 '+(100-dp)+'%,#107C10 '+(100-dp)+'% 100%)':'#E5E5E5';
+    return '<div class="db-donut-wrap"><div class="db-donut" style="background:'+bg+'"><span><b>'+esc(money(tot))+'</b><small>إجمالي</small></span></div>'+
+      '<div class="db-donut-leg"><div><span><i style="background:#0067B8"></i>الأكل</span><b>'+esc(money(R.foodRev))+'</b></div>'+
+      '<div><span><i style="background:#107C10"></i>المشروبات</span><b>'+esc(money(R.drinkRev))+'</b></div></div></div>';
+  }
   var TABS=[['over','نظرة عامة'],['sales','المبيعات'],['profit','الربحية'],['stock','المخزون والإنتاج']];
   function injectStyle(){
     if(document.getElementById('anStyle')) return;
@@ -302,7 +309,7 @@
       return [esc(p.label), esc(money(r.rev)), esc(money(r.pur)), esc(money(r.wasteCost)), '<span class="'+toneOf(n)+'">'+esc(money(n))+'</span>'];
     });
 
-    var SEC={over:[card('db-w12','المبيعات اليومية', vbars(R.days)),
+    var SEC={over:[card('db-w12','المبيعات اليومية', vbars(R.days)),card('db-w6','توزيع المبيعات', donutHtml(R)),card('db-w6','أعلى المنتجات', table(['#','الصنف','الإيراد'], R.products.slice(0,5).map(function(p,i){return [esc(i+1),esc(p.name),esc(money(p.rev))];}))),
 card('db-w12','مقارنة الفترات', table(['الفترة','المبيعات','المشتريات','الهالك','الصافي'], cmpRows))],sales:[card('db-w6','الأكل والمشروبات', split),
 card('db-w12','أفضل الأصناف (أعلى 8)', table(['#','الصنف','الكمية','الإيراد','التكلفة','الربح','الهامش'], prodRows)),
 card('db-w6','أكثر العملاء', table(['#','العميل','التليفون','الفواتير','الإجمالي'], custRows), 'من الفواتير اللي فيها اسم أو تليفون العميل ('+fmt(R.customerCount)+' عميل).'),
