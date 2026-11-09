@@ -90,7 +90,7 @@
 
   /* ضريبة اختيارية 14%: بتتفعل/تتقفل من السلة، والاختيار بيتحفظ على الجهاز */
   var TAX_RATE=14;
-  function taxOn(){ try{ return localStorage.getItem('pmTaxOn')==='1'; }catch(e){ return false; } } // افتراضيًا مش متحدد؛ '1' بس لما الكاشير يختار الضريبة لأوردر معين
+  function taxOn(){ try{ return localStorage.getItem('pmTaxOn')!=='0'; }catch(e){ return true; } } // دايمًا متحدد افتراضيًا؛ '0' بس لما الكاشير يلغي التحديد لأوردر معين
   function taxAmount(sub){ return taxOn() ? Math.round(sub*TAX_RATE)/100 : 0; }
   window.pmCartTaxToggle=function(on){ try{ localStorage.setItem('pmTaxOn',on?'1':'0'); }catch(e){} renderCart(); };
 

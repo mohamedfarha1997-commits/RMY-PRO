@@ -177,7 +177,7 @@
     var total=0;
     var rowsHtml=lines.map(function(l){ var sum=priceOf(l.name)*l.qty; total+=sum; return '<div><span>'+esc(l.name)+' × '+l.qty+'</span><span>'+moneyFmt(sum)+' ج.م</span></div>'; }).join('');
     /* ضريبة 14%: متحسبة لو الكاشير حدّدها من السلة (نفس الاختيار اللي في السلة) */
-    var __tx=localStorage.getItem('pmTaxOn')==='1';
+    var __tx=localStorage.getItem('pmTaxOn')!=='0';
     var __taxAmt=__tx?Math.round(total*14)/100:0;
     var ov=document.createElement('div'); ov.className='pty-ov'; ov.id='ptyCkOv';
     ov.innerHTML='<div class="pty-card" role="dialog" aria-modal="true">'+
