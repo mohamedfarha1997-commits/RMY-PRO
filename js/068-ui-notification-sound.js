@@ -76,16 +76,23 @@
     }catch(e){}
   },4000);
   window.pmCanSystemNotify=function(){ return ('Notification' in window)&&Notification.permission==='granted'; };
-  window.pmNotify=function(title,body,tag){
+  /* onFail (اختياري): بيتنفّذ لو الإشعار اتقبل (رجّع true) بس الجهاز فشل يعرضه بعد كده
+     (زي أندرويد لما new Notification بترمي خطأ). الكود اللي بينادي بيستخدمها عشان يعرض التنبيه جوه التطبيق كبديل. */
+  window.pmNotify=function(title,body,tag,onFail){
+    var failedLater=false;
+    var fail=function(){ if(failedLater) return; failedLater=true; if(typeof onFail==='function'){ try{ onFail(); }catch(e){} } };
     try{
       if(!window.pmCanSystemNotify()) return false;
-      var opts={body:body||'',icon:'ICONS/icon-192.png',badge:'ICONS/badge-96.png',tag:tag||'rmy',renotify:true,vibrate:[300,120,300,120,300],data:{url:location.href}};
-      var direct=function(){ try{ new Notification(title,opts); }catch(e){} };
+      var opts={body:body||'',badge:'ICONS/badge-96.png',tag:tag||'rmy',renotify:true,vibrate:[300,120,300,120,300],data:{url:location.href}};
+      var direct=function(){ try{ new Notification(title,opts); }catch(e){ fail(); } };
       if(navigator.serviceWorker&&navigator.serviceWorker.ready){
         /* لو الـ service worker مش جاهز في ثانيتين نستخدم الإشعار المباشر */
         var done=false;
         var t=setTimeout(function(){ if(!done){ done=true; direct(); } },2000);
-        navigator.serviceWorker.ready.then(function(reg){ if(done) return; done=true; clearTimeout(t); return reg.showNotification(title,opts); }).catch(function(){ if(!done){ done=true; clearTimeout(t); } direct(); });
+        navigator.serviceWorker.ready.then(function(reg){
+          if(done) return; done=true; clearTimeout(t);
+          return reg.showNotification(title,opts).catch(fail);
+        }).catch(function(){ if(!done){ done=true; clearTimeout(t); } direct(); });
       } else { direct(); }
       return true;
     }catch(e){ return false; }
