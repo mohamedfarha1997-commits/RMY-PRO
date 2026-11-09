@@ -97,7 +97,7 @@
         date:dateText(b.completedAt), deliveredAt:b.completedAt, by:delivererOf(b), createdBy:creatorOf(b),
         customer:f.customer||'', customerPhone:f.customerPhone||'',
         eventDate:f.date||'', eventTime:f.time||'', orderNote:notes.join(' · '),
-        total:Math.round(total*100)/100, cost:Math.round(pcost*100)/100, uncostedLines:puncosted, lines:lines, paymentMethod:String((live.find(function(o){return o&&o.paymentMethod})||{}).paymentMethod||''), paid:b.orders.reduce(function(a,o){return a+(o&&o.status!=='cancelled'?(Number(o.paid)||0):0)},0)
+        total:Math.round(total*100)/100, cost:Math.round(pcost*100)/100, uncostedLines:puncosted, lines:lines, taxIncl:live.some(function(o){return Number(o.taxRate)>0}), paymentMethod:String((live.find(function(o){return o&&o.paymentMethod})||{}).paymentMethod||''), paid:b.orders.reduce(function(a,o){return a+(o&&o.status!=='cancelled'?(Number(o.paid)||0):0)},0)
       };
     });
   };
@@ -132,7 +132,8 @@
     window.pmPartyInvoicesList=function(){
       return base.apply(this,arguments).map(function(i){
         var t=Number(i.total)||0;
-        var tax=(pmPartyTaxFromStore(i.key)&&t>0)?{rate:14, amount:Math.round(t*14)/100}:null;
+        /* الحجوزات الجديدة: السعر المتخزن على السيرفر شامل الضريبة، فالضريبة = الجزء اللي جوه الإجمالي */
+        var tax=(i.taxIncl&&t>0)?{rate:14, amount:Math.round((t-Math.round(t/1.14*100)/100)*100)/100}:(pmPartyTaxFromStore(i.key)&&t>0)?{rate:14, amount:Math.round(t*14)/100}:null;
         return Object.assign({}, i, {tax:tax});
       });
     };
@@ -235,7 +236,7 @@
         for(var i=0;i<lines.length;i++){
           var l=lines[i];
           var res=await apiCall({action:'party_order_action',party_action:'create',
-            order:{name:l.name,base_name:l.base||'',customer:cust,customerPhone:phone,customerAddress:String((document.getElementById('cartAddr')||{}).value||'').trim(),date:date,time:time,qty:l.qty,note:note,guests:guests,groupId:groupId,price:priceOf(l.name)},
+            order:{name:l.name,base_name:l.base||'',customer:cust,customerPhone:phone,customerAddress:String((document.getElementById('cartAddr')||{}).value||'').trim(),date:date,time:time,qty:l.qty,note:note,guests:guests,groupId:groupId,price:priceOf(l.name),taxRate:__tx?14:0},
             party_def:partyDefOf(l),employee_name:cloudActorName,pin:cloudActorPin});
           if(res.error) throw res.error;
           sent++;
