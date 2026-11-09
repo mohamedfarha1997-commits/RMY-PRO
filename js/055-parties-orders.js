@@ -120,6 +120,24 @@
     };
   })();
 
+  /* ---------- الضريبة 14% تتحفظ جوه الفاتورة نفسها (i.tax)، عشان لما الشهر يتقفل
+     الأرشيف بياخد نسخة من الفاتورة فيها الضريبة ومتضيعش ---------- */
+  function pmPartyTaxFromStore(key){
+    if(String(key||'').indexOf('g:')!==0) return false;
+    try{ return !!((JSON.parse(localStorage.getItem('pmPartyTax')||'{}')||{})[String(key).slice(2)]); }catch(e){ return false; }
+  }
+  (function(){
+    var base=window.pmPartyInvoicesList;
+    if(typeof base!=='function') return;
+    window.pmPartyInvoicesList=function(){
+      return base.apply(this,arguments).map(function(i){
+        var t=Number(i.total)||0;
+        var tax=(pmPartyTaxFromStore(i.key)&&t>0)?{rate:14, amount:Math.round(t*14)/100}:null;
+        return Object.assign({}, i, {tax:tax});
+      });
+    };
+  })();
+
   /* ---------- الأوردرات المقفولة: بنعلّم كل أوردر بـ id (بيفضل حتى لو الأرشيف اتحذف) ---------- */
   window.pmClosedPartyIds=function(){
     if(!Array.isArray(state.closedPartyOrderIds)){
@@ -355,9 +373,7 @@
   var __pinvOpen={};
   function pmInvRc(i){
     /* الضريبة 14% لو الحجز اتسجل عليه ضريبة (بالـ groupId من تخزين الجهاز) */
-    var __g=String(i.key||'').indexOf('g:')===0?String(i.key).slice(2):'';
-    var __hasTax=false; try{ __hasTax=!!((JSON.parse(localStorage.getItem('pmPartyTax')||'{}')||{})[__g]); }catch(e){}
-    var __tax=(__hasTax&&Number(i.total)>0)?{rate:14, amount:Math.round(Number(i.total)*14)/100}:null;
+    var __tax=(i.tax&&Number(i.tax.amount)>0)?i.tax:((pmPartyTaxFromStore(i.key)&&Number(i.total)>0)?{rate:14, amount:Math.round(Number(i.total)*14)/100}:null);
     return {no:'ح-'+i.no, date:i.date, by:([i.createdBy?'سجّل: '+i.createdBy:'', i.by?'أصدر: '+i.by:''].filter(Boolean).join(' · ')||'—'), note:i.customer, customerPhone:i.customerPhone, total:i.total, lines:i.lines, isParty:true, tax:__tax};
   }
   function pmPartyInvRender(){
