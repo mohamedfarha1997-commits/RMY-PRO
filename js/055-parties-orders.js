@@ -176,6 +176,9 @@
     var iso=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
     var total=0;
     var rowsHtml=lines.map(function(l){ var sum=priceOf(l.name)*l.qty; total+=sum; return '<div><span>'+esc(l.name)+' × '+l.qty+'</span><span>'+moneyFmt(sum)+' ج.م</span></div>'; }).join('');
+    /* ضريبة 14%: متحسبة لو الكاشير حدّدها من السلة (نفس الاختيار اللي في السلة) */
+    var __tx=localStorage.getItem('pmTaxOn')==='1';
+    var __taxAmt=__tx?Math.round(total*14)/100:0;
     var ov=document.createElement('div'); ov.className='pty-ov'; ov.id='ptyCkOv';
     ov.innerHTML='<div class="pty-card" role="dialog" aria-modal="true">'+
       '<h3>أوردر حفلات للشيف</h3>'+
@@ -188,7 +191,8 @@
       '<label>المبلغ اللي اتدفع دلوقتي (اختياري)</label><input id="ptyCkPaid" inputmode="decimal" maxlength="10" placeholder="0">'+
       (true?'<label>طريقة الدفع</label><select id="ptyCkMethod"><option value="cash">كاش</option><option value="instapay">انستا باي</option><option value="visa">فيزا</option></select>':'')+
       '<div class="pty-parts">'+rowsHtml+'</div>'+
-      '<div class="pty-total"><span>الإجمالي</span><span>'+moneyFmt(total)+' ج.م</span></div>'+
+      '<div class="pty-total"><span>الإجمالي قبل الضريبة</span><span>'+moneyFmt(total)+' ج.م</span></div>'+
+      (__tx?'<div class="pty-total"><span>ضريبة القيمة المضافة 14%</span><span>'+moneyFmt(__taxAmt)+' ج.م</span></div>'+'<div class="pty-total"><span>الإجمالي بعد الضريبة</span><span>'+moneyFmt(total+__taxAmt)+' ج.م</span></div>':'')+
       '<div class="pty-actions"><button type="button" class="secondary" id="ptyCkCancel">إلغاء</button><button type="button" class="primary" id="ptyCkOk">إرسال الأوردر للشيف</button></div></div>';
     document.body.appendChild(ov);
     document.getElementById('ptyCkCancel').onclick=function(){ ov.remove(); };
@@ -207,6 +211,8 @@
       btn.disabled=true; btn.textContent='جارٍ الإرسال…';
       var groupId='pg-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
       var sent=0;
+      /* الحجز عليه ضريبة: بنسجل الـ groupId على الجهاز عشان الفاتورة تعرضها */
+      if(__tx){ try{ var __pt=JSON.parse(localStorage.getItem('pmPartyTax')||'{}')||{}; __pt[groupId]={rate:14}; localStorage.setItem('pmPartyTax',JSON.stringify(__pt)); }catch(e){} }
       try{
         for(var i=0;i<lines.length;i++){
           var l=lines[i];
@@ -348,7 +354,11 @@
   /* ---------- تبويب فواتير الحفلات ---------- */
   var __pinvOpen={};
   function pmInvRc(i){
-    return {no:'ح-'+i.no, date:i.date, by:([i.createdBy?'سجّل: '+i.createdBy:'', i.by?'أصدر: '+i.by:''].filter(Boolean).join(' · ')||'—'), note:i.customer, customerPhone:i.customerPhone, total:i.total, lines:i.lines, isParty:true};
+    /* الضريبة 14% لو الحجز اتسجل عليه ضريبة (بالـ groupId من تخزين الجهاز) */
+    var __g=String(i.key||'').indexOf('g:')===0?String(i.key).slice(2):'';
+    var __hasTax=false; try{ __hasTax=!!((JSON.parse(localStorage.getItem('pmPartyTax')||'{}')||{})[__g]); }catch(e){}
+    var __tax=(__hasTax&&Number(i.total)>0)?{rate:14, amount:Math.round(Number(i.total)*14)/100}:null;
+    return {no:'ح-'+i.no, date:i.date, by:([i.createdBy?'سجّل: '+i.createdBy:'', i.by?'أصدر: '+i.by:''].filter(Boolean).join(' · ')||'—'), note:i.customer, customerPhone:i.customerPhone, total:i.total, lines:i.lines, isParty:true, tax:__tax};
   }
   function pmPartyInvRender(){
     var box=document.getElementById('partyInvBody'); if(!box) return;
