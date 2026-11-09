@@ -59,13 +59,8 @@
    سواء التطبيق مفتوح قدامك أو في الخلفية. لو الإذن مش متاح، pmNotify بترجّع false والتطبيق يعرض التنبيه جواه زي الأول. */
 (function(){
   if(window.__pmNotifyInit) return; window.__pmNotifyInit=true;
-  var asked=false;
-  function askPermission(){
-    if(asked||!('Notification' in window)) return; asked=true;
-    if(Notification.permission==='default'){ try{ Notification.requestPermission(); }catch(e){} }
-  }
-  /* طلب الإذن لازم يكون بعد لمسة من المستخدم */
-  document.addEventListener('pointerdown',askPermission,{capture:true,passive:true});
+  /* ملاحظة: طلب إذن الإشعارات بيتعمل بس من زرار «سماح» في البانر (219-notif-permission-banner.js).
+     مفيش طلب تلقائي عند أي لمسة، عشان نافذة المتصفح متظهرش غير لما المستخدم يوافق. */
   /* لو الإذن اتحجب قبل كده نفهّم المستخدم يفعّله من إعدادات الجهاز (مرة واحدة) */
   setTimeout(function(){
     try{
