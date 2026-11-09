@@ -102,10 +102,10 @@ try{
   }
   function itemHtml(m){
     /* الرسالة الجديدة بخلفية فاتحة ملونة (مش سودا)، والنص بلون غامق صريح عشان ما يختفيش في الوضع الداكن */
-    var bg = m.read ? '#FFFFFF' : '#E8F2FB';
+    var bg = m.read ? '#FFFFFF' : '#E8EBF7';
     return '<div style="border:1px solid rgba(0,0,0,.14);background:'+bg+';color:#1B1B1B;border-radius:10px;padding:10px;margin-top:8px">' +
       '<div style="font-size:12px;color:#1B1B1B">من: <b style="color:#1B1B1B">'+esc3(m.from_employee||'الإدارة')+'</b> · '+esc3(fmtDate(m.created_at)) +
-      (m.read ? '' : ' · <b style="color:#0067B8">جديدة</b>') + '</div>' +
+      (m.read ? '' : ' · <b style="color:#293394">جديدة</b>') + '</div>' +
       '<div style="margin-top:6px;white-space:pre-wrap;color:#1B1B1B">'+esc3(m.body)+'</div></div>';
   }
   function renderPanel(){
@@ -159,7 +159,7 @@ try{
   function showPopup(list){
     var ov = document.createElement('div');
     ov.setAttribute('role','dialog');
-    ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,103,184,.45);z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl';
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(41,51,148,.45);z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl';
     ov.innerHTML = '<div style="background:#fff;color:#1B1B1B;border-radius:14px;max-width:460px;width:100%;max-height:80vh;overflow:auto;padding:18px;box-sizing:border-box">' +
       '<h3 style="margin:0">عندك '+list.length+' رسالة جديدة من الإدارة</h3>' +
       list.map(itemHtml).join('') +

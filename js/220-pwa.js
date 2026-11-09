@@ -48,7 +48,7 @@
       btn.type = 'button';
       btn.textContent = b.label;
       btn.style.cssText = 'min-height:40px;padding:0 14px;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;border:1px solid ' +
-        (b.primary ? '#0067B8' : 'rgba(0,0,0,.2)') + ';background:' + (b.primary ? '#0067B8' : '#fff') + ';color:' + (b.primary ? '#fff' : '#1B1B1B');
+        (b.primary ? '#293394' : 'rgba(0,0,0,.2)') + ';background:' + (b.primary ? '#293394' : '#fff') + ';color:' + (b.primary ? '#fff' : '#1B1B1B');
       btn.addEventListener('click', b.onClick);
       bar.appendChild(btn);
     });

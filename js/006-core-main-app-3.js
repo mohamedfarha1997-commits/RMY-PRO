@@ -24,9 +24,9 @@ function fr_parseDay(v){
 function fr_money(v){return (Number(v)||0).toLocaleString('ar-EG',{maximumFractionDigits:0})+' ج.م';}
 function fr_pct(a,b){return b?((a/b)*100).toFixed(1).replace(/\.0$/,'')+'%':'—';}
 function fr_cssText(){
-  return '#pmFinOverlay{position:fixed;inset:0;z-index:10050;display:none;align-items:flex-start;justify-content:center;background:rgba(0,103,184,.55);overflow:auto;padding:18px 12px;direction:rtl}'+
+  return '#pmFinOverlay{position:fixed;inset:0;z-index:10050;display:none;align-items:flex-start;justify-content:center;background:rgba(41,51,148,.55);overflow:auto;padding:18px 12px;direction:rtl}'+
    '.pmfr{width:100%;max-width:820px;background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden;font-family:inherit;color:#1B1B1B}'+
-   '.pmfr-head{background:linear-gradient(135deg,#0067B8,#DCEBF8);color:#FFFFFF;padding:20px 22px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}'+
+   '.pmfr-head{background:linear-gradient(135deg,#293394,#E3E6F6);color:#FFFFFF;padding:20px 22px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}'+
    '.pmfr-head h1{margin:0;font-size:22px;font-weight:800}.pmfr-head p{margin:6px 0 0;font-size:13px;opacity:.9}'+
    '.pmfr-x{background:rgba(255,255,255,.18);border:0;color:#1B1B1B;width:36px;height:36px;border-radius:10px;font-size:20px;cursor:pointer;flex:0 0 auto}'+
    '.pmfr-body{padding:18px 20px 24px}'+
@@ -42,12 +42,12 @@ function fr_cssText(){
    '.pmfr tr.sub td{background:#FFFFFF;font-weight:800}'+
    '.pmfr tr.total td{background:#F2F2F2;font-weight:900;border-top:2px solid #D6D6D6}'+
    '.pmfr .how{font-size:12.5px;color:#1B1B1B;line-height:1.7}'+
-   '.pmfr .bar{height:8px;background:rgba(0,103,184,.25);border-radius:6px;overflow:hidden;margin-top:6px}'+
-   '.pmfr .bar i{display:block;height:100%;background:linear-gradient(90deg,#DCEBF8,#0067B8)}'+
-   '.pmfr .note{background:rgba(0,103,184,.12);border:1px solid #D6D6D6;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.7;margin-top:8px}'+
+   '.pmfr .bar{height:8px;background:rgba(41,51,148,.25);border-radius:6px;overflow:hidden;margin-top:6px}'+
+   '.pmfr .bar i{display:block;height:100%;background:linear-gradient(90deg,#E3E6F6,#293394)}'+
+   '.pmfr .note{background:rgba(41,51,148,.12);border:1px solid #D6D6D6;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.7;margin-top:8px}'+
    '.pmfr .steps{counter-reset:st;list-style:none;padding:0;margin:0}'+
    '.pmfr .steps li{counter-increment:st;position:relative;padding:10px 12px 10px 46px;border:1px solid rgba(0,0,0,.14);border-radius:12px;margin-bottom:8px;font-size:13.5px;line-height:1.8}'+
-   '.pmfr .steps li::before{content:counter(st);position:absolute;inset-inline-start:12px;top:10px;width:24px;height:24px;border-radius:50%;background:rgba(0,103,184,.12);color:#1B1B1B;display:grid;place-items:center;font-size:12px;font-weight:800}'+
+   '.pmfr .steps li::before{content:counter(st);position:absolute;inset-inline-start:12px;top:10px;width:24px;height:24px;border-radius:50%;background:rgba(41,51,148,.12);color:#1B1B1B;display:grid;place-items:center;font-size:12px;font-weight:800}'+
    '.pmfr .empty{color:#1B1B1B;font-size:13px;padding:8px 0}'+
    '@media(max-width:520px){.pmfr-kpis{grid-template-columns:1fr}.pmfr th,.pmfr td{padding:7px 5px;font-size:12.5px}}';
 }
@@ -201,11 +201,11 @@ function openFinReport(){
     '.pmfr h2,.pmfr tr,.pmfr .note,.pmfr-kpi,.pmfr .steps li{break-inside:avoid}'+
     'thead{display:table-header-group}'+
     '.pmfr-head{-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
-    '.pmfr-head{background:#0067B8!important;color:#fff!important;border-radius:14px;padding:16px}'+
+    '.pmfr-head{background:#293394!important;color:#fff!important;border-radius:14px;padding:16px}'+
     '.pmfr-head h1{color:#fff!important}'+
-    '.pmfr h2{color:#0067B8!important;border-bottom:2px solid #DCEBF8!important}'+
+    '.pmfr h2{color:#293394!important;border-bottom:2px solid #E3E6F6!important}'+
     '.pmfr-kpi{border-radius:14px!important;border:1px solid #D6D6D6!important;background:#fff!important}'+
-    '.pmfr .bar i{background:#0067B8!important}'+
+    '.pmfr .bar i{background:#293394!important}'+
     '</style></head><body>'+h+'</body></html>';
 
   var w=null;
@@ -249,7 +249,7 @@ function pmStageOrderUI(order,activeKey){
 window.pmMoveStage=function(k,d){const hid=document.getElementById('stageOrder');const order=normStageOrder(hid?String(hid.value).split(','):[]);const i=order.indexOf(k),j=i+d;if(i<0||j<0||j>=order.length)return;[order[i],order[j]]=[order[j],order[i]];pmStageOrderUI(order);};
 window.pmToggleStage=function(tr){const hide=!tr.classList.contains('collapsed');tr.classList.toggle('collapsed',hide);tr.querySelector('.pm-arrow')&&(tr.querySelector('.pm-arrow').textContent=hide?'◀':'▼');let n=tr.nextElementSibling;while(n&&!n.classList.contains('stage-head')){n.style.display=hide?'none':'';n=n.nextElementSibling}};
 function stageTagText(temp,time){const h=v=>v!==null&&v!==undefined&&v!=='';return [h(temp)?esc(temp)+'° ':'',h(time)?'لمدة '+esc(time)+' دقيقة':''].join('').trim()}
-function stageRowsHtml(rec,opts){opts=opts||{};const sOf=c=>RECIPE_STAGES.some(s=>s[0]===c.stage)?c.stage:'prep';const chip=txt=>`<span style="display:inline-block;margin-inline-start:8px;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:#fff;border:1px solid rgba(0,0,0,.14)">${txt}</span>`;const sv=opts.stove||{};const info={oven:{tag:stageTagText(opts.temp,opts.time),note:opts.note||''},stove:{tag:stageTagText(sv.temp,sv.time),note:sv.note||''}};return normStageOrder(opts.order).map(k=>RECIPE_STAGES.find(s=>s[0]===k)).map(([key,label,fixedTag])=>{const items=rec.filter(c=>sOf(c)===key);const inf=info[key];const showInfo=inf&&(inf.tag||inf.note);if(!items.length&&!showInfo)return '';const tag=inf?(inf.tag?chip(inf.tag):''):(fixedTag?chip(fixedTag):'');const head=`<tr class="stage-head" onclick="pmToggleStage(this)" style="cursor:pointer"><td colspan="3" style="font-weight:800;background:${RECIPE_STAGE_COLORS[key]};color:${RECIPE_STAGE_TEXT[key]||'#1B1B1B'}"><span class="pm-arrow" style="display:inline-block;margin-inline-end:6px">▼</span>${label}${tag}</td></tr>`;const noteRow=(inf&&inf.note)?`<tr><td colspan="3" style="background:rgba(0,103,184,.12);color:#1B1B1B;font-size:13px">ملحوظة: ${esc(inf.note)}</td></tr>`:'';return head+noteRow+items.map(c=>`<tr><td>${esc(c.name)}</td><td>${nfmt(c.qty)}</td><td>${esc(c.unit)}</td></tr>`).join('')}).join('')}
+function stageRowsHtml(rec,opts){opts=opts||{};const sOf=c=>RECIPE_STAGES.some(s=>s[0]===c.stage)?c.stage:'prep';const chip=txt=>`<span style="display:inline-block;margin-inline-start:8px;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:#fff;border:1px solid rgba(0,0,0,.14)">${txt}</span>`;const sv=opts.stove||{};const info={oven:{tag:stageTagText(opts.temp,opts.time),note:opts.note||''},stove:{tag:stageTagText(sv.temp,sv.time),note:sv.note||''}};return normStageOrder(opts.order).map(k=>RECIPE_STAGES.find(s=>s[0]===k)).map(([key,label,fixedTag])=>{const items=rec.filter(c=>sOf(c)===key);const inf=info[key];const showInfo=inf&&(inf.tag||inf.note);if(!items.length&&!showInfo)return '';const tag=inf?(inf.tag?chip(inf.tag):''):(fixedTag?chip(fixedTag):'');const head=`<tr class="stage-head" onclick="pmToggleStage(this)" style="cursor:pointer"><td colspan="3" style="font-weight:800;background:${RECIPE_STAGE_COLORS[key]};color:${RECIPE_STAGE_TEXT[key]||'#1B1B1B'}"><span class="pm-arrow" style="display:inline-block;margin-inline-end:6px">▼</span>${label}${tag}</td></tr>`;const noteRow=(inf&&inf.note)?`<tr><td colspan="3" style="background:rgba(41,51,148,.12);color:#1B1B1B;font-size:13px">ملحوظة: ${esc(inf.note)}</td></tr>`:'';return head+noteRow+items.map(c=>`<tr><td>${esc(c.name)}</td><td>${nfmt(c.qty)}</td><td>${esc(c.unit)}</td></tr>`).join('')}).join('')}
 function hasVal2(v){return v!==null&&v!==undefined&&v!==''}
 function pmRowHtml(c,stage){return `<div class="lineitem comp-row"><input class="cname" placeholder="اسم المكون" value="${esc(c.name||'')}"><input class="cqty" type="number" min="0" step="any" placeholder="الكمية" value="${esc(c.qty||'')}"><select class="cunit">${opt(UNITS,c.unit||'جرام')}</select><input type="hidden" class="cstage" value="${stage}"><button type="button" class="comp-del" title="حذف المكون" onclick="this.parentElement.remove()">×</button></div>`}
 window.pmAddRow=function(stage,name){const box=document.querySelector('[data-rows="'+stage+'"]');if(!box)return;box.insertAdjacentHTML('beforeend',pmRowHtml({name:name||'',qty:'',unit:'جرام'},stage));const r=box.lastElementChild;if(r&&!name){const i=r.querySelector('.cname');i&&i.focus()}};

@@ -23,9 +23,11 @@ try{
     if(cs.backgroundImage!=='none') return;
     var bg=parse(cs.backgroundColor); if(!bg||bg.a<0.5) return;
     var L=lum(bg), S=sat(bg);
-    if(L<0.45 && S<0.6){
+    /* ألوان هوية RMY الزرقا (كحلي/أزرق ملكي) مش خلفيات داكنة قديمة: بنسيبها زي ما هي */
+    var brandBlue = (bg.b - Math.max(bg.r,bg.g)) > 60;
+    if(L<0.45 && S<0.6 && !brandBlue){
       if(!marked.has(el)) marked.set(el,{bg:el.style.getPropertyValue('background-color')});
-      el.style.setProperty('background-color','rgba(0,103,184,.12)','important'); el.setAttribute('data-pm-auto-bg','1');
+      el.style.setProperty('background-color','rgba(41,51,148,.12)','important'); el.setAttribute('data-pm-auto-bg','1');
       var tc=parse(getComputedStyle(el).color);
       if(!tc || lum(tc)>0.45) el.style.setProperty('color','#1B1B1B','important'); el.setAttribute('data-pm-auto-color','1');
     }

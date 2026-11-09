@@ -189,7 +189,7 @@ async function loadAuditLog(){
  box.innerHTML=(function(){
   const dayName=(d)=>d.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   const hm=(d)=>d.toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
-  const PAL=['#1B1B1B','#16794B','#1B1B1B','#0067B8','#B42318','#1B1B1B','#C50F1F','#4D7C0F'];
+  const PAL=['#1B1B1B','#16794B','#1B1B1B','#293394','#B42318','#1B1B1B','#C50F1F','#4D7C0F'];
   const colorOf=(n)=>{let h=0;for(const ch of String(n||'?'))h=(h*31+ch.charCodeAt(0))>>>0;return PAL[h%PAL.length]};
   const people=new Set(), days=[], byDay={};
   rows.forEach(x=>{

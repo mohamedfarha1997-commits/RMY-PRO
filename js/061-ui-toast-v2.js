@@ -10,7 +10,7 @@
     nochange:{n:'لم يحدث تغيير',d:5400,icon:'info'}
   };
 
-  var ICON_CLR={success:'#16794B',error:'#D92D20',warn:'#1B1B1B',info:'#1B1B1B',progress:'#0067B8',undo:'#1B1B1B',nochange:'#1B1B1B'};
+  var ICON_CLR={success:'#16794B',error:'#D92D20',warn:'#1B1B1B',info:'#1B1B1B',progress:'#293394',undo:'#1B1B1B',nochange:'#1B1B1B'};
   function svgIco(key){ var I=(window.__PMUI__||{}).ICONS||{}; return I[key]||I.info||''; }
   var esc=function(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]}) };
 
@@ -59,7 +59,7 @@
     var n=QUEUE.reduce(function(a,x){ return a+x.count },0);
     if(!vis._queueBadge){
       var b=document.createElement('span'); b.className='toast-queue';
-      b.style.cssText='font-size:11px;font-weight:800;color:#fff;background:#0067B8;border-radius:99px;padding:1px 7px;margin-inline-start:6px';
+      b.style.cssText='font-size:11px;font-weight:800;color:#fff;background:#293394;border-radius:99px;padding:1px 7px;margin-inline-start:6px';
       var head=vis.querySelector('.toast-head'); if(head) head.appendChild(b);
       vis._queueBadge=b;
     }

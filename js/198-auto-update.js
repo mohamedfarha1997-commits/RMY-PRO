@@ -64,7 +64,7 @@
       bar.setAttribute('role', 'status');
       bar.style.cssText =
         'position:fixed;inset-inline:0;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);' +
-        'z-index:9999;margin:0 auto;width:max-content;max-width:92%;background:#0067B8;color:#fff;' +
+        'z-index:9999;margin:0 auto;width:max-content;max-width:92%;background:#293394;color:#fff;' +
         'padding:8px 14px;border-radius:12px;font-size:14px;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.2);' +
         'display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;direction:rtl';
       document.body.appendChild(bar);
@@ -74,7 +74,7 @@
     if (withButton) {
       var b = document.createElement('button');
       b.type = 'button'; b.textContent = 'حدّث الآن';
-      b.style.cssText = 'min-height:36px;padding:0 12px;border-radius:10px;border:0;background:#fff;color:#0067B8;font:inherit;font-weight:800;cursor:pointer';
+      b.style.cssText = 'min-height:36px;padding:0 12px;border-radius:10px;border:0;background:#fff;color:#293394;font:inherit;font-weight:800;cursor:pointer';
       b.addEventListener('click', function () { applyNow(true); });
       bar.appendChild(b);
     }

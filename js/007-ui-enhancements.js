@@ -79,12 +79,12 @@ history:svg('<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7
 arrowUp:svg('<path d="M12 19V5"/><path d="M5 12l7-7 7 7"/>')
 };
 var ICON_COLORS={
-  home:'#1B1B1B',cup:'#1B1B1B',drinkProduction:'#1B1B1B',clipboard:'#0067B8',hat:'#C50F1F',boxes:'#1B1B1B',tag:'#1B1B1B',calc:'#1B1B1B',cart:'#0067B8',
-  wallet:'#16A34A',list:'#E11D48',clock:'#1B1B1B',archive:'#0067B8',shield:'#059669',database:'#1B1B1B',
+  home:'#1B1B1B',cup:'#1B1B1B',drinkProduction:'#1B1B1B',clipboard:'#293394',hat:'#C50F1F',boxes:'#1B1B1B',tag:'#1B1B1B',calc:'#1B1B1B',cart:'#293394',
+  wallet:'#16A34A',list:'#E11D48',clock:'#1B1B1B',archive:'#293394',shield:'#059669',database:'#1B1B1B',
   plus:'#16A34A',save:'#1B1B1B',trash:'#DC2626',download:'#1B1B1B',upload:'#1B1B1B',print:'#1B1B1B',refresh:'#1B1B1B',
   check:'#16A34A',close:'#DC2626',error:'#DC2626',alertTri:'#1B1B1B',info:'#1B1B1B',cloud:'#1B1B1B',sync:'#1B1B1B',
-  spinner:'#1B1B1B',login:'#1B1B1B',logout:'#DC2626',unlock:'#16A34A',user:'#0067B8',restore:'#1B1B1B',search:'#1B1B1B',
-  edit:'#1B1B1B',back:'#1B1B1B',bell:'#0067B8',gauge:'#1B1B1B',chart:'#1B1B1B',bag:'#C50F1F',receipt:'#1B1B1B',
+  spinner:'#1B1B1B',login:'#1B1B1B',logout:'#DC2626',unlock:'#16A34A',user:'#293394',restore:'#1B1B1B',search:'#1B1B1B',
+  edit:'#1B1B1B',back:'#1B1B1B',bell:'#293394',gauge:'#1B1B1B',chart:'#1B1B1B',bag:'#C50F1F',receipt:'#1B1B1B',
   money:'#15803D',folder:'#1B1B1B',excel:'#15803D'
 };
 function iconHTML(key,extra){

@@ -6,7 +6,7 @@
   var KEY='pm_menu_admin_collapsed';
   var CSS=
     '#menuAdminCard.pm-collapsible>h2{cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;user-select:none;margin-bottom:0}'+
-    '#menuAdminCard.pm-collapsible>h2::after{content:"\u25BE";font-size:14px;font-weight:700;color:#0067B8;flex:0 0 auto}'+
+    '#menuAdminCard.pm-collapsible>h2::after{content:"\u25BE";font-size:14px;font-weight:700;color:#293394;flex:0 0 auto}'+
     '#menuAdminCard.pm-collapsible.pm-collapsed>h2::after{content:"\u25B8"}'+
     '#menuAdminCard.pm-collapsible.pm-collapsed>:not(h2){display:none!important}';
 

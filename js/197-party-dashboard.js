@@ -17,7 +17,7 @@
     '.pmd-kpi span{font-size:12px;color:var(--muted,#6b7280)}' +
     '.pmd-bars{display:flex;align-items:flex-end;gap:4px;height:90px;margin-top:8px}' +
     '.pmd-bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}' +
-    '.pmd-bar i{display:block;width:100%;min-height:2px;background:#0067B8;border-radius:4px 4px 0 0}' +
+    '.pmd-bar i{display:block;width:100%;min-height:2px;background:#293394;border-radius:4px 4px 0 0}' +
     '.pmd-bar em{font-style:normal;font-size:10px;color:var(--muted,#6b7280);margin-top:3px}' +
     '.pmd-row{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px dashed var(--line,#e5e7eb);font-size:14px}' +
     '.pmd-row:first-of-type{border-top:0}' +

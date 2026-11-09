@@ -36,7 +36,7 @@
         'html body nav.tabs .nav-group.pm-grp-closed > .nav-items{display:none!important}' +
         'html body nav.tabs .nav-sub{grid-column:1/-1!important;margin-top:4px}' +
         'html body nav.tabs .nav-sub-title{font-size:13px;font-weight:800;color:#5b6b7d;margin:6px 2px 8px;display:flex;align-items:center;gap:6px}' +
-        'html body nav.tabs .nav-sub-title::before{content:"";width:3px;height:13px;border-radius:3px;background:#0067B8}' +
+        'html body nav.tabs .nav-sub-title::before{content:"";width:3px;height:13px;border-radius:3px;background:#293394}' +
         'html body nav.tabs .nav-sub-items{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}' +
         'html[data-theme="dark"] body nav.tabs .nav-sub-title{color:#D6D6D6}';
       document.head.appendChild(st);

@@ -313,22 +313,22 @@
     var st=document.createElement('style'); st.id='anStyle';
     st.textContent=
       '.an-root{direction:rtl;color:#1B1B1B}'+
-      '.an-top{background:#0067B8;color:#fff;padding:16px;border-radius:0 0 18px 18px;margin:-4px -4px 0}'+
+      '.an-top{background:#293394;color:#fff;padding:16px;border-radius:0 0 18px 18px;margin:-4px -4px 0}'+
       '.an-top h1{font-size:18px;margin:0}.an-top p{font-size:12px;opacity:.85;margin:2px 0 0}'+
       '.an-per{display:flex;gap:6px;margin-top:12px}'+
       '.an-per button,.an-tabs button,.an-chips button{border:1px solid #D6D6D6;background:#fff;color:#5E5E5E;border-radius:999px;padding:7px 12px;font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}'+
       '.an-per button{background:transparent;color:#fff;border-color:rgba(255,255,255,.4)}'+
-      '.an-per .on{background:#fff;color:#0067B8;border-color:#fff;font-weight:700}'+
+      '.an-per .on{background:#fff;color:#293394;border-color:#fff;font-weight:700}'+
       '.an-tabs{display:flex;gap:6px;overflow-x:auto;padding:12px 4px 4px;scrollbar-width:none}'+
-      '.an-tabs .on,.an-chips .on{background:#0067B8;color:#fff;border-color:#0067B8;font-weight:700}'+
+      '.an-tabs .on,.an-chips .on{background:#293394;color:#fff;border-color:#293394;font-weight:700}'+
       '.an-main{padding:10px 2px}'+
-      '.an-hero{background:#0067B8;color:#fff;border-radius:16px;padding:18px;margin-bottom:10px}.an-hero small{opacity:.85;font-size:12px}.an-hero b{display:block;font-size:30px;margin:4px 0}'+
+      '.an-hero{background:#293394;color:#fff;border-radius:16px;padding:18px;margin-bottom:10px}.an-hero small{opacity:.85;font-size:12px}.an-hero b{display:block;font-size:30px;margin:4px 0}'+
       '.an-kp{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}'+
       '.an-k{background:#fff;border:1px solid #D6D6D6;border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(0,0,0,.05);display:flex;flex-direction:column;gap:3px;min-width:0}'+
       '.an-k small{color:#5E5E5E;font-size:12px}.an-k b{font-size:17px}.an-k span{color:#5E5E5E;font-size:11px}'+
       '.an-card{background:#fff;border:1px solid #D6D6D6;border-radius:16px;padding:14px;margin-bottom:10px;overflow:auto}'+
       '.an-card h3{font-size:14px;margin:0 0 10px}'+
-      '.an-bars{display:flex;align-items:flex-end;gap:4px;height:100px}.an-bars div{flex:1;background:#0067B8;border-radius:4px 4px 0 0;min-height:3px;opacity:.85}.an-bars .today{background:#107C10}'+
+      '.an-bars{display:flex;align-items:flex-end;gap:4px;height:100px}.an-bars div{flex:1;background:#293394;border-radius:4px 4px 0 0;min-height:3px;opacity:.85}.an-bars .today{background:#107C10}'+
       '.an-lbl{display:flex;justify-content:space-between;font-size:10px;color:#5E5E5E;margin-top:4px}'+
       '.an-donut{display:flex;gap:14px;align-items:center}'+
       '.an-ring{width:110px;height:110px;border-radius:50%;flex-shrink:0;display:grid;place-items:center}'+
@@ -338,35 +338,35 @@
       '.an-row:last-child{border:0}.an-row small{display:block;color:#5E5E5E;font-size:11px}'+
       '.an-block{display:block}.an-rs{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:5px;gap:6px}'+
       '.an-tot{font-size:15px;border-top:2px solid #1B1B1B;border-bottom:0;margin-top:4px}'+
-      '.an-bar{height:7px;background:#E5E5E5;border-radius:6px;overflow:hidden}.an-bar i{display:block;height:100%;background:#0067B8}'+
-      '.an-pill{font-size:11px;padding:3px 8px;border-radius:8px;background:#DCEBF8;color:#0067B8;white-space:nowrap}.an-pill.r{background:#FDE7E9;color:#C50F1F}.an-pill.g{background:#DFF6DD;color:#107C10}.an-pill.a{background:#FFF4CE;color:#9D5D00}'+
+      '.an-bar{height:7px;background:#E5E5E5;border-radius:6px;overflow:hidden}.an-bar i{display:block;height:100%;background:#293394}'+
+      '.an-pill{font-size:11px;padding:3px 8px;border-radius:8px;background:#E3E6F6;color:#293394;white-space:nowrap}.an-pill.r{background:#FDE7E9;color:#C50F1F}.an-pill.g{background:#DFF6DD;color:#107C10}.an-pill.a{background:#FFF4CE;color:#9D5D00}'+
       '.an-root .pos{color:#107C10}.an-root .neg{color:#C50F1F}'+
       '.an-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.an-chips button{padding:6px 10px}'+
       '.an-search{width:100%;border:1px solid #D6D6D6;border-radius:12px;padding:10px 12px;font:inherit;margin-bottom:10px;background:#fff}'+
       '.an-empty{color:#5E5E5E;font-size:13px;padding:8px 0}'+
       '.an-tablewrap{overflow:auto;width:100%}.an-tablewrap table{width:100%;border-collapse:collapse;font-size:12px}.an-tablewrap th,.an-tablewrap td{padding:7px 6px;border-bottom:1px solid #EEE;text-align:right}.an-tablewrap th{color:#5E5E5E;font-weight:700}'+
-      '.an-tools{background:#fff;border:1px solid #D6D6D6;border-radius:16px;padding:12px 14px;margin-bottom:10px}.an-tools summary{cursor:pointer;font-weight:700;color:#0067B8}'+
+      '.an-tools{background:#fff;border:1px solid #D6D6D6;border-radius:16px;padding:12px 14px;margin-bottom:10px}.an-tools summary{cursor:pointer;font-weight:700;color:#293394}'+
       '.an-tools-in{display:flex;flex-direction:column;gap:8px;margin-top:10px}'+
       '.an-range{display:flex;gap:8px}.an-range input{flex:1;border:1px solid #D6D6D6;border-radius:10px;padding:9px;font:inherit;min-width:0}'+
       '.an-sel{border:1px solid #D6D6D6;border-radius:10px;padding:9px;font:inherit;background:#fff}'+
-      '.an-btn{border:0;background:#0067B8;color:#fff;border-radius:12px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer}'+
+      '.an-btn{border:0;background:#293394;color:#fff;border-radius:12px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer}'+
       /* إصلاح الألوان: القواعد العامة (h1/small بـ !important) كانت بتخفي النص على الخلفية الزرقاء */
       'html body #anRoot .an-top,html body #anRoot .an-top h1,html body #anRoot .an-top p,html body #anRoot .an-top small{color:#fff!important}'+
       'html body #anRoot .an-top p{opacity:.9}'+
       'html body #anRoot .an-hero,html body #anRoot .an-hero small,html body #anRoot .an-hero b,html body #anRoot .an-hero span{color:#fff!important}'+
       'html body #anRoot .an-hero small{opacity:.92}'+
       'html body #anRoot .an-per button{background:transparent!important;color:#fff!important;border:1px solid rgba(255,255,255,.55)!important;box-shadow:none!important}'+
-      'html body #anRoot .an-per button.on{background:#fff!important;color:#0067B8!important;border-color:#fff!important}'+
-      'html body #anRoot .an-tabs button.on,html body #anRoot .an-chips button.on{background:#0067B8!important;color:#fff!important;border-color:#0067B8!important}'+
-      'html body #anRoot .an-btn{background:#0067B8!important;color:#fff!important}'+
+      'html body #anRoot .an-per button.on{background:#fff!important;color:#293394!important;border-color:#fff!important}'+
+      'html body #anRoot .an-tabs button.on,html body #anRoot .an-chips button.on{background:#293394!important;color:#fff!important;border-color:#293394!important}'+
+      'html body #anRoot .an-btn{background:#293394!important;color:#fff!important}'+
       'html body #anRoot .an-k small,html body #anRoot .an-k span,html body #anRoot .an-row small{color:#5E5E5E!important}'+
       'html[data-theme="dark"] body #anRoot .an-k small,html[data-theme="dark"] body #anRoot .an-k span,html[data-theme="dark"] body #anRoot .an-row small{color:#B5B5B5!important}'+
       'html[data-theme="dark"] .an-root{color:#D6D6D6}html[data-theme="dark"] .an-k,html[data-theme="dark"] .an-card,html[data-theme="dark"] .an-tools{background:#303030;border-color:#434343;color:#D6D6D6}'+
       'html[data-theme="dark"] .an-ring span{background:#303030;color:#9E9E9E}html[data-theme="dark"] .an-ring b{color:#D6D6D6}html[data-theme="dark"] .an-search,html[data-theme="dark"] .an-range input,html[data-theme="dark"] .an-sel{background:#303030;color:#D6D6D6;border-color:#434343}'+
       'html[data-theme="dark"] .an-tabs button,html[data-theme="dark"] .an-chips button{background:#303030;color:#9E9E9E;border-color:#434343}'+
       '.an-stages{display:grid;gap:10px;margin-top:12px}.an-st .an-rs{margin-bottom:4px}'+
-      '.an-cur{border:2px solid #0067B8}.an-cur-top{display:flex;justify-content:space-between;align-items:center}.an-cur-name{font-size:19px;margin:12px 0 10px}.an-bar-lg{height:10px;margin-top:10px}'+
-      '.an-party-slot .pmd-wrap{margin:0}.an-party-slot .pmd-card{background:#fff;border:1px solid #D6D6D6;border-radius:16px;padding:14px;margin-bottom:10px}.an-party-slot .pmd-title{font-size:14px;color:#1B1B1B;margin:0 0 10px}.an-party-slot .pmd-kpi{background:#F2F2F2;border-radius:14px}.an-party-slot .pmd-kpi b{color:#0067B8}'+
+      '.an-cur{border:2px solid #293394}.an-cur-top{display:flex;justify-content:space-between;align-items:center}.an-cur-name{font-size:19px;margin:12px 0 10px}.an-bar-lg{height:10px;margin-top:10px}'+
+      '.an-party-slot .pmd-wrap{margin:0}.an-party-slot .pmd-card{background:#fff;border:1px solid #D6D6D6;border-radius:16px;padding:14px;margin-bottom:10px}.an-party-slot .pmd-title{font-size:14px;color:#1B1B1B;margin:0 0 10px}.an-party-slot .pmd-kpi{background:#F2F2F2;border-radius:14px}.an-party-slot .pmd-kpi b{color:#293394}'+
       'html[data-theme="dark"] .an-party-slot .pmd-card{background:#303030;border-color:#434343;color:#D6D6D6}';
     document.head.appendChild(st);
   }
@@ -402,7 +402,7 @@
         '</div>'+
         '<div class="an-card"><h3>المبيعات اليومية (7 أيام)</h3><div class="an-bars">'+colBars(days)+'</div>'+
           '<div class="an-lbl"><span>'+esc(days.length?days[0].label:'')+'</span><span>اليوم</span></div></div>'+
-        '<div class="an-card"><h3>توزيع الحركات المالية</h3>'+donutG([['الإيرادات',rev,'#0067B8'],['المشتريات',R.pur,'#9D5D00'],['الهالك',R.wasteCost,'#C50F1F']])+'</div>';
+        '<div class="an-card"><h3>توزيع الحركات المالية</h3>'+donutG([['الإيرادات',rev,'#293394'],['المشتريات',R.pur,'#9D5D00'],['الهالك',R.wasteCost,'#C50F1F']])+'</div>';
     } else if(anTab==='fin'){
       body='<div class="an-card"><h3>قائمة الدخل</h3>'+rowH('إيراد المبيعات',R.rev)+rowH('إيراد الحفلات',R.partyRev)+rowH('المشتريات',-R.pur,'neg')+rowH('الهالك',-R.wasteCost,'neg')+
           '<div class="an-row an-tot"><span><b>صافي الربح</b></span><b class="'+(net>=0?'pos':'neg')+'">'+esc(money(net))+'</b></div></div>'+
@@ -423,7 +423,7 @@
     } else if(anTab==='stock'){
       body='<div class="an-card"><h3>المخزون والخامات</h3>'+(inv.length?inv.map(function(x){
           var q=num(x.qty), mn=num((obj(mFull.prices)[x.name]||{}).reorder), p=mn>0?Math.min(100,q/(mn*2)*100):(q>0?100:0);
-          return '<div class="an-row an-block"><div class="an-rs"><span>'+esc(x.name)+' <small>'+esc(qtyOf(q,x.unit))+'</small></span>'+pillFor(q,mn)+'</div><div class="an-bar"><i style="width:'+p+'%;background:'+(q<=mn?'#C50F1F':'#0067B8')+'"></i></div></div>';
+          return '<div class="an-row an-block"><div class="an-rs"><span>'+esc(x.name)+' <small>'+esc(qtyOf(q,x.unit))+'</small></span>'+pillFor(q,mn)+'</div><div class="an-bar"><i style="width:'+p+'%;background:'+(q<=mn?'#C50F1F':'#293394')+'"></i></div></div>';
         }).join(''):'<div class="an-empty">لا توجد خامات</div>')+'</div>'+
         '<div class="an-card"><h3>المشتريات حسب الخامة</h3>'+miniBars(R.purList,money)+'</div>'+
         '<div class="an-card"><h3>تكلفة الوصفات والهامش</h3>'+table(['الوصفة','تكلفة الوحدة','السعر المقترح','سعر البيع','الهامش'],costRows)+'</div>';

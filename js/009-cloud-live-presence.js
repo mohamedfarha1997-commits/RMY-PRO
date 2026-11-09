@@ -36,7 +36,7 @@ try{
       var busy=!err && /جاري|حفظ|مزامن|تحميل/.test(msg);
       icon.title='حالة التحديث: '+msg;
       icon.setAttribute('data-s',err?'err':(busy?'busy':'ok'));
-      icon.style.color=err?'var(--ui-err)':(busy?'#0067B8':'#4ADE80');
+      icon.style.color=err?'var(--ui-err)':(busy?'#293394':'#4ADE80');
       icon.style.animation='none';
     }
   }

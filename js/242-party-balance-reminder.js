@@ -92,7 +92,7 @@
         '.pbr-meta{color:#555;font-size:14px;margin-top:2px}.pbr-rem{font-size:16px;margin-top:4px;color:#B3261E}' +
         '.pbr-acts{display:flex;gap:8px;margin-top:12px}' +
         '.pbr-acts button{flex:1;min-height:48px;border-radius:14px;font:inherit;font-weight:800;font-size:16px;cursor:pointer;border:1px solid rgba(0,0,0,.15)}' +
-        '.pbr-go{background:#0067B8;color:#fff;border-color:#0067B8!important}.pbr-ok{background:#fff;color:#1B1B1B}';
+        '.pbr-go{background:#293394;color:#fff;border-color:#293394!important}.pbr-ok{background:#fff;color:#1B1B1B}';
       document.head.appendChild(st);
     }
     function close() { ov.remove(); }

@@ -10,7 +10,7 @@
   function showModal(title, html){
     var old=document.getElementById('pmSelfModal'); if(old) old.remove();
     var ov=document.createElement('div'); ov.id='pmSelfModal';
-    ov.style.cssText='position:fixed;inset:0;z-index:10000;background:rgba(0,103,184,.58);display:flex;align-items:center;justify-content:center;padding:16px';
+    ov.style.cssText='position:fixed;inset:0;z-index:10000;background:rgba(41,51,148,.58);display:flex;align-items:center;justify-content:center;padding:16px';
     ov.innerHTML='<div style="background:#fff;border-radius:18px;max-width:600px;width:100%;max-height:88vh;overflow:auto;padding:18px;direction:rtl;color:#1B1B1B">'+
       '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0;font-size:17px;color:#1B1B1B">'+E(title)+'</h2>'+
       '<button type="button" id="pmSelfClose" class="secondary mini">إغلاق</button></div>'+
@@ -91,7 +91,7 @@
     ];
     var fails=0, total=0, body='';
     GROUPS.forEach(function(g){
-      body+='<div style="margin-top:14px;font-weight:800;color:#0067B8">'+E(g.title)+'</div>'+
+      body+='<div style="margin-top:14px;font-weight:800;color:#293394">'+E(g.title)+'</div>'+
             '<div style="font-size:12px;color:#555;margin:2px 0 8px">'+E(g.hint)+'</div>';
       g.tests.forEach(function(t){
         total++;

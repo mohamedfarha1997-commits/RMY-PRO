@@ -116,7 +116,7 @@
   };
 
   /* بطاقات HTML للتقرير والملخص: لون لكل وسيلة + شريط نسبة */
-  var COLORS={cash:'#15875A',instapay:'#0067B8',visa:'#6B4BD8',unknown:'#9AA3AE',party:'#B26A00'};
+  var COLORS={cash:'#15875A',instapay:'#293394',visa:'#6B4BD8',unknown:'#9AA3AE',party:'#B26A00'};
   window.pmPayHtml=function(a){
     var b=pmPayBreakdown(a.salesLog,a.partyInvoices,a.partyPayByMethod);
     var total=b.salesTotal||0;
@@ -135,7 +135,7 @@
     }).join('');
     return '<section style="margin-top:14px;font-family:inherit">'+
       '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px"><h3 style="margin:0;font-size:16px;color:#1B1B1B">المحصّل حسب وسيلة الدفع (أكل + حفلات)</h3>'+
-      '<b style="font-size:15px;color:#0067B8">'+money(total)+'</b></div>'+html+'</section>';
+      '<b style="font-size:15px;color:#293394">'+money(total)+'</b></div>'+html+'</section>';
   };
 
   /* تقرير الشهر المطبوع: القسم يتحط قبل تقسيم الشهر */

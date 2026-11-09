@@ -83,8 +83,8 @@
     '.pm-ing-sug.open{display:block}'+
     '.pm-ing-sug .it{padding:11px 14px;font-size:15px;color:#1B1B1B;cursor:pointer;border-bottom:1px solid rgba(0,0,0,.06)}'+
     '.pm-ing-sug .it:last-child{border-bottom:0}'+
-    '.pm-ing-sug .it.on,.pm-ing-sug .it:hover{background:#E3F2FD}'+
-    '.pm-ing-sug .it b{font-weight:800;color:#0067B8}';
+    '.pm-ing-sug .it.on,.pm-ing-sug .it:hover{background:#E8EAF6}'+
+    '.pm-ing-sug .it b{font-weight:800;color:#293394}';
   document.head.appendChild(st);
 
   function normAr(s){

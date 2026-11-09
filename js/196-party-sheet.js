@@ -107,8 +107,8 @@
       '.pm-po-sum{display:flex;align-items:center;gap:8px;flex-wrap:wrap;cursor:pointer;padding:8px 10px;border-radius:12px;background:#F7F9FC;border:1px solid #E6EBF2;font-size:13px}'+
       '.pm-po-sum .sn{font-weight:700;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'+
       '.pm-po-sum .st{color:#5E5E5E;white-space:nowrap}'+
-      '.pm-po-sum .rm{font-weight:700;color:#0067B8;white-space:nowrap}'+
-      '.pm-compact.pm-open > .pm-po-sum{background:#EAF3FB}';
+      '.pm-po-sum .rm{font-weight:700;color:#293394;white-space:nowrap}'+
+      '.pm-compact.pm-open > .pm-po-sum{background:#E9ECF7}';
     document.head.appendChild(st);
   }
   function cardKey(card){

@@ -21,7 +21,7 @@
     ov.innerHTML =
       '<div class="osc-box">' +
         '<div class="osc-icon"><svg viewBox="0 0 24 24" width="44" height="44" aria-hidden="true">' +
-          '<path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="#0067B8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
+          '<path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="#293394" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
         '<span class="osc-badge">' + badge + '</span>' +
         '<h3>' + esc(title) + '</h3>' +
         lines +
@@ -34,11 +34,11 @@
       style.textContent =
         '.osc-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99990;display:flex;align-items:center;justify-content:center;padding:16px}' +
         '.osc-box{background:#fff;color:#1B1B1B;border-radius:28px;padding:22px 18px;width:min(92vw,420px);text-align:center;direction:rtl;box-shadow:0 12px 40px rgba(0,0,0,.25)}' +
-        '.osc-icon{width:116px;height:116px;margin:0 auto 14px;border-radius:28px;background:#DCEBF8;border:2px solid #BFE5CF;display:flex;align-items:center;justify-content:center}' +
-        '.osc-badge{display:inline-block;background:#DCEBF8;color:#0067B8;border-radius:999px;padding:6px 16px;font-weight:800;font-size:14px}' +
+        '.osc-icon{width:116px;height:116px;margin:0 auto 14px;border-radius:28px;background:#E3E6F6;border:2px solid #BFE5CF;display:flex;align-items:center;justify-content:center}' +
+        '.osc-badge{display:inline-block;background:#E3E6F6;color:#293394;border-radius:999px;padding:6px 16px;font-weight:800;font-size:14px}' +
         '.osc-box h3{margin:12px 0 8px;font-size:22px;font-weight:900}' +
         '.osc-line{font-size:16px;font-weight:700;line-height:1.7}' +
-        '.osc-close{margin-top:16px;width:100%;min-height:52px;border:0;border-radius:18px;background:#DCEBF8;color:#1B1B1B;font:inherit;font-size:18px;font-weight:800;cursor:pointer}';
+        '.osc-close{margin-top:16px;width:100%;min-height:52px;border:0;border-radius:18px;background:#E3E6F6;color:#1B1B1B;font:inherit;font-size:18px;font-weight:800;cursor:pointer}';
       document.head.appendChild(style);
     }
     function close() { ov.remove(); }
