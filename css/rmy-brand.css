@@ -14,14 +14,14 @@
 
 /* ---------- 1) شعار شاشة الدخول ---------- */
 html body.auth-required .login-screen .login-logo{
-  width:200px!important;height:68px!important;border-radius:22px!important;
+  width:250px!important;height:104px!important;border-radius:26px!important;
   margin:0 auto 16px!important;
   background:linear-gradient(135deg,var(--rmy-deep) 0%,var(--rmy-blue) 58%,var(--rmy-light) 100%)!important;
   box-shadow:0 14px 28px -10px rgba(41,51,148,.55),inset 0 1px 0 rgba(255,255,255,.18)!important;
 }
 html body.auth-required .login-screen .login-logo::after{inset:-6px!important;border-radius:28px!important}
 html body.auth-required .login-screen .login-logo .pm-logo-img{
-  width:70%!important;height:50%!important;margin:auto!important;
+  width:88%!important;height:74%!important;margin:auto!important;
 }
 html body.auth-required .login-screen .login-logo .pm-logo-img::after{display:none!important}
 /* ---------- 1b) شعار الدخول بدون لمعان متحرك: الـ overlay بتاع الزجاج كان بيغطي الحروف ويخليها تبان متأكلة ---------- */
