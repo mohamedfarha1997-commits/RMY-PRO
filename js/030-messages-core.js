@@ -90,10 +90,8 @@ try{
     presChip.style.minWidth = '0';
     presChip.style.direction = 'rtl';
     row.appendChild(presChip);
-    row.appendChild(wrap);
-  } else {
-    document.body.appendChild(wrap);
   }
+  (document.getElementById('pmHdrActions')||document.body).insertBefore(wrap,(document.getElementById('pmHdrActions')||document.body).firstChild);
 
   function updateBadge(){
     var n = unread().length;
@@ -129,14 +127,14 @@ try{
     }));
   }
   function placePanel(){
-    var d=document.getElementById('pmDock');
-    var top=d ? d.getBoundingClientRect().top : window.innerHeight-90;
+    var h=document.querySelector('body > header');
+    var bottom=h ? h.getBoundingClientRect().bottom : 70;
     panel.style.position='fixed';
-    panel.style.top='auto';
+    panel.style.bottom='auto';
+    panel.style.top=(bottom+8)+'px';
     panel.style.left='12px';
     panel.style.right='12px';
     panel.style.margin='0 auto';
-    panel.style.bottom=(window.innerHeight-top+8)+'px';
     panel.style.zIndex='9000';
   }
   window.addEventListener('resize',function(){ if(panelOpen) placePanel() });

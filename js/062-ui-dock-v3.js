@@ -40,7 +40,8 @@
     var cust=d.querySelector('[data-act="customers"]')||R.cust;
     var menu=d.querySelector('[data-act="menu"]')||R.menu;
     var notifW=document.getElementById('pmNotifWrap');
-    var seq=[d.querySelector('[data-act="devView"]'),dev,msg,notifW,pur,cust,menu].filter(Boolean);
+    /* الرسائل والتنبيهات اتنقلوا للهيدر (#pmHdrActions) */
+    var seq=[d.querySelector('[data-act="devView"]'),dev,pur,cust,menu].filter(Boolean);
     var vis=seq.filter(visibleEl), hid=seq.filter(function(x){ return !visibleEl(x); });
     var half=Math.ceil(vis.length/2);
     /* عدد الخانات في كل نص من الشريط: كل الأزرار بنفس العرض والرئيسية في النص */

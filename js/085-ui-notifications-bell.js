@@ -1,4 +1,4 @@
-/* الإشعارات في جرس مستقل، والرسائل تفضل في الشريط السفلي بأيقونة مسنجر */
+/* الإشعارات في جرس مستقل، والرسائل والإشعارات في الهيدر (أيقونة مسنجر للرسائل) */
 (function(){
   var KEY='pmNotifHist', MAX=50;
   var hist=[]; try{ hist=JSON.parse(localStorage.getItem(KEY)||'[]')||[]; }catch(e){ hist=[]; }
@@ -22,8 +22,11 @@
   btn.appendChild(lbl);
   document.body.appendChild(panel);
   function placeInDock(){
-    var d=document.getElementById('pmDock');
-    if(d && !wrap.isConnected) d.appendChild(wrap);
+    /* الإشعارات والرسائل في الهيدر (#pmHdrActions): الرسائل الأول ثم الإشعارات */
+    var h=document.getElementById('pmHdrActions'); if(!h) return;
+    var m=document.getElementById('pmMsgWrap');
+    if(m && m.parentNode!==h) h.insertBefore(m,h.firstChild);
+    if(wrap.parentNode!==h) h.appendChild(wrap);
   }
   placeInDock();
   setInterval(placeInDock,800);
@@ -79,8 +82,8 @@
     panel.style.width=w+'px';
     panel.style.left=left+'px';
     panel.style.right='auto';
-    panel.style.top='auto';
-    panel.style.bottom=(vh - r.top + 10)+'px';
+    panel.style.bottom='auto';
+    var hd=document.querySelector('body > header'); panel.style.top=((hd?hd.getBoundingClientRect().bottom:r.bottom)+8)+'px';
   }
   window.addEventListener('resize',function(){ if(panel.style.display==='block') placePanel(); });
   btn.addEventListener('click',function(e){
