@@ -1,14 +1,13 @@
 /* 219-notif-permission-banner.js
    بانر واضح بيطلب إذن الإشعارات بلمسة زرار "سماح"، عشان المتصفح/الهاتف يعرض نافذة الإذن.
-   لو المستخدم قال "لاحقاً" ما يتسألش تاني. لو الإذن اتقفل من الإعدادات بنوضح له يفتحه. */
+   البانر بيفضل ظاهر لحد ما الإذن يتوافق عليه. زرار "لاحقاً" بيأجّله 5 دقايق بس، ويرجع تاني
+   في كل مرة يفتح فيها التطبيق. لو الإذن اتقفل من الإعدادات بنوضح له يفتحه. */
 (function(){
   if(window.__pmPermBanner) return; window.__pmPermBanner=true;
   if(!('Notification' in window)) return;
-  var KEY='pm_notif_banner_dismissed';
-  var shown=false;
+  var SNOOZE_MS=5*60*1000;
+  var snoozeUntil=0;
 
-  function dismissedBefore(){ try{ return !!localStorage.getItem(KEY); }catch(e){ return false; } }
-  function remember(){ try{ localStorage.setItem(KEY,'1'); }catch(e){} }
   function hideBanner(){ var b=document.getElementById('pmNotifBanner'); if(b) b.remove(); }
   function loginVisible(){
     var ls=document.getElementById('loginScreen');
@@ -32,34 +31,35 @@
         '<button id="pmNotifAllow" type="button" style="border:0;background:#0067B8;color:#fff;border-radius:10px;padding:9px 14px;font:inherit;font-weight:700;cursor:pointer">سماح</button>'+
       '</div>';
     document.body.appendChild(b);
-    shown=true;
 
-    document.getElementById('pmNotifLater').onclick=function(){ remember(); hideBanner(); };
+    document.getElementById('pmNotifLater').onclick=function(){
+      snoozeUntil=Date.now()+SNOOZE_MS; hideBanner();
+    };
     document.getElementById('pmNotifAllow').onclick=function(){
       var req;
       try{ req=Notification.requestPermission(); }catch(e){ req=null; }
-      if(!req){ hideBanner(); return; }
+      if(!req){ return; }
       Promise.resolve(req).then(function(p){
         if(p==='granted'){
-          remember(); hideBanner();
+          hideBanner();
           if(window.pmNotify) window.pmNotify('RMY PRO','تم تفعيل الإشعارات على الجهاز');
         } else if(p==='denied'){
-          remember(); hideBanner();
+          hideBanner();
           if(window.toast) window.toast({k:'warn',t:'الإشعارات مقفولة',x:'فعّلها من إعدادات الموقع في المتصفح، وبعدين أعد فتح التطبيق.',d:9000});
         }
-      }).catch(function(){ hideBanner(); });
+        /* لو المستخدم قفل نافذة الإذن من غير اختيار (default): البانر يفضل ظاهر */
+      }).catch(function(){});
     };
   }
 
   function check(){
-    if(shown) return;
     if(!('Notification' in window)) return;
     if(Notification.permission!=='default'){ hideBanner(); return; }
-    if(dismissedBefore()) return;
+    if(Date.now()<snoozeUntil) return;
     if(loginVisible()) return;
     showBanner();
   }
 
   setTimeout(check, 2500);
-  var t=setInterval(function(){ if(shown){ clearInterval(t); return; } check(); },3000);
+  setInterval(check, 3000);
 })();
