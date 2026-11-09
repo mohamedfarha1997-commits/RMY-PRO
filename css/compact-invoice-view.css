@@ -1,0 +1,39 @@
+/* ==================================================================
+   نافذة الفاتورة بعد البيع (.pmv-ov): مضغوطة على الكمبيوتر والجوال
+   الجدول بياخد عرض النافذة كله بدل ما يتقص، والأزرار تفضل ظاهرة من غير سكرول
+   ================================================================== */
+.pmv-ov{padding:10px!important}
+.pmv-box{
+  width:min(400px,100%)!important;
+  max-width:100%!important;
+  padding:10px!important;
+  border-radius:16px!important;
+  max-height:calc(100dvh - 20px)!important;
+  overflow:auto!important;
+}
+.pmv-paper{padding:10px!important;border-radius:12px!important;overflow:visible!important}
+.pmv-paper .inv-shop{font-size:17px!important}
+.pmv-paper .inv-sub,.pmv-paper .inv-tax,.pmv-paper .inv-tax span{font-size:11px!important;margin:0!important;padding:0!important}
+.pmv-paper .inv-top{padding-bottom:6px!important;margin-bottom:6px!important}
+.pmv-paper .inv-meta{margin:6px 0!important;gap:6px!important;font-size:11px!important}
+.pmv-paper .inv-meta>div{padding:4px 6px!important}
+.pmv-paper .inv-meta small{font-size:10px!important}
+.pmv-paper .inv-meta b{font-size:11.5px!important}
+.pmv-paper .inv-tbl{width:100%!important;table-layout:fixed!important;font-size:12px!important}
+.pmv-paper .inv-tbl th,.pmv-paper .inv-tbl td{padding:5px 3px!important;word-break:break-word}
+.pmv-paper .inv-tbl th:nth-child(1),.pmv-paper .inv-tbl td:nth-child(1){width:38%!important}
+.pmv-paper .inv-tbl th:nth-child(2),.pmv-paper .inv-tbl td:nth-child(2){width:14%!important}
+.pmv-paper .inv-tbl th:nth-child(3),.pmv-paper .inv-tbl td:nth-child(3){width:22%!important}
+.pmv-paper .inv-tbl th:nth-child(4),.pmv-paper .inv-tbl td:nth-child(4){width:26%!important}
+.pmv-paper .inv-sum{margin-top:4px!important}
+.pmv-paper .inv-note{font-size:11px!important}
+.pmv-paper .inv-total{padding:4px 0!important;font-size:12px!important;margin:2px 0!important}
+.pmv-paper .inv-total span,.pmv-paper .inv-total b{font-size:13px!important}
+.pmv-paper .inv-foot{font-size:11px!important;margin-top:6px!important}
+.pmv-lang{margin:8px 0 0!important}
+.pmv-lang button{padding:6px 14px!important;font-size:12.5px!important}
+.pmv-acts{margin-top:8px!important;gap:6px!important}
+.pmv-acts button{padding:8px 6px!important;font-size:12.5px!important}
+#pmvQr{margin-top:8px!important;padding:8px!important}
+#pmvQr .pmv-qrbox img{width:150px!important;height:150px!important}
+#pmvQr p{font-size:11.5px!important;margin:4px 0 0!important}
