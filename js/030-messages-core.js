@@ -127,15 +127,31 @@ try{
     }));
   }
   function placePanel(){
+    /* نفس طريقة الإشعارات: اللوحة تحت الزرار وممركزة عليه، مش في نص الشاشة.
+       بنستخدم setProperty مع !important لأن css/app.bundle.css فيه قواعد !important بتفرض width/left */
+    var s=panel.style;
     var h=document.querySelector('body > header');
-    var bottom=h ? h.getBoundingClientRect().bottom : 70;
-    panel.style.position='fixed';
-    panel.style.bottom='auto';
-    panel.style.top=(bottom+8)+'px';
-    panel.style.left='12px';
-    panel.style.right='12px';
-    panel.style.margin='0 auto';
-    panel.style.zIndex='9000';
+    var top=(h ? h.getBoundingClientRect().bottom : 70)+8;
+    var vw=window.innerWidth;
+    s.setProperty('position','fixed','important');
+    s.setProperty('top',top+'px','important');
+    s.setProperty('bottom','auto','important');
+    s.setProperty('right','auto','important');
+    s.setProperty('margin','0','important');
+    s.setProperty('z-index','9000','important');
+    if(vw<=600){
+      // الموبايل: اللوحة تقريبًا عرض الشاشة
+      s.setProperty('left','10px','important');
+      s.setProperty('width',(vw-20)+'px','important');
+      return;
+    }
+    // الكمبيوتر: اللوحة متمركزة تحت أيقونة الرسايل
+    var r=bell.getBoundingClientRect();
+    var w=Math.min(360,vw-20);
+    var left=r.left+r.width/2-w/2;
+    left=Math.max(10,Math.min(left,vw-w-10));
+    s.setProperty('width',w+'px','important');
+    s.setProperty('left',left+'px','important');
   }
   window.addEventListener('resize',function(){ if(panelOpen) placePanel() });
   function setPanel(open){
