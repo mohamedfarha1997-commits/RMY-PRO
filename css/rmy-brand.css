@@ -24,6 +24,9 @@ html body.auth-required .login-screen .login-logo .pm-logo-img{
   width:70%!important;height:50%!important;margin:auto!important;
 }
 html body.auth-required .login-screen .login-logo .pm-logo-img::after{display:none!important}
+/* ---------- 1b) شعار الدخول بدون لمعان متحرك: الـ overlay بتاع الزجاج كان بيغطي الحروف ويخليها تبان متأكلة ---------- */
+html body.auth-required .login-screen .login-logo .pm-logo-img::before{display:none!important;animation:none!important}
+html body.auth-required .login-screen .login-logo .pm-logo-img{overflow:visible!important}
 html[data-theme="dark"] body.auth-required .login-screen .login-logo{
   background:linear-gradient(135deg,var(--rmy-deep) 0%,var(--rmy-blue) 58%,var(--rmy-light) 100%)!important;
 }
