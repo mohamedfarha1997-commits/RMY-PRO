@@ -17,7 +17,7 @@
     var h=document.getElementById('rmyHero'); if(h) return h;
     var nav=document.getElementById('appNav'); if(!nav||!nav.parentNode) return null;
     h=document.createElement('section'); h.id='rmyHero'; h.className='rmy-hero'; h.setAttribute('aria-label','ترحيب');
-    h.innerHTML='<div><div class="rh-greet"></div><div class="rh-name">كل خطوة محسوبة.. وكل صنف في مكانه</div></div>'+
+    h.innerHTML='<div><div class="rh-greet"></div></div>'+
       '<div class="rh-clock"><div class="rh-d"></div><div class="rh-t"></div></div>';
     nav.parentNode.insertBefore(h,nav);
     return h;
