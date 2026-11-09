@@ -102,6 +102,13 @@
     var key=k+'|'+ttl+'|'+text;
     var dur=(typeof o.d==='number')?o.d:K.d;
 
+    /* لو إذن إشعارات الجهاز متاح: الإشعار يظهر على الجهاز نفسه بدل جوه التطبيق.
+       اللي فيه أزرار (تراجع) أو شريط تقدّم بيفضل جوه التطبيق عشان محتاج تفاعل. */
+    if(k!=='progress' && k!=='undo' && typeof o.onShow!=='function' && window.pmNotify){
+      var sysOk=false; try{ sysOk=window.pmNotify('RMY · '+ttl,text,'rmy-'+k); }catch(e){}
+      if(sysOk) return null;
+    }
+
     // نفس الرسالة اللي ظاهرة دلوقتي: بنزوّد العداد بدل ما نكرّرها
     var vis=live(stack())[0];
     if(vis && vis._key===key && Date.now()-vis._born<10000){

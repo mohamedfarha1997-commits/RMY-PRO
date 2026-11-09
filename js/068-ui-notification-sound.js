@@ -66,6 +66,15 @@
   }
   /* طلب الإذن لازم يكون بعد لمسة من المستخدم */
   document.addEventListener('pointerdown',askPermission,{capture:true,passive:true});
+  /* لو الإذن اتحجب قبل كده نفهّم المستخدم يفعّله من إعدادات الجهاز (مرة واحدة) */
+  setTimeout(function(){
+    try{
+      if(!('Notification' in window)||Notification.permission!=='denied') return;
+      if(localStorage.getItem('pm_notif_denied_hint')) return;
+      localStorage.setItem('pm_notif_denied_hint','1');
+      if(window.toast) window.toast({k:'warn',t:'إشعارات الجهاز مقفولة',x:'عشان الإشعارات تظهر على الجهاز: افتح إعدادات الموقع أو التطبيق وفعّل «الإشعارات»، وبعدها أعد فتح التطبيق.',d:12000});
+    }catch(e){}
+  },4000);
   window.pmCanSystemNotify=function(){ return ('Notification' in window)&&Notification.permission==='granted'; };
   window.pmNotify=function(title,body,tag){
     try{
