@@ -34,7 +34,7 @@
     catch (e) { return []; }
   }
   function writeCart(c) { try { localStorage.setItem(cartKey(), JSON.stringify(c)); } catch (e) {} }
-  function taxOn() { try { return localStorage.getItem('pmTaxOn') !== '0'; } catch (e) { return true; } }
+  function taxOn() { try { return localStorage.getItem('pmTaxOn') === '1'; } catch (e) { return false; } }
   function menuItem(name) {
     return (state.menu || []).find(function (x) { return x && x.name === name && x.active !== false; });
   }
