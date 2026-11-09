@@ -2651,3 +2651,6 @@ html[data-theme="dark"] body > header #pmHdrActions #pmMsgWrap>button,html[data-
   html body > header #themeToggle{right:56px!important}
   html body > header #pmSyncIcon{left:8px!important;padding:0 8px 0 6px!important;font-size:11px!important}
 }
+
+/* إخفاء طبقة اللمعة اللي بتعمل نسخة صغيرة من اللوجو فوق الأيقونة في شاشة الدخول */
+body.auth-required .login-screen .login-logo .pm-logo-img::after{display:none !important}
