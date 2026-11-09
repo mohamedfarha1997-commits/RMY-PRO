@@ -52,7 +52,7 @@
     if(b){ b.textContent=n>9?'9+':String(n); b.style.display=n?'inline-flex':'none'; }
     el.textContent='☕ عندك '+n+' طلب مشروبات في قائمة الانتظار، اضغط للعرض';
     el.style.display=(n&&!onQueueScreen())?'block':'none';
-    if(isBarista && lastCount>=0 && n>lastCount){ beep(); if(window.pmNotify) window.pmNotify('طلب مشروبات جديد','عندك '+n+' طلب في قائمة الانتظار','drinks'); }
+    if(isBarista && lastCount>=0 && n>lastCount){ var sys=window.pmNotify?window.pmNotify('طلب مشروبات جديد','عندك '+n+' طلب في قائمة الانتظار','drinks'):false; if(!sys) beep(); }
     lastCount=isBarista?n:-1;
   }
   function tick(){
@@ -172,12 +172,15 @@
       var seen=Number(stored)||0;
       var fresh=list.filter(function(n){ return notifTime(n)>seen }).sort(function(x,y){ return notifTime(x)-notifTime(y) });
       if(fresh.length){
+        /* لو إشعار النظام متاح بيظهر على الجهاز نفسه بدل التنبيه جوه التطبيق */
+        var last=fresh[fresh.length-1], sysOk=false;
+        if(window.pmNotify){ sysOk=window.pmNotify(fresh.length>1?'RMY · '+fresh.length+' إشعارات جديدة':'RMY · '+(last.title||'إشعار جديد'), fresh.length>1?'':(last.body||''), 'rmy-notice'); }
         fresh.forEach(function(n){
-          window.__pmSkipHist=true; try{ toast({k:r==='sales'?'success':'info',t:'إشعار · '+n.title,x:n.body||n.title}) }catch(e){} window.__pmSkipHist=false; try{ if(window.__pmBellAdd) window.__pmBellAdd(); }catch(e){}
+          if(!sysOk){ window.__pmSkipHist=true; try{ toast({k:r==='sales'?'success':'info',t:'إشعار · '+n.title,x:n.body||n.title}) }catch(e){} window.__pmSkipHist=false; }
+          try{ if(window.__pmBellAdd) window.__pmBellAdd(); }catch(e){}
         });
         localStorage.setItem(key,String(Math.max(newest,seen)));
-        beep();
-        if(window.pmNotify){ var last=fresh[fresh.length-1]; window.pmNotify(fresh.length>1?'RMY · '+fresh.length+' إشعارات جديدة':'RMY · '+(last.title||'إشعار جديد'), fresh.length>1?'':(last.body||''), 'rmy-notice'); }
+        if(!sysOk) beep();
       }
       renderNotices();
     });

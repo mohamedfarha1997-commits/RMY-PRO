@@ -55,7 +55,8 @@
   };
 })();
 
-/* إشعار النظام: لما التطبيق يكون في تبويب تاني أو برا الشاشة، الإشعار بيظهر في الجهاز ومعاه صوت الإشعارات بتاع الجهاز نفسه */
+/* إشعار النظام: الإشعار بيظهر في الجهاز نفسه (شريط إشعارات أندرويد / مركز إشعارات الويندوز والماك) ومعاه صوت الإشعارات بتاع الجهاز،
+   سواء التطبيق مفتوح قدامك أو في الخلفية. لو الإذن مش متاح، pmNotify بترجّع false والتطبيق يعرض التنبيه جواه زي الأول. */
 (function(){
   if(window.__pmNotifyInit) return; window.__pmNotifyInit=true;
   var asked=false;
@@ -65,14 +66,18 @@
   }
   /* طلب الإذن لازم يكون بعد لمسة من المستخدم */
   document.addEventListener('pointerdown',askPermission,{capture:true,passive:true});
+  window.pmCanSystemNotify=function(){ return ('Notification' in window)&&Notification.permission==='granted'; };
   window.pmNotify=function(title,body,tag){
     try{
-      if(!('Notification' in window)||Notification.permission!=='granted') return false;
-      if(!document.hidden) return false; /* والتطبيق مفتوح قدامك الصوت والتنبيه اللي فوق كفاية */
+      if(!window.pmCanSystemNotify()) return false;
       var opts={body:body||'',icon:'ICONS/icon-192.png',badge:'ICONS/favicon-32.png',tag:tag||'rmy',renotify:true,vibrate:[300,120,300,120,300],data:{url:location.href}};
+      var direct=function(){ try{ new Notification(title,opts); }catch(e){} };
       if(navigator.serviceWorker&&navigator.serviceWorker.ready){
-        navigator.serviceWorker.ready.then(function(reg){ return reg.showNotification(title,opts); }).catch(function(){ try{ new Notification(title,opts); }catch(e){} });
-      } else { new Notification(title,opts); }
+        /* لو الـ service worker مش جاهز في ثانيتين نستخدم الإشعار المباشر */
+        var done=false;
+        var t=setTimeout(function(){ if(!done){ done=true; direct(); } },2000);
+        navigator.serviceWorker.ready.then(function(reg){ if(done) return; done=true; clearTimeout(t); return reg.showNotification(title,opts); }).catch(function(){ if(!done){ done=true; clearTimeout(t); } direct(); });
+      } else { direct(); }
       return true;
     }catch(e){ return false; }
   };
