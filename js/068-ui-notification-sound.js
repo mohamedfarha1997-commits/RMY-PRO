@@ -79,7 +79,7 @@
   window.pmNotify=function(title,body,tag){
     try{
       if(!window.pmCanSystemNotify()) return false;
-      var opts={body:body||'',icon:'ICONS/icon-192.png',badge:'ICONS/favicon-32.png',tag:tag||'rmy',renotify:true,vibrate:[300,120,300,120,300],data:{url:location.href}};
+      var opts={body:body||'',icon:'ICONS/icon-192.png',badge:'ICONS/badge-96.png',tag:tag||'rmy',renotify:true,vibrate:[300,120,300,120,300],data:{url:location.href}};
       var direct=function(){ try{ new Notification(title,opts); }catch(e){} };
       if(navigator.serviceWorker&&navigator.serviceWorker.ready){
         /* لو الـ service worker مش جاهز في ثانيتين نستخدم الإشعار المباشر */
