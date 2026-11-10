@@ -224,7 +224,8 @@ try{
   }, 1500);
 
   /* تحديث دوري للرسايل والعداد */
-  setInterval(function(){ refresh() }, 60000);
+  setInterval(function(){ refresh() }, 300000);
+  window.addEventListener('pm:messages-changed', function(){ refresh() });
 })();
 }catch(e){console.error('[PastryMY] 030-messages-core.js failed',e)}
 /* ---- 043-messages-read-ticks.js ---- */
@@ -336,7 +337,8 @@ try{
   }
   function watch(){
     var host=$('pmMsgsSection'); if(!host) return false;
-    setInterval(load,5000);
+    setInterval(load,120000);
+    window.addEventListener('pm:messages-changed', load);
     load();
     return true;
   }

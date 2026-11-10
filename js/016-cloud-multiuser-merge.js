@@ -23,10 +23,16 @@
     if(body.action==='save_state'){
       var sent=body.state;
       var sentStr=JSON.stringify(sent);
-      var withBase=Object.assign({},body,{base_state: pmBase||null});
+      var withBase=Object.assign({},body,{base_state: pmBase||null, accept_delta: true});
       return Promise.resolve(origApi.call(this,withBase)).then(function(res){
-        if(!res||res.error||!res.data||!res.data.state) return res;
+        if(!res||res.error||!res.data) return res;
         var merged=res.data.state;
+        if(!merged){
+          // السيرفر رجّع الفرق بس: بنركّب النسخة المدمجة من اللي اتبعت + الفرق
+          if(!res.data.stateDelta) return res;
+          merged=Object.assign({},sent,res.data.stateDelta);
+          (res.data.stateRemoved||[]).forEach(function(k){ delete merged[k]; });
+        }
         if(JSON.stringify(state)===sentStr){
           // ما اتعملش تعديل أثناء الحفظ: بناخد النسخة المدمجة (فيها تعديلات الأجهزة التانية)
           state=migrateStateUnits(copy(merged));
