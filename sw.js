@@ -1,6 +1,6 @@
 // Service worker: لازم يكون فيه fetch handler عشان المتصفح يعتبر الموقع قابل للتثبيت.
 // الشبكة أولًا، ولو مفيش نت يرجع النسخة المخزنة (البيانات الحية ما بتتخزنش قديمة).
-const CACHE = 'rmy-shell-v279';
+const CACHE = 'rmy-shell-v281';
 const SHELL = [
   './',
   './index.html',
@@ -142,7 +142,16 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  if (url.origin !== self.location.origin) return; // API / CDN: للشبكة مباشرة
+  // مكتبة Supabase من الـCDN: الشبكة أولًا، ولو فشلت نرجع للنسخة المخزّنة
+  if (url.origin !== self.location.origin) {
+    if (/supabase-js|supabase\.min\.js|\/supabase\.js/i.test(url.href)) {
+      e.respondWith(
+        fetch(req).then((res) => { if (res && res.status === 200) { const cp = res.clone(); caches.open(CACHE).then((c) => c.put(req, cp)); } return res; })
+          .catch(() => caches.match(req))
+      );
+    }
+    return; // باقي الـAPI / CDN: للشبكة مباشرة
+  }
 
   // 1) الصفحة الرئيسية: الشبكة بمهلة قصيرة، وبعدين النسخة المخزّنة.
   //    شبكة المحل الضعيفة ما تأخرش فتح التطبيق.
