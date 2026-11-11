@@ -47,12 +47,12 @@ function changesFor(v) {
 const changes = changesFor(version);
 
 // 1) المصدر
-let info = read('js/000-app-info.js');
+let info = read('js/core/000-app-info.js');
 info = replaceOnce(info, /version: '[^']*'/, "version: '" + version + "'", 'version في app-info');
 info = replaceOnce(info, /updated: '[^']*'/, "updated: '" + iso + "'", 'updated في app-info');
 info = replaceOnce(info, /updatedLabel: '[^']*'/, "updatedLabel: '" + label + "'", 'updatedLabel في app-info');
 info = replaceOnce(info, /  changes: \[[\s\S]*?\]\n/, '  changes: ' + JSON.stringify(changes, null, 2).replace(/\n/g, '\n  ') + '\n', 'changes في app-info');
-write('js/000-app-info.js', info);
+write('js/core/000-app-info.js', info);
 
 // 2) index.html
 let html = read('index.html');
