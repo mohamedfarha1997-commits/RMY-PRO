@@ -1,0 +1,267 @@
+/* 061-toast-dock.js — اتدمجت من: 061-ui-toast-v2.js، 062-ui-dock-v3.js */
+/* ---- 061-ui-toast-v2.js ---- */
+try{
+(function(){
+  if(window.__pmToastV2) return; window.__pmToastV2=true;
+  var KV={
+    success:{n:'نجاح',d:4200,icon:'check'},
+    error:{n:'خطأ',d:8000,icon:'error'},
+    warn:{n:'تنبيه',d:6500,icon:'alertTri'},
+    info:{n:'معلومة',d:4500,icon:'info'},
+    progress:{n:'جارٍ التنفيذ',d:0,icon:'sync'},
+    undo:{n:'قابل للتراجع',d:11000,icon:'restore'},
+    nochange:{n:'لم يحدث تغيير',d:5400,icon:'info'}
+  };
+
+  var ICON_CLR={success:'#16794B',error:'#D92D20',warn:'#1B1B1B',info:'#1B1B1B',progress:'#293394',undo:'#1B1B1B',nochange:'#1B1B1B'};
+  function svgIco(key){ var I=(window.__PMUI__||{}).ICONS||{}; return I[key]||I.info||''; }
+  var esc=function(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]}) };
+
+  // ===== قاعدة الإشعار الواحد: إشعار واحد ظاهر في الشاشة، والباقي بيستنى في طابور ويظهر بعده =====
+  var QUEUE=[];
+
+  function stack(){
+    var s=document.getElementById('toastStack');
+    if(!s){ s=document.createElement('div'); s.id='toastStack'; s.className='toast-stack'; s.setAttribute('role','status'); s.setAttribute('aria-live','polite'); document.body.appendChild(s); }
+    return s;
+  }
+  function place(){
+    var h=document.querySelector('header'), b=h?h.getBoundingClientRect().bottom:0;
+    var top=Math.max(10, Math.round(b+10));
+    stack().style.setProperty('--toast-top', top+'px');
+  }
+  function live(s){ return [].slice.call(s.children).filter(function(el){ return !el._closing }); }
+  // مشغول = فيه إشعار لسه في الشاشة (حتى لو بيتقفل بالأنيميشن)
+  function busy(){ return stack().children.length>0; }
+  function arm(el,ms){
+    clearTimeout(el._t); el._left=ms; el._start=Date.now();
+    el._t=setTimeout(function(){ close(el) }, ms);
+  }
+  function close(el){
+    if(!el||el._closing||!el.parentNode) return;
+    el._closing=true; clearTimeout(el._t);
+    var s=el.parentNode, h=el.offsetHeight;
+    el.style.height=h+'px'; el.style.overflow='hidden'; el.style.boxSizing='border-box';
+    void el.offsetHeight;
+    el.style.transition='transform .36s cubic-bezier(.4,0,.2,1), opacity .24s ease, height .36s cubic-bezier(.4,0,.2,1) .05s, padding .36s ease, margin .36s ease, border-width .36s ease';
+    el.style.transform='translateY(-'+(h+(parseFloat(s.style.getPropertyValue('--toast-top'))||96)+40)+'px) scale(.96)';
+    el.style.opacity='0';
+    el.style.height='0px'; el.style.paddingTop='0px'; el.style.paddingBottom='0px'; el.style.marginTop='-10px'; el.style.borderWidth='0px';
+    setTimeout(function(){
+      if(el.parentNode) el.parentNode.removeChild(el);
+      pump();                       // بعد ما الإشعار يختفي، الإشعار اللي بعده في الطابور يظهر
+    }, 420);
+  }
+  function bind(el){
+    el.addEventListener('pointerenter',function(){ if(!el._auto||el._closing) return; clearTimeout(el._t); el._left=Math.max(600,(el._left||0)-(Date.now()-el._start)); });
+    el.addEventListener('pointerleave',function(){ if(!el._auto||el._closing) return; arm(el,el._left||2000); });
+  }
+  function updateBadge(){
+    var vis=live(stack())[0];
+    if(!vis) return;
+    var n=QUEUE.reduce(function(a,x){ return a+x.count },0);
+    if(!vis._queueBadge){
+      var b=document.createElement('span'); b.className='toast-queue';
+      b.style.cssText='font-size:11px;font-weight:800;color:#fff;background:#293394;border-radius:99px;padding:1px 7px;margin-inline-start:6px';
+      var head=vis.querySelector('.toast-head'); if(head) head.appendChild(b);
+      vis._queueBadge=b;
+    }
+    vis._queueBadge.textContent='+'+n+' في الانتظار';
+    vis._queueBadge.style.display=n?'':'none';
+  }
+  function render(item){
+    var s=stack(); place();
+    var el=document.createElement('div');
+    el.className='toast '+item.k; el._key=item.key; el._born=Date.now(); el._count=1;
+    el.innerHTML='<span class="toast-edge"></span>'+
+      '<div class="toast-ico"><span class="ui-ring"></span><span class="ui-ico'+(item.k==='progress'?' spin':' ui-live')+'" style="--ic:'+ICON_CLR[item.k]+'">'+svgIco(KV[item.k].icon)+'</span></div>'+
+      '<div class="toast-body"><div class="toast-head"><span class="toast-kind">'+esc(KV[item.k].n)+'</span>'+
+      '<span class="toast-title">'+esc(item.ttl)+'</span><span class="toast-count" style="display:none"></span></div>'+
+      '<div class="toast-text">'+esc(item.text)+'</div></div>'+
+      '<button class="toast-x" type="button" aria-label="إغلاق">×</button><span class="toast-progress"></span>';
+    el._badge=el.querySelector('.toast-count');
+    el.querySelector('.toast-x').onclick=function(e){ e.stopPropagation(); close(el) };
+    el._sticky=true; el._auto=item.dur>0;
+    s.insertBefore(el,s.firstChild);
+    var bar=el.querySelector('.toast-progress');
+    if(item.dur>0){ bar.style.animation='toastBar '+item.dur+'ms linear forwards'; arm(el,item.dur); }
+    else { bar.style.animation='none'; bar.style.transform='scaleX(0)'; }
+    bind(el);
+    // لو الكود اللي طلب الإشعار عايز يضيف زر (تراجع/فحص)، بيتضاف لحظة ما الإشعار يظهر فعلًا
+    if(typeof item.onShow==='function'){ try{ item.onShow(el) }catch(e){} }
+    return el;
+  }
+  function show(item){ var el=render(item); updateBadge(); return el; }
+  function pump(){
+    if(!QUEUE.length || busy()) return;
+    show(QUEUE.shift());
+  }
+
+  window.toast=function(o,kind,duration,title){
+    if(o==null) return null;
+    if(typeof o==='string') o={x:o,k:kind,d:duration,t:title};
+    var k=KV[o.k]?o.k:'info', K=KV[k];
+    var text=String(o.x==null?'':o.x), ttl=String(o.t==null?'':o.t).trim()||K.n;
+    var key=k+'|'+ttl+'|'+text;
+    var dur=(typeof o.d==='number')?o.d:K.d;
+
+    /* لو إذن إشعارات الجهاز متاح: الإشعار يظهر على الجهاز نفسه بدل جوه التطبيق.
+       اللي فيه أزرار (تراجع) أو شريط تقدّم بيفضل جوه التطبيق عشان محتاج تفاعل. */
+    if(k!=='progress' && k!=='undo' && typeof o.onShow!=='function' && window.pmNotify){
+      var sysOk=false; try{ sysOk=window.pmNotify('RMY · '+ttl,text,'rmy-'+k); }catch(e){}
+      if(sysOk) return null;
+    }
+
+    // نفس الرسالة اللي ظاهرة دلوقتي: بنزوّد العداد بدل ما نكرّرها
+    var vis=live(stack())[0];
+    if(vis && vis._key===key && Date.now()-vis._born<10000){
+      vis._count=(vis._count||1)+1; vis._badge.textContent='×'+vis._count; vis._badge.style.display='';
+      if(vis._auto && dur>0) arm(vis,dur);
+      return vis;
+    }
+    // نفس الرسالة اللي في الطابور: بنزوّد عدادها
+    var pend=QUEUE.filter(function(x){ return x.key===key })[0];
+    if(pend){ pend.count++; updateBadge(); return {_queued:pend}; }
+
+    var item={key:key,k:k,ttl:ttl,text:text,dur:dur,count:1,onShow:o.onShow};
+    if(busy() || QUEUE.length){
+      QUEUE.push(item); updateBadge();
+      return {_queued:item};          // مقبض للإشعار المنتظر (مثلاً عشان نلغيه لو العملية خلصت)
+    }
+    return show(item);
+  };
+
+  // الإغلاق: الإشعار الظاهر بيتقفل بالزرار أو بالوقت. الإشعار المنتظر يتشال من الطابور لو اتلغى.
+  window.dismiss=function(t){
+    if(!t) return;
+    if(t._pendingEntry){ t._pendingEntry.cancelled=true; return; }
+    if(t._queued){
+      var i=QUEUE.indexOf(t._queued); if(i>=0){ QUEUE.splice(i,1); updateBadge(); }
+      return;
+    }
+    if(t.classList && t.classList.contains('progress')) close(t);
+  };
+  // الإشعارات اللي اتطلبت قبل ما هذا الملف يتحمّل: بتتعرض بعد اكتمال تحميل الصفحة، واحد ورا واحد
+  function replayPending(){
+    var p=window.__pmToastPending||[]; window.__pmToastPending=null;
+    p.forEach(function(e){ if(!e.cancelled) window.toast.apply(null,e.args); });
+  }
+  if(document.readyState==='complete') replayPending();
+  else window.addEventListener('load',replayPending);
+})();
+}catch(e){console.error('[PastryMY] 061-ui-toast-v2.js failed',e)}
+/* ---- 062-ui-dock-v3.js ---- */
+try{
+(function(){
+  if(window.__pmDockV3) return; window.__pmDockV3=true;
+  var SV={menu:'list',customers:'customers',purchases:'cart'};
+  function svgOf(k){ var I=(window.__PMUI__||{}).ICONS||{}; return I[k]||I.list||''; }
+  function dock(){ return document.getElementById('pmDock'); }
+  function setLabel(btn,text){
+    var s=btn.querySelector('svg');
+    btn.innerHTML=(s?s.outerHTML:'')+'<span class="pmd-txt">'+text+'</span>';
+  }
+  function ensure(act,label,svgInner){
+    var d=dock(); if(!d) return null;
+    var b=d.querySelector('[data-act="'+act+'"]');
+    if(!b){ b=document.createElement('button'); b.type='button'; b.setAttribute('data-act',act); b.innerHTML=svgOf(svgInner)+'<span class="pmd-txt">'+label+'</span>'; }
+    return b;
+  }
+  function mkGroup(id){
+    var g=document.getElementById(id);
+    if(!g){ g=document.createElement('div'); g.id=id; g.className='pm-dk-grp'; }
+    return g;
+  }
+  function visibleEl(el){
+    if(!el) return false;
+    /* الغلاف ممكن يكون display:contents، فبنحكم على الزرار اللي جواه ومساحته الفعلية */
+    if(el.id==='pmMsgWrap'){ var b=el.querySelector('button'); return !!b && getComputedStyle(b).display!=='none' && b.getBoundingClientRect().width>0; }
+    return getComputedStyle(el).display!=='none' && el.getBoundingClientRect().width>0;
+  }
+  function sameList(parent,list){
+    if(parent.children.length!==list.length) return false;
+    for(var i=0;i<list.length;i++){ if(parent.children[i]!==list[i]) return false; }
+    return true;
+  }
+  function layoutDock(){
+    var d=dock(), R=window.__pmDockRefs;
+    if(!d||!R||!R.home) return;
+    var home=R.home;
+    // المراجع بتتحدّث كل مرة: الرسايل والإعدادات وأي زرار ممكن يتعمل بعد التحميل
+    var dev=d.querySelector('[data-act="devices"]')||R.dev;
+    var msg=document.getElementById('pmMsgWrap')||R.msg;
+    var pur=d.querySelector('[data-act="purchases"]')||R.pur;
+    var cust=d.querySelector('[data-act="customers"]')||R.cust;
+    var menu=d.querySelector('[data-act="menu"]')||R.menu;
+    var notifW=document.getElementById('pmNotifWrap');
+    /* الرسائل والتنبيهات اتنقلوا للهيدر (#pmHdrActions) */
+    var seq=[d.querySelector('[data-act="devView"]'),dev,pur,cust,menu].filter(Boolean);
+    var vis=seq.filter(visibleEl), hid=seq.filter(function(x){ return !visibleEl(x); });
+    var half=Math.ceil(vis.length/2);
+    /* عدد الخانات في كل نص من الشريط: كل الأزرار بنفس العرض والرئيسية في النص */
+    d.style.setProperty('--pm-n', String(Math.max(2, half)));
+    var A=mkGroup('pmDockA'), B=mkGroup('pmDockB');
+    var wantA=vis.slice(0,half).concat(hid), wantB=vis.slice(half);
+    if(!sameList(A,wantA)) wantA.forEach(function(x){ A.appendChild(x); });
+    if(!sameList(B,wantB)) wantB.forEach(function(x){ B.appendChild(x); });
+    if(A.parentNode!==d) d.insertBefore(A,d.firstChild);
+    if(home.parentNode!==d) d.insertBefore(home,A.nextSibling);
+    if(home.previousElementSibling!==A) d.insertBefore(A,home);
+    if(B.parentNode!==d || home.nextElementSibling!==B) d.insertBefore(B,home.nextSibling);
+  }
+  function build(){
+    var d=dock(); if(!d) return false;
+    var menu=ensure('menu','المنيو',SV.menu), cust=ensure('customers','العملاء',SV.customers), pur=ensure('purchases','المشتريات',SV.purchases);
+    var home=d.querySelector('[data-act="home"]'), dev=d.querySelector('[data-act="devices"]');
+    var msg=document.getElementById('pmMsgWrap');
+    if(!home||!dev) return false;
+    home.classList.add('pm-center'); setLabel(home,'الرئيسية');
+    setLabel(dev,'الحسابات المتصلة');
+    if(msg){ var ml=msg.querySelector('.pmd-lbl'); if(ml) ml.textContent='الرسائل'; }
+    /* ترتيب DOM من اليمين لليسار: الحسابات، الرسائل، الإعدادات | الرئيسية | المشتريات، العملاء، المنيو */
+    window.__pmDockRefs={dev:dev,msg:msg,home:home,pur:pur,cust:cust,menu:menu};
+    layoutDock();
+    return true;
+  }
+  // ادخل الأماكن الجديدة للزراير: الشريط لازم يفضل بنفس الترتيب حتى لو سكربتات تانية حركته
+  var busy=false;
+  function arrange(){ if(busy) return; busy=true; try{ build() }catch(e){} busy=false; }
+  setInterval(function(){ try{ layoutDock() }catch(e){} },800);
+  var mo=null;
+  function watch(){
+    var d=dock(); if(!d||mo) return;
+    mo=new MutationObserver(function(){ arrange() });
+    mo.observe(d,{childList:true});
+  }
+  // الضغط: المنيو/العملاء/المشتريات/الرئيسية نتعامل معاها هنا، والباقي بيكمل بالكود القديم
+  document.addEventListener('click',function(e){
+    var b=e.target&&e.target.closest?e.target.closest('#pmDock [data-act]'):null; if(!b) return;
+    var act=b.getAttribute('data-act');
+    var nav=null;
+    /* الرئيسية بتتعالج في زرار الرئيسية/الصعود نفسه، مش هنا */
+    if(act==='menu'||act==='customers'||act==='purchases') nav=act;
+    if(!nav) return;
+    e.stopImmediatePropagation(); e.preventDefault();
+    if(nav==='home'){
+      if(document.body.classList.contains('pm-view')){ var back=document.getElementById('pmBack'); if(back) back.click(); else if(window.go) window.go('home'); }
+      else if(window.go) window.go('home');
+      return;
+    }
+    if(window.pmGo) window.pmGo(nav); else if(window.go) window.go(nav);
+  },true);
+  // تحديد القسم الحالي في الشريط
+  var MAP={analytics:'home',menu:'menu',customers:'customers',purchases:'purchases',devices:'devices'};
+  setInterval(function(){
+    var d=dock(); if(!d) return;
+    var act=null, p=document.querySelector('main .panel.active');
+    if(p && MAP[p.id]) act=MAP[p.id];
+    else if(!p) act='home'; /* لو مفيش قسم مفتوح (الشاشة الرئيسية) الرئيسية هي النشطة */
+    d.querySelectorAll('button[data-act]').forEach(function(b){
+      b.classList.toggle('cur', !!act && b.getAttribute('data-act')===act);
+    });
+  },400);
+  function start(){ arrange(); watch(); }
+  if(document.readyState==='complete') start(); else window.addEventListener('load',start);
+  setTimeout(arrange,600); setTimeout(arrange,1500);
+})();
+}catch(e){console.error('[PastryMY] 062-ui-dock-v3.js failed',e)}
