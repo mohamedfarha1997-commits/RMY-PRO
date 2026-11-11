@@ -1,3 +1,23 @@
+# RMY PRO 3.13.2 — تنظيم ملفات المشروع
+
+## للمستخدم
+- تنظيم داخلي للتطبيق وتقليل عدد الملفات اللي بتتحمّل، من غير أي تغيير في الاستخدام.
+
+## للمطوّر
+- ICONS اتحوّل لـ icons (حروف صغيرة) وكل المراجع (manifest، sw، index، css، 068) اتحدّثت.
+- js/ اتقسم لمجلدات حسب الميزة: core, ui, cloud, auth, sales, invoices, reports, admin, menu, customers, inventory, recipes, parties, barista, messages, pwa.
+- اتدمجت ملفات متتالية من نفس الميزة (14 ملف دمج، 107 → 85 سكريبت). 006-core-main-app اتدمج في js/core/006-main-app.js. الملفات المدموجة جواها بانر باسم كل ملف أصلي وبنفس نمط try/catch المعتاد.
+- css/: app.bundle.css → app.css، وphone-compact وcompact-order-modal وcompact-invoice-view وrmy-brand اتدمجوا في overrides.css (بنفس الترتيب)، وdark-mode.css زي ما هو. 125-maintenance-palette.css → maintenance.css.
+- supabase-config.js اتنقل لـ config/. mobile-ux.css (مش مستخدم في أي صفحة) اتنقل لـ archive/.
+- scripts/set-version.js بقى بيقرا js/core/000-app-info.js. إضافة README.md بشرح الهيكل.
+- invoice.html وmaintenance.html وsw.js فضلوا في الجذر عن قصد: روابط الفواتير اللي اتبعتت لازم تفضل شغالة، وsw.js لازم يكون في الجذر عشان نطاق الكاش.
+
+# RMY PRO 3.13.1 — تحديثات لحظية بين الأجهزة
+
+## للمستخدم
+- التحديثات بين الأجهزة بقت بتوصل في ثواني بدل ما كل جهاز يسأل السيرفر كل 8 ثواني.
+- الرسايل بتتحدّث لحظياً، ومش بتسأل السيرفر كل 5 ثواني.
+
 # RMY PRO 3.13.0 — هوية RMY الجديدة
 
 ## للمستخدم
