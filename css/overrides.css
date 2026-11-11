@@ -1,0 +1,224 @@
+/* ---- phone-compact.css ---- */
+/* ==================================================================
+   تصغير للجوال: نافذة الفاتورة بعد البيع + شاشة حجز الحفلات
+   (أقل من 600px بس، الشاشات الكبيرة مش متأثرة)
+   ================================================================== */
+@media (max-width:600px){
+  /* ---- نافذة الفاتورة بعد البيع: تتعرض من غير سكرول ---- */
+  .pmv-ov{padding:8px!important}
+  .pmv-box{width:100%!important;max-width:100%!important;padding:8px!important;border-radius:16px!important;max-height:calc(100dvh - 16px)!important}
+  .pmv-paper{padding:8px!important;border-radius:12px!important}
+  .pmv-paper .inv-shop{font-size:14px!important}
+  .pmv-paper .inv-sub,.pmv-paper .inv-tax,.pmv-paper .inv-tax span{font-size:10px!important;padding:0!important;margin:0!important}
+  .pmv-paper .inv-top{padding-bottom:4px!important;margin-bottom:4px!important}
+  .pmv-paper .inv-meta{margin:4px 0!important;gap:4px!important}
+  .pmv-paper .inv-meta>div{padding:2px 0!important}
+  .pmv-paper .inv-meta small{font-size:10px!important}
+  .pmv-paper .inv-meta b{font-size:11px!important}
+  .pmv-paper .inv-tbl{font-size:11px!important}
+  .pmv-paper .inv-tbl th,.pmv-paper .inv-tbl td{padding:3px 2px!important}
+  .pmv-paper .inv-sum{margin-top:2px!important}
+  .pmv-paper .inv-note{font-size:10px!important}
+  .pmv-paper .inv-total{padding:3px 0!important;font-size:12px!important}
+  .pmv-paper .inv-total span,.pmv-paper .inv-total b{font-size:12.5px!important}
+  .pmv-paper .inv-foot{font-size:10px!important;margin-top:4px!important}
+  .pmv-lang{margin:6px 0 0!important}
+  .pmv-lang button{padding:5px 12px!important;font-size:12px!important}
+  .pmv-acts{margin-top:8px!important;gap:6px!important}
+  .pmv-acts button{padding:8px 4px!important;font-size:12px!important}
+  #pmvQr{margin-top:6px!important;padding:6px!important}
+  #pmvQr .pmv-qrbox img{width:130px!important;height:130px!important}
+  #pmvQr p{font-size:11px!important;margin:4px 0 0!important}
+
+  /* ---- شاشة حجز الحفلات: مضغوطة من غير سكرول طويل ---- */
+  #partiesBody .pm-po-toolbar{margin-bottom:2px!important;gap:6px!important}
+  #partiesBody .pm-po-meta{font-size:10.5px!important;margin-top:0!important;line-height:1.35!important}
+  #partiesBody .pm-po-toolbar .mini{min-height:30px!important;padding:0 10px!important;font-size:12px!important}
+  #partiesBody .pm-po-h{margin:8px 0 3px!important;font-size:13px!important}
+  #partiesBody .pm-po-list{gap:5px!important;margin-top:3px!important}
+  #partiesBody .pm-po-card{padding:6px!important;border-radius:10px!important}
+  #partiesBody .pm-po-sum{padding:5px 7px!important;gap:5px!important;font-size:12px!important;border-radius:9px!important}
+  #partiesBody .pm-po-sum .st,#partiesBody .pm-po-sum .rm{font-size:11px!important}
+  #partiesBody .pm-po-sum .pill{font-size:10px!important;padding:1px 6px!important}
+  #partiesBody .pm-po-head b{font-size:13px!important}
+  #partiesBody .pm-po-head .pill{font-size:10px!important}
+  #partiesBody .pm-po-section{margin-top:4px!important;padding-top:3px!important}
+  #partiesBody .pm-po-section h4{font-size:12.5px!important;margin:3px 0 2px!important}
+  #partiesBody .pm-po-item{padding:4px 0!important}
+  #partiesBody .pm-po-itemhead{gap:4px!important;font-size:12px!important}
+  #partiesBody .pm-po-materials{font-size:11px!important;line-height:1.4!important;margin-top:4px!important}
+  #partiesBody .pm-po-pay{font-size:11px!important;margin:3px 0!important;padding:3px 6px!important}
+  #partiesBody .pm-po-pay .mini{min-height:28px!important;font-size:11px!important}
+  #partiesBody .pm-po-note{font-size:10.5px!important;padding:5px 7px!important;margin:4px 0!important;line-height:1.4!important}
+  #partiesBody .pm-po-ok{font-size:11px!important;padding:5px 7px!important;margin:4px 0!important}
+  #partiesBody .pm-po-actions{margin-top:4px!important}
+  #partiesBody .pm-po-actions button{min-height:30px!important;font-size:11.5px!important;padding:0 10px!important}
+  #partiesBody .pm-po-tablewrap th,#partiesBody .pm-po-tablewrap td{padding:3px 4px!important;font-size:11px!important}
+  #partiesBody .pm-po-empty{padding:8px!important;font-size:12px!important}
+}
+/* ---- compact-order-modal.css ---- */
+/* ==================================================================
+   نافذة "أوردر حفلات للشيف" (#ptyCkOv): مضغوطة على الكمبيوتر والجوال
+   الاسم والقيمة على سطر واحد، وبدون سكرول على الشاشات العادية
+   ================================================================== */
+#ptyCkOv{padding:10px!important}
+#ptyCkOv .pty-card{
+  width:min(560px,100%)!important;
+  padding:12px 14px!important;
+  border-radius:16px!important;
+  max-height:calc(100dvh - 20px)!important;
+  overflow:auto!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,40%) minmax(0,1fr)!important;
+  align-items:center!important;
+  column-gap:10px!important;
+  row-gap:6px!important;
+}
+#ptyCkOv .pty-card h3{grid-column:1/-1!important;margin:0 0 4px!important;font-size:16px!important}
+#ptyCkOv .pty-card label{margin:0!important;font-size:12.5px!important;line-height:1.3!important;font-weight:700!important}
+#ptyCkOv .pty-card input,
+#ptyCkOv .pty-card select{
+  width:100%!important;
+  min-height:34px!important;
+  height:34px!important;
+  padding:4px 10px!important;
+  margin:0!important;
+  font-size:14px!important;
+  box-sizing:border-box!important;
+}
+#ptyCkOv .pty-parts{grid-column:1/-1!important;margin:4px 0!important;padding:6px 8px!important;font-size:12px!important}
+#ptyCkOv .pty-parts div{padding:1px 0!important}
+#ptyCkOv .pty-total{grid-column:1/-1!important;margin:2px 0 4px!important;font-size:14px!important}
+#ptyCkOv .pty-actions{grid-column:1/-1!important;gap:8px!important}
+#ptyCkOv .pty-actions button{min-height:36px!important;padding:6px 10px!important;font-size:13.5px!important}
+
+/* الجوال: عمود واحد عشان الخانات تفضل واسعة */
+@media (max-width:600px){
+  #ptyCkOv .pty-card{grid-template-columns:minmax(0,1fr)!important;row-gap:3px!important}
+  #ptyCkOv .pty-card label{margin-top:4px!important}
+}
+/* ---- compact-invoice-view.css ---- */
+/* ==================================================================
+   نافذة الفاتورة بعد البيع (.pmv-ov): مضغوطة على الكمبيوتر والجوال
+   الجدول بياخد عرض النافذة كله بدل ما يتقص، والأزرار تفضل ظاهرة من غير سكرول
+   ================================================================== */
+.pmv-ov{padding:10px!important}
+.pmv-box{
+  width:min(400px,100%)!important;
+  max-width:100%!important;
+  padding:10px!important;
+  border-radius:16px!important;
+  max-height:calc(100dvh - 20px)!important;
+  overflow:auto!important;
+}
+.pmv-paper{padding:10px!important;border-radius:12px!important;overflow:visible!important}
+.pmv-paper .inv-shop{font-size:17px!important}
+.pmv-paper .inv-sub,.pmv-paper .inv-tax,.pmv-paper .inv-tax span{font-size:11px!important;margin:0!important;padding:0!important}
+.pmv-paper .inv-top{padding-bottom:6px!important;margin-bottom:6px!important}
+.pmv-paper .inv-meta{margin:6px 0!important;gap:6px!important;font-size:11px!important}
+.pmv-paper .inv-meta>div{padding:4px 6px!important}
+.pmv-paper .inv-meta small{font-size:10px!important}
+.pmv-paper .inv-meta b{font-size:11.5px!important}
+.pmv-paper .inv-tbl{width:100%!important;table-layout:fixed!important;font-size:12px!important}
+.pmv-paper .inv-tbl th,.pmv-paper .inv-tbl td{padding:5px 3px!important;word-break:break-word}
+.pmv-paper .inv-tbl th:nth-child(1),.pmv-paper .inv-tbl td:nth-child(1){width:38%!important}
+.pmv-paper .inv-tbl th:nth-child(2),.pmv-paper .inv-tbl td:nth-child(2){width:14%!important}
+.pmv-paper .inv-tbl th:nth-child(3),.pmv-paper .inv-tbl td:nth-child(3){width:22%!important}
+.pmv-paper .inv-tbl th:nth-child(4),.pmv-paper .inv-tbl td:nth-child(4){width:26%!important}
+.pmv-paper .inv-sum{margin-top:4px!important}
+.pmv-paper .inv-note{font-size:11px!important}
+.pmv-paper .inv-total{padding:4px 0!important;font-size:12px!important;margin:2px 0!important}
+.pmv-paper .inv-total span,.pmv-paper .inv-total b{font-size:13px!important}
+.pmv-paper .inv-foot{font-size:11px!important;margin-top:6px!important}
+.pmv-lang{margin:8px 0 0!important}
+.pmv-lang button{padding:6px 14px!important;font-size:12.5px!important}
+.pmv-acts{margin-top:8px!important;gap:6px!important}
+.pmv-acts button{padding:8px 6px!important;font-size:12.5px!important}
+#pmvQr{margin-top:8px!important;padding:8px!important}
+#pmvQr .pmv-qrbox img{width:150px!important;height:150px!important}
+#pmvQr p{font-size:11.5px!important;margin:4px 0 0!important}
+
+/* ---- إصلاح السكرول الجانبي: الجدول والأزرار بياخدوا عرض النافذة بس ---- */
+.pmv-box{width:min(420px,100%)!important;overflow-x:hidden!important;overflow-y:auto!important;min-width:0!important}
+.pmv-paper{min-width:0!important;max-width:100%!important;overflow-x:hidden!important}
+.pmv-paper .tablewrap,.pmv-paper .inv-tbl-wrap{overflow:visible!important;min-width:0!important}
+.pmv-paper .inv-tbl{min-width:0!important;max-width:100%!important;table-layout:fixed!important}
+.pmv-paper .inv-tbl th:nth-child(1),.pmv-paper .inv-tbl td:nth-child(1){width:36%!important}
+.pmv-paper .inv-tbl th:nth-child(2),.pmv-paper .inv-tbl td:nth-child(2){width:13%!important}
+.pmv-paper .inv-tbl th:nth-child(3),.pmv-paper .inv-tbl td:nth-child(3){width:22%!important}
+.pmv-paper .inv-tbl th:nth-child(4),.pmv-paper .inv-tbl td:nth-child(4){width:29%!important}
+.pmv-paper .inv-tbl th,.pmv-paper .inv-tbl td{font-size:11.5px!important;padding:4px 2px!important;white-space:normal!important}
+.pmv-acts{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
+.pmv-acts button{min-width:0!important;white-space:normal!important;line-height:1.3!important;padding:7px 4px!important;font-size:12px!important}
+/* ---- rmy-brand.css ---- */
+/* ===== هوية RMY: الأزرق الجديد #293394 + شعار RMY الأبيض =====
+   الملف ده بيتحمّل بعد dark-mode.css، وبيضبط:
+   1) الشعار (wordmark) على شاشة الدخول
+   2) الأسطح الصلبة بالأزرق بنص أبيض (لايت)
+   3) نسخة الدارك: الأزرق يبقى فاتح للنصوص، والخلفيات الصلبة تفضل كحلي */
+
+:root{
+  --rmy-blue:#293394;
+  --rmy-deep:#1E2670;
+  --rmy-light:#3D4AB3;
+  --rmy-on-dark:#9AA6F2;
+  --pm-logo:url("../icons/rmy-wordmark.png");
+}
+
+/* ---------- 1) شعار شاشة الدخول ---------- */
+html body.auth-required .login-screen .login-logo{
+  width:250px!important;height:104px!important;border-radius:26px!important;
+  margin:0 auto 16px!important;
+  background:linear-gradient(135deg,var(--rmy-deep) 0%,var(--rmy-blue) 58%,var(--rmy-light) 100%)!important;
+  box-shadow:0 14px 28px -10px rgba(41,51,148,.55),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+html body.auth-required .login-screen .login-logo::after{inset:-6px!important;border-radius:28px!important}
+html body.auth-required .login-screen .login-logo .pm-logo-img{
+  width:88%!important;height:74%!important;margin:auto!important;
+}
+html body.auth-required .login-screen .login-logo .pm-logo-img::after{display:none!important}
+/* ---------- 1b) شعار الدخول بدون لمعان متحرك: الـ overlay بتاع الزجاج كان بيغطي الحروف ويخليها تبان متأكلة ---------- */
+html body.auth-required .login-screen .login-logo .pm-logo-img::before{display:none!important;animation:none!important}
+html body.auth-required .login-screen .login-logo .pm-logo-img{overflow:visible!important}
+html[data-theme="dark"] body.auth-required .login-screen .login-logo{
+  background:linear-gradient(135deg,var(--rmy-deep) 0%,var(--rmy-blue) 58%,var(--rmy-light) 100%)!important;
+}
+
+/* ---------- 2) الأسطح الصلبة بالأزرق: نص أبيض ---------- */
+html body .primary,
+html body button.primary,
+html body.auth-required .login-screen .login-button:not(.secondary){
+  background:linear-gradient(125deg,var(--rmy-deep),var(--rmy-blue))!important;
+  background-color:var(--rmy-blue)!important;
+  color:#FFFFFF!important;
+}
+html body .pm-fab,
+html body .pm-fix:not(.ghost),
+html body .pm-pal-item.sel .ui-ico{
+  background:linear-gradient(135deg,var(--rmy-deep),var(--rmy-blue))!important;
+  background-color:var(--rmy-blue)!important;
+  color:#FFFFFF!important;
+}
+html body .primary .ui-ico,
+html body .login-button:not(.secondary) .ui-ico{color:#FFFFFF!important}
+
+/* ---------- 3) الدارك مود ---------- */
+/* الأيقونات والنصوص اللي بتستخدم --blue/--navy/--sky بتبقى فاتحة عشان تتقري */
+html[data-theme="dark"]{--navy:var(--rmy-on-dark);--blue:var(--rmy-on-dark);--sky:#B7C0F7}
+/* الخلفيات الصلبة تفضل كحلي (متعتمدش على المتغيرات الفاتحة) */
+html[data-theme="dark"] header{
+  background:linear-gradient(125deg,var(--rmy-deep) 0%,var(--rmy-blue) 68%,var(--rmy-light) 100%)!important;
+}
+html[data-theme="dark"] body .primary,
+html[data-theme="dark"] body button.primary,
+html[data-theme="dark"] body .pm-fab,
+html[data-theme="dark"] body .pm-fix:not(.ghost),
+html[data-theme="dark"] body .pm-pal-item.sel .ui-ico{
+  background:linear-gradient(125deg,var(--rmy-deep),var(--rmy-blue))!important;
+  background-color:var(--rmy-blue)!important;
+  color:#FFFFFF!important;
+}
+/* نصوص كتبت بالأزرق بشكل inline في الـ JS */
+html[data-theme="dark"] [style*="color:#293394"],
+html[data-theme="dark"] [style*="color: #293394"]{color:var(--rmy-on-dark)!important}
+html[data-theme="dark"] .msg-box.progress .msg-symbol{color:var(--rmy-on-dark)}
